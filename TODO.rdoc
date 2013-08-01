@@ -1,0 +1,89 @@
+= TODO
+- Create Friends or frequent travelers (model and api)
+- Add images to expenses
+- Create account using twitter x
+	- Add profile pic from twitter x
+	- Store twitter handle x
+- Create account using facebook x
+	- Add profile pic from facebook x
+	- Store facebook id x
+- Add more details to trip x
+	- Location x
+	- Cover photo x
+	- Dates x
+- Add model for handling tieing expenses to users that did not purchase x
+	- Track amount paid for expense x
+	- Remove expense if not used x
+- Invite Junketeers
+	- Invite from contacts
+		- Send text message
+	- Invite from facebook friends
+		- Send facebook message
+	- Invite friends using twitter
+		- Send invite through DM
+		- List users first with recent conversations
+		- List users first that have mentioned trip name or location
+- Expense Obligation
+	- Specifies how much a user owes for an expense x
+- Expense Contribution
+	- Specifies how much a user contributed to a bill x
+- Tip
+	- Add tip to expense x
+	- Also allow to say it was just added to final bill
+- OCR
+	- Read final cost from reciept
+	- Break up expense items from bill to be assigned to users
+	- Find good ocr technology to use
+- Social
+	- Twitter
+		- Keep track of tweets sent from all members during time period of trip
+		- Display tweets from time period of trip
+		- Create hashtag and share with members
+	- Instagram
+		- Keep track of photos posted during trip
+		- Display photos from teim period of trip
+		- Create hashtag and share with members
+	- Facebook
+		- Keep track of checkins, statuses, photos
+		- Create junket from event
+		- Add junketeers from accepted invites in event
+- API
+	- Users
+		- Create x
+		- Update x
+		- Destroy x
+		- List (Master) x
+		- List for Trip x
+		- Show with details for current event
+	- Trips
+		- Create (Organizer) x
+		- Update (Organizer) x
+		- Destroy (Organizer) x
+		- List x
+		- List for Organizer x
+		- Include total cost, average cost x
+		- Member details
+	- Memberships
+		- Create x
+		- Destroy x
+	- Expenses
+		- Create (Purchaser) x
+		- Update (Purchaser) x
+		- Destroy (Purchaser) x
+		- List
+			- For Trip x
+			- For User on Trip x
+			- For User x
+	- Obligations
+		- Update x
+			- Return error if updating will not meet full cost of expense x
+		- Create x
+		- List x
+			- Expense x
+			- User Per Expense (neccessary?)
+	- Contributions
+		- Update
+		- Destroy
+		- Create
+		- List
+			- For Expense
