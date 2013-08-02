@@ -1,0 +1,29 @@
+<div class="navigation">
+    <norm -back-button=""></norm>
+    <a ng-href="#/trips/new">
+        <i class="icon icon-plus"></i>
+    </a>
+</div>
+
+<div class="top-section">
+    <div id="trip_name">{{currentUser.name}}'s Trips</div>
+</div>
+
+<div class="bottom-section">
+    <a ng-href="#/trips/{{trip.id}}" ng-repeat="trip in trips">
+    </a><div class="section-row">
+        <div class="expense-cost">
+            {{trip.name}}
+        </div>
+    </div>
+    <div class="section-row">
+        <div class="expense-cost" ng-bind-html-unsafe="trip.total_cost | currency | normCurrency"></div>
+        <div class="divider"></div>
+        <div class="expense-name">Cost</div>
+    </div>
+    <div class="section-row">
+        <div class="expense-cost" ng-bind-html-unsafe="trip.average_cost_per_member | currency | normCurrency"></div>
+        <div class="divider"></div>
+        <div class="expense-name">Average Cost</div>
+    </div>
+</div>

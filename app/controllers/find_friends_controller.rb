@@ -2,7 +2,7 @@ class FindFriendsController < ApplicationController
 	respond_to :json
 
 	def twitter_friends
-		respond_with [client.friends.users.first]
+		respond_with client.friends.users
 	end
 
 	def invite_twitter_friend
