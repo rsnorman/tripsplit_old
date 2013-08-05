@@ -1,0 +1,16 @@
+<div class="content-body row-fluid" ng-show="isActive(\"expenses\")" ng-controller="ExpensesCtrl">
+    <div class="span12">
+        <div class="row-fluid">
+            <h2>Expenses</h2>
+        </div>
+        <div class="expense row-fluid" ng-repeat="expense in expenses">
+            <div class="row-fluid">
+                <a class="span12" ng-href="#/trips/{{expense.trip_id}}/expenses/{{expense.id}}">
+                    {{expense.name}}:
+                    <span ui-currency="{ symbol: '$'}" ng-model="expense.cost"></span>
+                    <i class="icon-arrow-right icon-white"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

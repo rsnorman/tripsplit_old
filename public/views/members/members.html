@@ -1,0 +1,22 @@
+<div class="navigation">
+    <norm-back-button></norm-back-button>
+    <a ng-href="#/trips/{{tripId}}/members/invite">
+        <i class="icon icon-plus"></i>
+    </a>
+</div>
+
+<div class="top-section">
+    <div id="trip_name">{{trip.name}}</div>
+
+    <div id="trip_cost">Members</div>
+</div>
+
+<div class="bottom-section">
+    <a ng-href="#/trips/{{tripId}}/members/{{member.id}}" class="section-row" ng-repeat="member in members">
+        <div class="expense-cost">
+        	{{member.name}}
+        </div>
+        <div class="divider"></div>
+        <div class="expense-name"></div>
+    </a>
+</div>

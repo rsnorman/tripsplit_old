@@ -1,0 +1,82 @@
+<div class="navigation">
+    <norm-back-button></norm-back-button>
+    <a ui-if="isMine(expense, \"purchaser_id\")" ng-href="#/trips/{{expense.trip_id}}/expenses/{{expense.id}}/edit">
+        <i class="icon icon-edit"></i>
+    </a>
+</div>
+
+<div class="top-section">
+    <div id="trip_name">{{expense.name}}</div>
+
+    <div id="trip_cost" ng-bind-html-unsafe="expense.cost | currency | normCurrency"></div>
+</div>
+
+<div class="bottom-section">
+    <span class="section-row">
+        <div class="expense-cost">
+            <span>{{expense.purchaser.name}}</span>
+        </div>
+        <div class="divider"></div>
+        <div class="expense-name">Purchaser</div>
+    </span>
+
+    <span class="section-row">
+        <div class="expense-cost" ng-bind-html-unsafe="expense.average_cost | currency | normCurrency">
+        </div>
+        <div class="divider"></div>
+        <div class="expense-name">Average Cost</div>
+    </span>
+
+    <div ng-show="hasTip()">
+        <span class="section-row">
+            <div class="expense-cost" ng-bind-html-unsafe="expense.tip | currency | normCurrency">
+            </div>
+            <div class="divider"></div>
+            <div class="expense-name">Tip</div>
+        </span>
+
+        <span class="section-row">
+            <div class="expense-cost" ng-bind-html-unsafe="expense.average_tip | currency | normCurrency">
+            </div>
+            <div class="divider"></div>
+            <div class="expense-name">Average Tip</div>
+        </span>
+
+        <span class="section-row">
+            <div class="expense-cost" ng-bind-html-unsafe="expense.average_tip_without_tip | currency | normCurrency">
+            </div>
+            <div class="divider"></div>
+            <div class="expense-name">Average Cost (w/o tip)</div>
+        </span>
+    </div>
+
+    <h3>Obligations</h3>
+    <div ng-switch="canEditObligation(obligation)" ng-repeat="obligation in expense.obligations">
+        <a ng-switch-when="true" ng-href="#/trips/{{expense.trip_id}}/expenses/{{expense.id}}/obligations/{{obligation.id}}/edit" class="section-row">
+            <div class="expense-cost" ng-bind-html-unsafe="obligation.amount | currency | normCurrency">
+            </div>
+            <div class="divider"></div>
+            <div class="expense-name">{{obligation.user.name}}</div>
+        </a>
+        <span ng-switch-when="false" class="section-row" ng-repeat="obligation in expense.obligations">
+            <div class="expense-cost" ng-bind-html-unsafe="obligation.amount | currency | normCurrency">
+            </div>
+            <div class="divider"></div>
+            <div class="expense-name">{{obligation.user.name}}</div>
+        </span>
+    </div>
+    <div ng-hide="hasObligations()">
+        <em>None</em>
+    </div>
+
+    <h3>Contributions</h3>
+    <a ng-href="#/trips/{{expense.trip_id}}/expenses/{{expense.id}}/contributions/{{contribution.id}}/edit" class="section-row" ng-repeat="contribution in expense.contributions">
+        <div class="expense-cost" ng-bind-html-unsafe="contribution.amount | currency | normCurrency">
+        </div>
+        <div class="divider"></div>
+        <div class="expense-name">{{contribution.user.name}}</div>
+    </a>
+    <a ng-href="#/trips/{{expense.trip_id}}/expenses/{{expense.id}}/contributions/new" ng-show="canAddContribution()">
+        <em>Add Contribution</em>
+    </a>
+</div>

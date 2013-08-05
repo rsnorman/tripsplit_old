@@ -3,7 +3,7 @@ class SessionsController < ApplicationController
   def create
     client = env['omniauth.auth']
 
-    if params[:provider] == 'twitter'      
+    if params[:provider] == 'twitter'
       @user = User.find_by_twitter_id(client.uid) || User.new
 
       @user.name ||= client.info.name
@@ -25,12 +25,17 @@ class SessionsController < ApplicationController
 
     @user.save!
 
-    redirect_to "http://www.group-expenser.dev:9000/#/users/#{@user.id}"
+    if Rails.env.dev?
+      redirect_to "http://www.group-expenser.dev:9000/#/users/#{@user.id}"
+    else
+      redirect_to "http://aqueous-tundra-9580.heroku.com/#/users/#{@user.id}"
+    end
+
   end
 
   def error
-    flash[:error] = "Sign in with #{params[:provider].titleize} failed"
-    redirect_to root_path
+    flash[:error] = "Sign in with #{params[:strategy].titleize} failed"
+    redirect_to "/"
   end
 
 end

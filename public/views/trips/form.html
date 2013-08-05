@@ -1,0 +1,29 @@
+<div class="navigation">
+    <norm-back-button></norm-back-button>
+</div>
+
+
+<div class="top-section">
+    <div id="trip_name">{{action}}</div>
+
+    <div id="trip_cost">Trip</div>
+</div>
+
+<div class="bottom-section">
+    <form ng-submit="create()" class="span12">
+        <div class="row-fluid">
+            <label class="span6" for="name">Name</label>
+            <input class="span6" type="text" required="" ng-model="trip.name">
+        </div>
+        <div class="row-fluid">
+            <label class="span6" for="name">Location</label>
+            <input class="span6" type="text" required="" ng-model="trip.location">
+        </div>
+        <div class="row-fluid">
+            <button type="submit" class="span6 btn btn-large">{{action}} Trip</button>
+        </div>
+        <div class="row-fluid">
+            <button ng-show="expense.id" class="span6 btn btn-large" ng-click="delete()">Delete Trip</button>
+        </div>
+    </form>
+</div>

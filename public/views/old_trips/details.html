@@ -1,0 +1,26 @@
+<div class="content-body row-fluid" ng-show="isActive(\"details\")" ng-controller="DetailsCtrl">
+    <div class="span12">
+        <div class="row-fluid">
+            <h2>Trip Details</h2>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">Total Cost: <strong>${{trip.total_cost}}</strong></div>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">Average Cost Per Member: <strong>${{trip.average_cost_per_member}}</strong></div>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">Location: <strong>{{trip.location}}</strong></div>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">Dates: <strong>{{trip.starts_on.replace('2013-', '').replace('-','/')}} to {{trip.ends_on.replace('2013-', '').replace('-','/')}}</strong></div>
+        </div>
+        <div class="row-fluid">
+            <a class="span12 btn btn-large" href="#/trips/{{trip.id}}/expenses/new">
+                Add Expense
+                <i class="icon-plus"></i>
+            </a>
+        </div>
+    </div>
+
+</div>

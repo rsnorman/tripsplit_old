@@ -1,5 +1,5 @@
 <div class="navigation">
-    <norm -back-button=""></norm>
+    <norm-back-button></norm-back-button>
     <a ng-href="#/trips/new">
         <i class="icon icon-plus"></i>
     </a>
@@ -11,7 +11,7 @@
 
 <div class="bottom-section">
     <a ng-href="#/trips/{{trip.id}}" ng-repeat="trip in trips">
-    </a><div class="section-row">
+    <div class="section-row">
         <div class="expense-cost">
             {{trip.name}}
         </div>
@@ -26,4 +26,4 @@
         <div class="divider"></div>
         <div class="expense-name">Average Cost</div>
     </div>
-</div>
+</a></div>

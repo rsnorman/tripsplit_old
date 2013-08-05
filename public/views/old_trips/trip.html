@@ -1,0 +1,24 @@
+<div class="row-fluid circle-header">
+    <h1 class="span12" ng-bind="trip.name"></h1>
+
+
+    <div class="circle-image">
+        <div class="image-border" norm-circle-animate="" radius="125" active-position="90">
+            <a name="details" href="javascript:;" class="icon" ng-class="{active: isActive(\"details\")}">
+                <i class="icon-orange icon-road"></i>
+            </a>
+            <a name="expenses" href="javascript:;" class="icon" ng-class="{active: isActive(\"expenses\")}">
+                <i class="icon-orange icon-tags"></i>
+            </a>
+            <a name="members" href="javascript:;" class="icon" ng-class="{active: isActive(\"members\")}">
+                <i class="icon-orange icon-group"></i>
+            </a>
+            <a ng-click="goToPosition(\"individual\")" href="#/trips/{{trip.id}}?pos=individual" id="user_icon" class="icon" ng-class="{active:isActive(\"individual\")}">
+                <i class="icon-orange icon-user"></i>
+            </a>
+        </div>
+        <!--<img ng-src='{{trip.image_url}}' alt='' />-->
+    </div>
+</div>
+
+<norm-trip-detail norm-template-url="/views/trips/{{currentPosition}}.html"></norm-trip-detail>

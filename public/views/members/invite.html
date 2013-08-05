@@ -1,0 +1,19 @@
+<div class="navigation">
+    <norm-back-button></norm-back-button>
+</div>
+
+<div class="top-section">
+    <div id="trip_name">Invite</div>
+
+    <div id="trip_cost">Friends</div>
+</div>
+<div class="bottom-section">
+    <div class="invite section-row" ng-repeat="friend in twitterFriends">
+        <img ng-src="{{friend.profile_image_url}}" alt="">
+        <div class="user-details">
+            <h4>{{friend.name}} (@{{friend.screen_name}})</h4>
+            <em>{{friend.status.text}}</em>
+        </div>
+        <a class="btn" href="javascript:;" ng-click="invite($index)">Invite</a>
+    </div>
+</div>
