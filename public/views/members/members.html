@@ -12,11 +12,12 @@
 </div>
 
 <div class="bottom-section">
-    <a ng-href="#/trips/{{tripId}}/members/{{member.id}}" class="section-row" ng-repeat="member in members">
-        <div class="expense-cost">
-        	{{member.name}}
+
+    <a class="invite section-row" ng-href="#/trips/{{tripId}}/members/{{member.id}}" ng-repeat="member in members">
+        <img ng-src="{{member.profile_image_url}}" alt="">
+        <div class="user-details">
+            <h4>{{member.name}}</h4>
+            <p>Total Paid: {{member.total_paid}}</p>
         </div>
-        <div class="divider"></div>
-        <div class="expense-name"></div>
     </a>
 </div>
