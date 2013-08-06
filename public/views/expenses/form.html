@@ -3,10 +3,15 @@
 </div>
 
 
-<div class="top-section">
-    <div id="trip_name">{{expense.name}}</div>
-
-    <div id="trip_cost" ng-bind-html-unsafe="expense.cost | currency | normCurrency"></div>
+<div class="top-section" ng-switch="" on="action">
+    <div ng-switch-when="Create">
+        <div id="trip_name">Create</div>
+        <div id="trip_cost">Expense</div>
+    </div>
+    <div ng-switch-default="">
+        <div id="trip_name">{{expense.name}}</div>
+        <div id="trip_cost" ng-bind-html-unsafe="expense.cost | currency | normCurrency"></div>
+    </div>
 </div>
 
 <div class="bottom-section">
@@ -26,13 +31,13 @@
             <input class="span6" type="input" required="" ng-model="expense.cost">
         </div>
         <div class="row-fluid">
-            <a class="span6" href="javascript:;" ng-click="addTip()" ng-hide="hasTip"><i class="icon-plus icon-white"></i> Tip</a>
-            <div ng-show="hasTip">
+            <a id="add_tip" class="span6" href="javascript:;" ng-click="addTip()" ng-hide="hasTip"><i class="icon-plus icon-white"></i> Tip</a>
+            <div id="expense_tip" ng-show="hasTip">
                 <label class="span6" for="name">
                     Tip
                     <a href="javascript:;" ng-click="removeTip()">remove</a>
                 </label>
-                <input class="span6" type="input" ng-required="hasTip()" ng-model="expense.tip">
+                <input class="span6" type="input" ng-required="hasTip" ng-model="expense.tip">
             </div>
         </div>
         <div class="row-fluid">
