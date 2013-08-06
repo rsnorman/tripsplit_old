@@ -22,18 +22,35 @@
         <div class="divider"></div>
         <div class="expense-name">Total Obligated</div>
     </span>
-    <span class="section-row">
-        <div class="expense-cost" ng-bind-html-unsafe="member.due | currency | normCurrency">
+<!--     <span class='section-row'>
+        <div class='expense-cost' ng-bind-html-unsafe="member.due | currency | normCurrency">
+        </div>
+        <div class='divider'></div>
+        <div class='expense-name'>Total Due</div>
+    </span>
+    <span class='section-row'>
+        <div class='expense-cost' ng-bind-html-unsafe="member.owe | currency | normCurrency">
+        </div>
+        <div class='divider'></div>
+        <div class='expense-name'>Total Owe</div>
+    </span> -->
+
+    <h3>Members You Owe</h3>
+    <span class="section-row" ng-show="due_member.amount != '0.0'" ng-repeat="due_member in member.due_members">
+        <div class="expense-cost" ng-bind-html-unsafe="due_member.amount | currency | normCurrency">
         </div>
         <div class="divider"></div>
-        <div class="expense-name">Total Due</div>
+        <div class="expense-name">{{due_member.user.name}}</div>
     </span>
-    <span class="section-row">
-        <div class="expense-cost" ng-bind-html-unsafe="member.owe | currency | normCurrency">
+
+    <h3>Members That Owe You</h3>
+    <span class="section-row" ng-show="owe_member.amount != '0.0'" ng-repeat="owe_member in member.owe_members">
+        <div class="expense-cost" ng-bind-html-unsafe="owe_member.amount | currency | normCurrency">
         </div>
         <div class="divider"></div>
-        <div class="expense-name">Total Owe</div>
+        <div class="expense-name">{{owe_member.user.name}}</div>
     </span>
+
 
     <h3>Purchases</h3>
     <span class="section-row" ng-repeat="expense in member.purchases">

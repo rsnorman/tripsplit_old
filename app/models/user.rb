@@ -65,6 +65,20 @@ class User < ActiveRecord::Base
     contribution
   end
 
+  # Returns the amount owed from a member on a trip to the user
+  # @param [User] member that owes money
+  # @return [BigDecimal] amount the user is owed from trip member
+  def amount_owed_from(member)
+    [(member.obligations.where(:expense_id => self.purchases.collect(&:id)).sum(:amount) - member.contributions.where(:expense_id => self.purchases.collect(&:id)).sum(:amount)) - (self.obligations.where(:expense_id => member.purchases.collect(&:id)).sum(:amount) - self.contributions.where(:expense_id => member.purchases.collect(&:id)).sum(:amount)), 0].max
+  end
+
+  # Returns the amount due to a member on a trip from the user
+  # @param [User] member that is due money
+  # @return [BigDecimal] amount the member is due from user
+  def amount_due_to(member)
+    [(self.obligations.where(:expense_id => member.purchases.collect(&:id)).sum(:amount) - self.contributions.where(:expense_id => member.purchases.collect(&:id)).sum(:amount)) - (member.obligations.where(:expense_id => self.purchases.collect(&:id)).sum(:amount) - member.contributions.where(:expense_id => self.purchases.collect(&:id)).sum(:amount)), 0].max
+  end
+
   # Override so that password is not sent in JSON, XML, etc
   def serializable_hash(*args)
     args[0] = (args[0] || {}).merge(:except => :password)
@@ -78,6 +92,9 @@ class User < ActiveRecord::Base
       user_hash[:purchases] = self.purchases.where(:trip_id => self.current_trip.id)
       user_hash[:contributions] = self.contributions.includes(:expense).where(["expenses.trip_id = ?", self.current_trip.id])
       user_hash[:obligations] = self.obligations.includes(:expense).where(["expenses.trip_id = ?", self.current_trip.id])
+
+      user_hash[:owe_members] = self.current_trip.members.collect{|x| {:user => x, :amount => self.amount_owed_from(x)}}
+      user_hash[:due_members] = self.current_trip.members.collect{|x| {:user => x, :amount => self.amount_due_to(x)}}
     end
 
     user_hash
