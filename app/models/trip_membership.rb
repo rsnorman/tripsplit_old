@@ -14,4 +14,13 @@ class TripMembership < ActiveRecord::Base
       e.reaverage_obligations
   	end
   end
+
+  after_destroy :remove_obligations
+
+  def remove_obligations
+    user.obligations.where(:expense_id => self.trip.expenses.collect(&:id)).destroy_all
+    self.trip.expenses.each do |e|
+      e.reaverage_obligations
+    end
+  end
 end

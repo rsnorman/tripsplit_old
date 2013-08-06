@@ -14,7 +14,7 @@ GroupExpenser::Application.routes.draw do
     resources :expenses, :only => [:create, :index, :show, :update, :destroy]
   end
 
-  resources :memberships, :as => :trip_memberships, :only => :show
+  resources :memberships, :as => :trip_memberships, :only => [:show, :index]
 
   match "organized_trips" => "trips#index", :organized => true, :via => :get
 

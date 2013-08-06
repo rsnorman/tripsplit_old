@@ -17,9 +17,10 @@ class FindFriendsController < ApplicationController
 		end
 
 
-		client.direct_message_create(params[:twitter_id].to_i, "Let's get weird during #{@trip.name}. http://www.group-expenser.dev:9000/#/join/#{@member.id}") unless Rails.env.test?
+		# client.direct_message_create(params[:twitter_id].to_i, "Let's get weird during #{@trip.name}. http://www.group-expenser.dev:9000/#/join/#{@member.id}") unless Rails.env.test?
 
 		@membership = @trip.add_member(@member)
+
 		respond_with @membership
 	end
 end
