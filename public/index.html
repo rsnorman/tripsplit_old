@@ -14,7 +14,7 @@
 
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="stylesheet" href="styles/208cf949.main.css">
+    <link rel="stylesheet" href="styles/1f5697e4.main.css">
 
   </head>
   <body>
@@ -32,7 +32,7 @@
             <norm-navigation class="span12">
             </norm-navigation>
         </nav>
-        <header class="header row-fluid" norm-scroll-shadow="" norm-parallax="">
+        <header class="header row-fluid">
             <div class="span4" id="main_header">{{mainHeader}}</div>
             <div ui-if="!useCurrencyForSecondaryHeader" class="span4" id="secondary_header">{{secondaryHeader}}</div>
             <div ui-if="useCurrencyForSecondaryHeader" class="span4" id="secondary_header" ng-bind-html-unsafe="secondaryHeader | currency | normCurrency"></div>
@@ -44,18 +44,19 @@
         </div>
 
         <footer norm-tabs="" ng-show="currentTrip" class="footer row-fluid" norm-scroll-shadow="">
+            <a class="tab" ng-href="#/trips/{{currentTrip.id}}">
+                <i class="icon icon-road"></i>
+            </a>
             <a class="tab" ng-href="#/trips/{{currentTrip.id}}/expenses">
                 $
-            </a>
-            <a class="tab" ng-href="#/trips/{{currentTrip.id}}/members/{{currentUser.id}}">
-                <i class="icon icon-user"></i>
             </a>
             <a class="tab" ng-href="#/trips/{{currentTrip.id}}/members">
                 <i class="icon icon-group"></i>
             </a>
-            <a class="tab" ng-href="#/trips/{{currentTrip.id}}">
-                <i class="icon icon-road"></i>
+            <a class="tab" ng-href="#/trips/{{currentTrip.id}}/members/{{currentUser.id}}">
+                <i class="icon icon-user"></i>
             </a>
+
         </footer>
     </div>
 
