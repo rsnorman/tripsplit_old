@@ -1,7 +1,7 @@
 class Trip < ActiveRecord::Base
   include ActionView::Helpers::NumberHelper
 
-  attr_accessible :name
+  attr_accessible :name, :location, :starts_on, :ends_on
 
   belongs_to :organizer, :class_name => User
   has_many :memberships, :class_name => TripMembership, :dependent => :destroy

@@ -1,29 +1,18 @@
-<div class="navigation">
-    <norm-back-button></norm-back-button>
-</div>
-
-<div class="top-section">
-    <div id="trip_name">Invite</div>
-
-    <div id="trip_cost">Friends</div>
-</div>
-<div class="bottom-section">
-    <div ng-show="fetchingFriends">
-        <h4>Fetching Twitter Friends...</h4>
-        <div class="progress progress-striped active row">
-            <div class="bar span12" style="width:100%"></div>
-        </div>
+<div ng-show="fetchingFriends">
+    <h4>Fetching Twitter Friends...</h4>
+    <div class="progress progress-striped active row">
+        <div class="bar span12" style="width:100%"></div>
     </div>
-    <div class="row" ng-hide="fetchingFriends">
-        <input class="span2" tye="text" ng-model="friendSearch" placeholder="Search...">
-    </div>
-    <div class="invite section-row" ng-class="{'invited': friend.invited}" ng-repeat="friend in twitterFriends | filter:friendSearch">
-        <img ng-src="{{friend.profile_image_url}}" alt="">
-        <div class="user-details">
-            <a class="btn" href="javascript:;" ng-click="invite($index)">Invite</a>
-            <span class="invited-text">Invited</span>
-            <h5>{{friend.name}} (@{{friend.screen_name}})</h5>
-            <em>{{friend.status.text}}</em>
-        </div>
+</div>
+<div class="row" ng-hide="fetchingFriends">
+    <input class="span2" tye="text" ng-model="friendSearch" placeholder="Search...">
+</div>
+<div class="invite section-row" ng-class="{'invited': friend.invited}" ng-repeat="friend in twitterFriends | filter:friendSearch">
+    <img ng-src="{{friend.profile_image_url}}" alt="">
+    <div class="user-details">
+        <a class="btn" href="javascript:;" ng-click="invite($index)">Invite</a>
+        <span class="invited-text">Invited</span>
+        <h5>{{friend.name}} (@{{friend.screen_name}})</h5>
+        <em>{{friend.status.text}}</em>
     </div>
 </div>

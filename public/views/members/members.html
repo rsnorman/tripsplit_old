@@ -1,23 +1,7 @@
-<div class="navigation">
-    <norm-back-button></norm-back-button>
-    <a ng-href="#/trips/{{tripId}}/members/invite">
-        <i class="icon icon-plus"></i>
-    </a>
-</div>
-
-<div class="top-section">
-    <div id="trip_name">{{trip.name}}</div>
-
-    <div id="trip_cost">Members</div>
-</div>
-
-<div class="bottom-section">
-
-    <a class="invite section-row" ng-href="#/trips/{{trip.id}}/members/{{member.id}}" ng-repeat="member in members">
-        <img ng-src="{{member.profile_image_url}}" alt="">
-        <div class="user-details">
-            <h4>{{member.name}}</h4>
-            <p>Total Paid: {{member.total_paid}}</p>
-        </div>
-    </a>
-</div>
+<a class="invite section-row" ng-href="#/trips/{{currentTrip.id}}/members/{{member.id}}" ng-repeat="member in members">
+    <img ng-src="{{member.profile_image_url}}" alt="">
+    <div class="user-details">
+        <h4>{{member.name}}</h4>
+        <p>Total Paid: {{member.total_paid}}</p>
+    </div>
+</a>

@@ -1,25 +1,41 @@
-<div class="navigation">
-	<a ng-href="#/trips"><i class="icon icon-tasks"></i></a>
-	<a ng-href="#/trips/{{trip.id}}/edit"><i class="icon icon-edit"></i></a>
-	<a ng-href="#/trips/{{trip.id}}/members"><i class="icon icon-group"></i></a>
+<div class="section-row">
+	<div class="expense-cost">
+		<span>{{currentTrip.organizer.name}}</span>
+	</div>
+	<div class="divider"></div>
+	<div class="expense-name">Organizer</div>
 </div>
 
-<div class="top-section">
-	<div id="trip_name">{{trip.name}}</div>
-
-	<div id="trip_cost"><span class="currency">$</span>{{trip.total_cost}}</div>
-
-	<a id="add_expense" ng-href="#/trips/{{trip.id}}/expenses/new">
-        <i class="icon icon-plus"></i> Add Expense
-    </a>
+<div class="section-row">
+	<div class="expense-cost">
+		<span>{{currentTrip.location}}</span>
+	</div>
+	<div class="divider"></div>
+	<div class="expense-name">Location</div>
 </div>
 
-<div class="bottom-section">
-	<a ng-href="#/trips/{{trip.id}}/expenses/{{expense.id}}" class="section-row" ng-repeat="expense in expenses">
-		<div class="expense-cost">
-			<span class="currency">$</span>
-			<span ui-currency="{ symbol: ''}" ng-model="expense.cost"></span>
-		</div>
-		<div class="divider"></div>
-		<div class="expense-name">{{expense.name}}</div>
-	</a></div>
+<div class="section-row">
+	<div class="expense-cost">
+		<span>{{currentTrip.total_members}}</span>
+	</div>
+	<div class="divider"></div>
+	<div class="expense-name">Group Size</div>
+</div>
+
+<div class="section-row">
+	<div class="expense-cost">
+		<span class="currency">$</span>
+		<span ui-currency="{ symbol: ''}" ng-model="currentTrip.total_cost"></span>
+	</div>
+	<div class="divider"></div>
+	<div class="expense-name">Total Cost</div>
+</div>
+
+<div class="section-row">
+	<div class="expense-cost">
+		<span class="currency">$</span>
+		<span ui-currency="{ symbol: ''}" ng-model="currentTrip.average_cost_per_member"></span>
+	</div>
+	<div class="divider"></div>
+	<div class="expense-name">Average Cost</div>
+</div>

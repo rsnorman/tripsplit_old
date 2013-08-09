@@ -1,0 +1,8 @@
+<a ng-href="#/trips/{{currentTrip.id}}/expenses/{{expense.id}}" class="section-row" ng-repeat="expense in expenses">
+	<div class="expense-cost">
+		<span class="currency">$</span>
+		<span ui-currency="{ symbol: ''}" ng-model="expense.cost"></span>
+	</div>
+	<div class="divider"></div>
+	<div class="expense-name">{{expense.name}}</div>
+</a>

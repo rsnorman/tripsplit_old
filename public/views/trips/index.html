@@ -1,30 +1,16 @@
-<div class="navigation">
-    <norm-back-button></norm-back-button>
-    <a ng-href="#/trips/new">
-        <i class="icon icon-plus"></i>
-    </a>
+<a ng-href="#/trips/{{trip.id}}" ng-repeat="trip in trips">
+<div class="section-row">
+    <div class="expense-cost">
+        {{trip.name}}
+    </div>
 </div>
-
-<div class="top-section">
-    <div id="trip_name">{{currentUser.name}}'s</div>
-    <div id="trip_cost">Trips</div>
+<div class="section-row">
+    <div class="expense-cost" ng-bind-html-unsafe="trip.total_cost | currency | normCurrency"></div>
+    <div class="divider"></div>
+    <div class="expense-name">Cost</div>
 </div>
-
-<div class="bottom-section">
-    <a ng-href="#/trips/{{trip.id}}" ng-repeat="trip in trips">
-    <div class="section-row">
-        <div class="expense-cost">
-            {{trip.name}}
-        </div>
-    </div>
-    <div class="section-row">
-        <div class="expense-cost" ng-bind-html-unsafe="trip.total_cost | currency | normCurrency"></div>
-        <div class="divider"></div>
-        <div class="expense-name">Cost</div>
-    </div>
-    <div class="section-row">
-        <div class="expense-cost" ng-bind-html-unsafe="trip.average_cost_per_member | currency | normCurrency"></div>
-        <div class="divider"></div>
-        <div class="expense-name">Average Cost</div>
-    </div>
-</a></div>
+<div class="section-row">
+    <div class="expense-cost" ng-bind-html-unsafe="trip.average_cost_per_member | currency | normCurrency"></div>
+    <div class="divider"></div>
+    <div class="expense-name">Average Cost</div>
+</div></a>
