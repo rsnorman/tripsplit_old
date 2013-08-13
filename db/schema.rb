@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130404013609) do
+ActiveRecord::Schema.define(:version => 20130810213400) do
 
   create_table "expense_contributions", :force => true do |t|
     t.integer  "user_id"
@@ -52,6 +52,16 @@ ActiveRecord::Schema.define(:version => 20130404013609) do
   add_index "expenses", ["purchaser_id"], :name => "index_expenses_on_purchaser_id"
   add_index "expenses", ["trip_id"], :name => "index_expenses_on_trip_id"
 
+  create_table "friendships", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "friend_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "friendships", ["friend_id"], :name => "index_friendships_on_friend_id"
+  add_index "friendships", ["user_id"], :name => "index_friendships_on_user_id"
+
   create_table "trip_memberships", :force => true do |t|
     t.integer  "user_id"
     t.integer  "trip_id"
@@ -78,9 +88,9 @@ ActiveRecord::Schema.define(:version => 20130404013609) do
   create_table "users", :force => true do |t|
     t.string   "name"
     t.string   "email"
-    t.string   "password"
     t.datetime "created_at",                       :null => false
     t.datetime "updated_at",                       :null => false
+    t.string   "password"
     t.string   "twitter_access_token"
     t.string   "twitter_access_secret"
     t.string   "twitter_id"

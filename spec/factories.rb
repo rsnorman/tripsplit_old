@@ -37,4 +37,9 @@ FactoryGirl.define do
     is_tip false
     amount 10
   end
+
+  factory :friendship do
+    association :user, :factory => :user
+    association :friend, :factory => :user
+  end
 end

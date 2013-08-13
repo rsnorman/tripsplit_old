@@ -9,15 +9,25 @@ describe "/twitter_friends" do
     @trip = Factory(:trip, :organizer => @user)
   end
 
-  describe "GET /twitter_friends" do
-    it "should list all the current users twitter friends" do
-      get "/twitter_friends", {:format => :json}, auth_parameters
+  # describe "GET /twitter_friends" do
+  #   it "should list all the current users twitter friends" do
+  #     get "/twitter_friends", {:format => :json}, auth_parameters
+
+  #     response.status.should eq 200
+  #     friends = JSON.parse(response.body)
+
+  #     friends.first['id'].should_not be_nil
+
+  #   end
+  # end
+
+  describe "GET /twitter_friends/find/:handle" do
+    it "should return a user that matches the twitter handle" do
+      get "/twitter_friends/find/normanonrails", {:format => :json}, auth_parameters
 
       response.status.should eq 200
-      friends = JSON.parse(response.body)
-
-      friends.first['id'].should_not be_nil
-
+      twitter_users = JSON.parse(response.body)
+      twitter_users.collect{|x| x['screen_name']}.should include 'NormanOnRails'
     end
   end
 

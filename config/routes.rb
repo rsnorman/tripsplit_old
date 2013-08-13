@@ -27,9 +27,12 @@ GroupExpenser::Application.routes.draw do
   resources :obligations, :as => :expense_obligations, :controller => :expense_obligations, :only => [:show, :update, :destroy]
   resources :contributions, :as => :expense_contributions, :controller => :expense_contributions
 
+  resources :friendships, :only => [:index, :create, :destroy]
+
   match "trips/:trip_id/purchases" => "expenses#index", :purchased => true, :via => :get
 
   get '/twitter_friends', :to => 'find_friends#twitter_friends'
+  get '/twitter_friends/find/:handle', :to => 'find_friends#find_twitter_user'
   post '/twitter_friends/invite', :to => 'find_friends#invite_twitter_friend'
 
   get '/auth/:provider/callback', :to =>'sessions#create', :as =>'callback'

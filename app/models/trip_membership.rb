@@ -23,4 +23,13 @@ class TripMembership < ActiveRecord::Base
       e.reaverage_obligations
     end
   end
+
+  after_create :add_friends
+
+  def add_friends
+    self.trip.members.where(["user_id != ?", self.user_id]).each do |member|
+      member.friendships << Friendship.new(:friend_id => self.user_id)
+      self.user.friendships << Friendship.new(:friend_id => member.id)
+    end
+  end
 end

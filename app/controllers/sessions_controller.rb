@@ -25,10 +25,10 @@ class SessionsController < ApplicationController
 
     @user.save!
 
-    if Rails.env.dev?
+    if Rails.env.development?
       redirect_to "http://www.group-expenser.dev:9000/#/users/#{@user.id}"
     else
-      redirect_to "http://aqueous-tundra-9580.herokuapp.com/#/users/#{@user.id}"
+      redirect_to "http://tripsplit.herokuapp.com/#/users/#{@user.id}"
     end
 
   end

@@ -28,4 +28,18 @@ describe TripMembership do
     @expense.reload.obligations.size.should eq 1
     @expense.obligations.collect(&:amount).should eq [100]
   end
+
+  it "should add a user that just created the trip membership as a friend to all other members" do
+    user = Factory(:user, :name => "John Smith")
+    trip_membership = Factory(:trip_membership, :trip => @trip, :user => user)
+
+    @purchaser.friends.first.should eq user
+  end
+
+  it "should add all members as friends to the user the just created a trip membership" do
+    user = Factory(:user, :name => "John Smith")
+    trip_membership = Factory(:trip_membership, :trip => @trip, :user => user)
+
+    user.friends.first.should eq @purchaser
+  end
 end
