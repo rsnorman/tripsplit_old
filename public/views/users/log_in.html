@@ -1,19 +1,35 @@
-<form method="get" html="classform-horizontal" action="{{domain}}/auth/twitter" accept-charset="UTF-8">
-    <div style="margin:0;padding:0;display:inline"><input type="hidden" value="✓" name="utf8"></div>
-    <fieldset>
-        <div>
-            <button type="submit" class="twitter-button">
-            </button>
-        </div>
-    </fieldset>
-</form>
+<div class="span12">
+    <div id="app_title" class="row-fluid">
+        <img id="trip_split_logo" src="/images/91fbd0ad.tripsplit-logo.png" alt="Trip Split Logo">
+        <h1 class="span12">Trip<span class="secondary-color">Split<span></span></span></h1>
+    </div>
 
-<form method="get" html="classform-horizontal" action="{{domain}}/auth/facebook" accept-charset="UTF-8">
-    <div style="margin:0;padding:0;display:inline"><input type="hidden" value="✓" name="utf8"></div>
-    <fieldset>
-        <div>
-            <button type="submit" class="facebook-button">
-            </button>
+    <div id="sign_in" class="row-fluid">
+        <div class="span12">
+            <div class="row-fluid">
+                <h2 class="span12">Sign In</h2>
+            </div>
+            <div class="row-fluid">
+                <form id="twitter_sign_in" class="span6" method="get" html="classform-horizontal" action="{{domain}}/auth/twitter" accept-charset="UTF-8">
+                    <div style="margin:0;padding:0;display:inline"><input type="hidden" value="✓" name="utf8"></div>
+                    <fieldset>
+                        <div>
+                            <button type="submit" class="twitter-button">
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+
+                <form id="facebook_sign_in" class="span6" method="get" html="classform-horizontal" action="{{domain}}/auth/facebook" accept-charset="UTF-8">
+                    <div style="margin:0;padding:0;display:inline"><input type="hidden" value="✓" name="utf8"></div>
+                    <fieldset>
+                        <div>
+                            <button type="submit" class="facebook-button">
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
         </div>
-    </fieldset>
-</form>
+    </div>
+</div>
