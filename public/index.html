@@ -20,7 +20,7 @@
 
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="stylesheet" href="styles/555194e4.main.css">
+    <link rel="stylesheet" href="styles/f12e834d.main.css">
 
   </head>
   <body ng-cloak="">
@@ -33,7 +33,7 @@
       <script src="components/json3/lib/json3.min.js"></script>
     <![endif]-->
 
-    <div id="settings" class="container" norm-settings="" trigger="#settings_button" main-container=".wrapper">
+    <div id="settings" class="container" norm-settings="" trigger="#settings_button" main-container=".wrapper,.footer">
         <ul>
             <li>
                 {{currentUser.name}}
@@ -73,23 +73,25 @@
                 </div>
             </div>
 
-            <footer norm-tabs="" ng-show="currentTrip" class="footer row-fluid" norm-scroll-shadow="">
-                <a class="tab" ng-href="#/trips/{{currentTrip.id}}">
-                    <i class="icon icon-road"></i>
-                </a>
-                <a class="tab" ng-href="#/trips/{{currentTrip.id}}/expenses">
-                    $
-                </a>
-                <a class="tab" ng-href="#/trips/{{currentTrip.id}}/members">
-                    <i class="icon icon-group"></i>
-                </a>
-                <a class="tab" ng-href="#/trips/{{currentTrip.id}}/members/{{currentUser.id}}">
-                    <i class="icon icon-user"></i>
-                </a>
 
-            </footer>
         </div>
     </div>
+
+    <footer norm-tabs="" ng-show="currentTrip" class="footer row-fluid" norm-scroll-shadow="">
+        <a class="tab" ng-href="#/trips/{{currentTrip.id}}">
+            <i class="icon icon-road"></i>
+        </a>
+        <a class="tab" ng-href="#/trips/{{currentTrip.id}}/expenses">
+            $
+        </a>
+        <a class="tab" ng-href="#/trips/{{currentTrip.id}}/members">
+            <i class="icon icon-group"></i>
+        </a>
+        <a class="tab" ng-href="#/trips/{{currentTrip.id}}/members/{{currentUser.id}}">
+            <i class="icon icon-user"></i>
+        </a>
+
+    </footer>
 
     <norman-loader></norman-loader>
 
