@@ -95,8 +95,8 @@ class User < ActiveRecord::Base
       user_hash[:contributions] = self.contributions.includes(:expense).where(["expenses.trip_id = ?", self.current_trip.id])
       user_hash[:obligations] = self.obligations.includes(:expense).where(["expenses.trip_id = ?", self.current_trip.id])
 
-      user_hash[:owe_members] = self.current_trip.members.collect{|x| {:user => x, :amount => self.amount_owed_from(x)}}
-      user_hash[:due_members] = self.current_trip.members.collect{|x| {:user => x, :amount => self.amount_due_to(x)}}
+      user_hash[:owe_members] = self.current_trip.members.collect{|x| {:user => x, :amount => self.amount_owed_from(x)}}.select{|x| !x[:amount].zero?}
+      user_hash[:due_members] = self.current_trip.members.collect{|x| {:user => x, :amount => self.amount_due_to(x)}}.select{|x| !x[:amount].zero?}
     end
 
     user_hash

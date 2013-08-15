@@ -6,23 +6,21 @@
     <span ng-bind-html-unsafe="member.obligated | currency | normCurrency"></span>
 </norm-row>
 
-<norm-row title="Total Owed To You">
-    <span ng-bind-html-unsafe="member.due | currency | normCurrency"></span>
-</norm-row>
-
-<norm-row title="Total You Owe">
-    <span ng-bind-html-unsafe="member.owe | currency | normCurrency"></span>
-</norm-row>
-
 <h3>Members You Owe</h3>
 <norm-row title="{{due_member.user.name}}" src="{{due_member.user.profile_image_url}}" ng-repeat="due_member in member.due_members">
     <span ng-bind-html-unsafe="due_member.amount | currency | normCurrency"></span>
 </norm-row>
+<div ng-hide="hasDueMembers()">
+    <em>None</em>
+</div>
 
 <h3>Members That Owe You</h3>
 <norm-row title="{{owe_member.user.name}}" src="{{owe_member.user.profile_image_url}}" ng-repeat="owe_member in member.owe_members">
     <span ng-bind-html-unsafe="owe_member.amount | currency | normCurrency"></span>
 </norm-row>
+<div ng-hide="hasOweMembers()">
+    <em>None</em>
+</div>
 
 <h3>Purchases</h3>
 <norm-row title="{{expense.name}}" icon="{{expense.expense_type | normExpenseIcon}}" ng-repeat="expense in member.purchases">
