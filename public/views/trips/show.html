@@ -1,41 +1,11 @@
-<div class="section-row">
-	<div class="expense-cost">
-		<span>{{currentTrip.organizer.name}}</span>
-	</div>
-	<div class="divider"></div>
-	<div class="expense-name">Organizer</div>
-</div>
-
-<div class="section-row">
-	<div class="expense-cost">
-		<span>{{currentTrip.location}}</span>
-	</div>
-	<div class="divider"></div>
-	<div class="expense-name">Location</div>
-</div>
-
-<div class="section-row">
-	<div class="expense-cost">
-		<span>{{currentTrip.total_members}}</span>
-	</div>
-	<div class="divider"></div>
-	<div class="expense-name">Group Size</div>
-</div>
-
-<div class="section-row">
-	<div class="expense-cost">
-		<span class="currency">$</span>
-		<span ui-currency="{ symbol: ''}" ng-model="currentTrip.total_cost"></span>
-	</div>
-	<div class="divider"></div>
-	<div class="expense-name">Total Cost</div>
-</div>
-
-<div class="section-row">
-	<div class="expense-cost">
-		<span class="currency">$</span>
-		<span ui-currency="{ symbol: ''}" ng-model="currentTrip.average_cost_per_member"></span>
-	</div>
-	<div class="divider"></div>
-	<div class="expense-name">Average Cost</div>
-</div>
+<norm-row title="Organizer" src="{{currentTrip.organizer.profile_image_url}}">{{currentTrip.organizer.name}}</norm-row>
+<norm-row title="Location" icon="globe">{{currentTrip.location}}</norm-row>
+<norm-row title="Group Size" icon="group">{{currentTrip.total_members}}</norm-row>
+<norm-row title="Total Cost" icon="credit-card">
+	<span class="currency">$</span>
+	<span ui-currency="{ symbol: ''}" ng-model="currentTrip.total_cost"></span>
+</norm-row>
+<norm-row title="Average Cost" icon="credit-card">
+	<span class="currency">$</span>
+	<span ui-currency="{ symbol: ''}" ng-model="currentTrip.average_cost_per_member"></span>
+</norm-row>

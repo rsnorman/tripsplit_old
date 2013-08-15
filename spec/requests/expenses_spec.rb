@@ -32,6 +32,14 @@ describe "/expenses" do
       expenses.collect{|x| x['id']}.should_not include other_expense.id
     end
 
+    it "should include the purchaser for each expense" do
+      get "/trips/#{@trip.id}/expenses", {:format => :json}, auth_parameters
+
+      response.should be_ok
+      expenses = JSON.parse(response.body)
+      expenses.first['purchaser'].should_not be_nil
+    end
+
   end
 
 

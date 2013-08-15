@@ -1,7 +1,3 @@
-<a class="invite section-row" ng-href="#/trips/{{currentTrip.id}}/members/{{member.id}}" ng-repeat="member in members">
-    <img ng-src="{{member.profile_image_url}}" alt="">
-    <div class="user-details">
-        <h4>{{member.name}}</h4>
-        <p>Total Paid: {{member.total_paid}}</p>
-    </div>
-</a>
+<norm-row title="{{member.name}}" href="#/trips/{{currentTrip.id}}/members/{{member.id}}" src="{{member.profile_image_url}}" ng-repeat="member in members">
+	Total Paid {{member.total_paid}}
+</norm-row>

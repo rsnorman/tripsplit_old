@@ -1,78 +1,55 @@
-<span class="section-row">
-    <div class="expense-cost" ng-bind-html-unsafe="member.contributed | currency | normCurrency">
-    </div>
-    <div class="divider"></div>
-    <div class="expense-name">Total Contributed</div>
-</span>
-<span class="section-row">
-    <div class="expense-cost" ng-bind-html-unsafe="member.obligated | currency | normCurrency">
-    </div>
-    <div class="divider"></div>
-    <div class="expense-name">Total Obligated</div>
-</span>
-<!--     <span class='section-row'>
-    <div class='expense-cost' ng-bind-html-unsafe="member.due | currency | normCurrency">
-    </div>
-    <div class='divider'></div>
-    <div class='expense-name'>Total Due</div>
-</span>
-<span class='section-row'>
-    <div class='expense-cost' ng-bind-html-unsafe="member.owe | currency | normCurrency">
-    </div>
-    <div class='divider'></div>
-    <div class='expense-name'>Total Owe</div>
-</span> -->
+<norm-row title="Total Contributed">
+    <span ng-bind-html-unsafe="member.contributed | currency | normCurrency"></span>
+</norm-row>
+
+<norm-row title="Total Obligated">
+    <span ng-bind-html-unsafe="member.obligated | currency | normCurrency"></span>
+</norm-row>
+
+<norm-row title="Total Owed To You">
+    <span ng-bind-html-unsafe="member.due | currency | normCurrency"></span>
+</norm-row>
+
+<norm-row title="Total You Owe">
+    <span ng-bind-html-unsafe="member.owe | currency | normCurrency"></span>
+</norm-row>
 
 <h3>Members You Owe</h3>
-<span class="section-row" ng-show="due_member.amount != '0.0'" ng-repeat="due_member in member.due_members">
-    <div class="expense-cost" ng-bind-html-unsafe="due_member.amount | currency | normCurrency">
-    </div>
-    <div class="divider"></div>
-    <div class="expense-name">{{due_member.user.name}}</div>
-</span>
+<norm-row title="{{due_member.user.name}}" src="{{due_member.user.profile_image_url}}" ng-repeat="due_member in member.due_members">
+    <span ng-bind-html-unsafe="due_member.amount | currency | normCurrency"></span>
+</norm-row>
 
 <h3>Members That Owe You</h3>
-<span class="section-row" ng-show="owe_member.amount != '0.0'" ng-repeat="owe_member in member.owe_members">
-    <div class="expense-cost" ng-bind-html-unsafe="owe_member.amount | currency | normCurrency">
-    </div>
-    <div class="divider"></div>
-    <div class="expense-name">{{owe_member.user.name}}</div>
-</span>
-
+<norm-row title="{{owe_member.user.name}}" src="{{owe_member.user.profile_image_url}}" ng-repeat="owe_member in member.owe_members">
+    <span ng-bind-html-unsafe="owe_member.amount | currency | normCurrency"></span>
+</norm-row>
 
 <h3>Purchases</h3>
-<span class="section-row" ng-repeat="expense in member.purchases">
-    <div class="expense-cost" ng-bind-html-unsafe="expense.cost | currency | normCurrency">
-    </div>
-    <div class="divider"></div>
-    <div class="expense-name">{{expense.name}}</div>
-</span>
+<norm-row title="{{expense.name}}" icon="{{expense.expense_type | normExpenseIcon}}" ng-repeat="expense in member.purchases">
+    <span ng-bind-html-unsafe="expense.cost | currency | normCurrency"></span>
+</norm-row>
+
 <div ng-hide="hasPurchases()">
     <em>None</em>
 </div>
 
 <h3>Obligations</h3>
-<span class="section-row" ng-repeat="obligation in member.obligations">
-    <div class="expense-cost" ng-bind-html-unsafe="obligation.amount | currency | normCurrency">
-    </div>
-    <div class="divider"></div>
-    <div class="expense-name">{{obligation.expense.name}}</div>
-</span>
+<norm-row title="{{obligation.expense.name}}" icon="{{obligation.expense.expense_type | normExpenseIcon}}" ng-repeat="obligation in member.obligations">
+    <span ng-bind-html-unsafe="obligation.amount | currency | normCurrency"></span>
+</norm-row>
+
 <div ng-hide="hasObligations()">
     <em>None</em>
 </div>
 
 <h3>Contributions</h3>
-<span class="section-row" ng-repeat="contribution in member.contributions">
-    <div class="expense-cost" ng-bind-html-unsafe="contribution.amount | currency | normCurrency">
-    </div>
-    <div class="divider"></div>
-    <div class="expense-name">{{contribution.expense.name}}</div>
-</span>
+<norm-row title="{{contribution.expense.name}}" icon="{{contribution.expense.expense_type | normExpenseIcon}}" ng-repeat="contribution in member.contributions">
+    <span ng-bind-html-unsafe="contribution.amount | currency | normCurrency"></span>
+</norm-row>
+
 <div ng-hide="hasContributions()">
     <em>None</em>
 </div>
-
 
 <div ui-if="isOrganizer()">
     <div class="row-fluid">

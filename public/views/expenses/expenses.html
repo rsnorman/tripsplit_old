@@ -1,8 +1,4 @@
-<a ng-href="#/trips/{{currentTrip.id}}/expenses/{{expense.id}}" class="section-row" ng-repeat="expense in expenses">
-	<div class="expense-cost">
-		<span class="currency">$</span>
-		<span ui-currency="{ symbol: ''}" ng-model="expense.cost"></span>
-	</div>
-	<div class="divider"></div>
-	<div class="expense-name">{{expense.name}}</div>
-</a>
+<norm-row title="{{expense.name}}" href="#/trips/{{currentTrip.id}}/expenses/{{expense.id}}" icon="{{expense.expense_type | normExpenseIcon}}" ng-repeat="expense in expenses">
+	Purchased by {{expense.purchaser.name}} for
+  <span ng-bind-html-unsafe="expense.cost | currency | normCurrency"></span>
+</norm-row>

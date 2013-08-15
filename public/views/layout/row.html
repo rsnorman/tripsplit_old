@@ -1,0 +1,14 @@
+<a class="row span6" ng-href="{{href}}">
+	<div class="row-fluid">
+		<div ui-if="icon" class="row-icon span1">
+			<i class="icon icon-{{icon}}"></i>
+		</div>
+		<div ui-if="src" class="row-image span1">
+			<img ng-src="{{src}}" alt="">
+		</div>
+		<div class="row-content span5">
+			<h4>{{title}}</h4>
+			<div ng-transclude=""></div>
+		</div>
+	</div>
+</a>

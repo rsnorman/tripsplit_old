@@ -1,6 +1,6 @@
 class Expense < ActiveRecord::Base
   attr_accessible :cost, :expense_type, :name, :tip, :tip_included
-  attr_accessor :full_detail
+  attr_accessor :full_detail, :with_purchaser
 
   belongs_to :purchaser, :class_name => User
   belongs_to :trip
@@ -104,6 +104,13 @@ class Expense < ActiveRecord::Base
       args[0][:methods] = [:average_cost, :average_tip, :average_tip_without_cost]
       args[0][:include] = [:contributions, :obligations, :purchaser]
     end
+
+    if self.with_purchaser
+      args[0] ||= {}
+      args[0][:include] = [:purchaser]
+    end
+
+
 
     super
   end

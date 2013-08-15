@@ -9,7 +9,7 @@ class ExpensesController < ApplicationController
 		@trip = @user.trips.find(params[:trip_id]) if params[:trip_id]
 	end
 
-	# Gets a list of all the expenses for the application or a user. 
+	# Gets a list of all the expenses for the application or a user.
   #
   # @example
   #  #GET /expenses
@@ -19,7 +19,7 @@ class ExpensesController < ApplicationController
   #  [200 OK] Successfully retrieved Array of expenses
   #   # Example response
   #   [{
-  #    "name" => "Gas Fill up", 
+  #    "name" => "Gas Fill up",
   #    "expense_type" => "Gas",
   #    "cost" => "45.0",
   #    "user" => {
@@ -31,6 +31,7 @@ class ExpensesController < ApplicationController
   #   }]
 	def index
 		@expenses = @trip.nil? ? @user.purchases : params[:purchased] ? @user.purchases.where(:trip_id => @trip.id) : @trip.expenses
+    @expenses.each{|x| x.with_purchaser = true}
 		respond_with @expenses
 	end
 
@@ -43,7 +44,7 @@ class ExpensesController < ApplicationController
   #  [200 OK] Successfully retrieved a expense
   #   # Example response
   #   {
-  #    "name" => "Gas Fill up", 
+  #    "name" => "Gas Fill up",
   #    "expense_type" => "Gas",
   #    "cost" => "45.0",
   #    "user" => {
@@ -64,7 +65,7 @@ class ExpensesController < ApplicationController
   # @example
   #  #POST /expenses, {
   #    expense: {
-  #      name: 'Dorito Chips', 
+  #      name: 'Dorito Chips',
   #      cost:  2.87,
   #      expense_type: 'Food'
   #    }
@@ -74,7 +75,7 @@ class ExpensesController < ApplicationController
   #  [201 CREATED] Successfully created a expense
   #   # Example response
   #   {
-  #    "name" => "Gas Fill up", 
+  #    "name" => "Gas Fill up",
   #    "expense_type" => "Gas",
   #    "cost" => "45.0",
   #    "user" => {
@@ -98,7 +99,7 @@ class ExpensesController < ApplicationController
 	# @example
 	#  #PUT /expenses, {
   #    expense: {
-  #      name: 'Dorito Chips', 
+  #      name: 'Dorito Chips',
   #      cost:  2.87,
   #      expense_type: 'Food'
   #    }

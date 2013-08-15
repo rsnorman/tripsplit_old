@@ -7,12 +7,11 @@
 <div class="row" ng-hide="fetchingFriends">
     <input class="span2" tye="text" ng-model="friendSearch" placeholder="Search...">
 </div>
-<div class="invite section-row" ng-class="{'invited': friend.invited}" ng-repeat="friend in twitterFriends | filter:friendSearch">
-    <img ng-src="{{friend.profile_image_url}}" alt="">
+
+<norm-row title="{{friend.name}} (@{{friend.screen_name}}" ng-class="{'invited': friend.invited}" href="#/trips/{{currentTrip.id}}/members/{{member.id}}" src="{{friend.profile_image_url}}" ng-repeat="friend in twitterFriends | filter:friendSearch">
     <div class="user-details">
         <a class="btn" href="javascript:;" ng-click="invite($index)">Invite</a>
         <span class="invited-text">Invited</span>
-        <h5>{{friend.name}} (@{{friend.screen_name}})</h5>
         <em>{{friend.status.text}}</em>
     </div>
-</div>
+</norm-row>

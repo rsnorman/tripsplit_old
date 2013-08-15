@@ -20,7 +20,7 @@
 
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="stylesheet" href="styles/f12e834d.main.css">
+    <link rel="stylesheet" href="styles/159241fb.main.css">
 
   </head>
   <body ng-cloak="">
@@ -33,7 +33,7 @@
       <script src="components/json3/lib/json3.min.js"></script>
     <![endif]-->
 
-    <div id="settings" class="container" norm-settings="" trigger="#settings_button" main-container=".wrapper,.footer">
+    <div id="settings" class="container" norm-settings="" trigger="#settings_button" main-container=".wrapper,.footer,.navigation">
         <ul>
             <li>
                 {{currentUser.name}}
@@ -50,12 +50,13 @@
         </ul>
     </div>
 
+    <nav ui-if="!hideNavigation" class="nav row-fluid">
+        <norm-navigation class="span12">
+        </norm-navigation>
+    </nav>
     <div class="wrapper" ng-class="{'settings-open': settingsOpen}">
         <div id="main" class="container">
-            <nav ui-if="!hideNavigation" class="row-fluid">
-                <norm-navigation class="span12">
-                </norm-navigation>
-            </nav>
+
             <header ui-if="mainHeader" class="header row-fluid">
                 <div class="span12">
                     <div clasjs="row-fluid">
@@ -68,9 +69,7 @@
                 </div>
                 <hr>
             </header>
-            <div id="main_section" class="row-fluid">
-                <div class="span12" ng-view="">
-                </div>
+            <div id="main_section" class="row-fluid" ng-view="">
             </div>
 
 
@@ -100,7 +99,7 @@
 
     <script src="scripts/70ac031c.modules.js"></script>
 
-    <script src="scripts/31ff8379.scripts.js"></script>
+    <script src="scripts/4b01bf91.scripts.js"></script>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
