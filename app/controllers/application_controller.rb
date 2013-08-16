@@ -8,13 +8,16 @@ class ApplicationController < ActionController::Base
     @user = User.find_by_id(request.env["HTTP_USER"])
   end
 
-  def client
-    @client ||= Twitter::Client.new(
+  def twitter_client
+    @twitter_client ||= Twitter::Client.new(
     :consumer_key => JUNKETEER_TWITTER_CONSUMER_KEY,
     :consumer_secret => JUNKETEER_TWITTER_CONSUMER_SECRET,
     :oauth_token => session[:access_token] || @user.twitter_access_token,
     :oauth_token_secret => session[:access_secret] || @user.twitter_access_secret
     )
+  end
 
+  def facebook_client
+    @facebook_client ||= Koala::Facebook::API.new(@user.facebook_access_token)
   end
 end

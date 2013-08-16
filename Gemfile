@@ -24,6 +24,8 @@ gem 'twitter'
 gem 'twitter-text'
 
 gem 'omniauth-facebook'
+gem "koala", "~> 1.7.0rc1"
+
 
 gem 'rest-client'
 

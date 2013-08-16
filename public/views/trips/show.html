@@ -2,10 +2,8 @@
 <norm-row title="Location" icon="globe">{{currentTrip.location}}</norm-row>
 <norm-row title="Group Size" icon="group">{{currentTrip.total_members}}</norm-row>
 <norm-row title="Total Cost" icon="credit-card">
-	<span class="currency">$</span>
-	<span ui-currency="{ symbol: ''}" ng-model="currentTrip.total_cost"></span>
+	<span ng-bind-html-unsafe="currentTrip.total_cost | currency | normCurrency"></span>
 </norm-row>
 <norm-row title="Average Cost" icon="credit-card">
-	<span class="currency">$</span>
-	<span ui-currency="{ symbol: ''}" ng-model="currentTrip.average_cost_per_member"></span>
+	<span ng-bind-html-unsafe="currentTrip.average_cost_per_member | currency | normCurrency"></span>
 </norm-row>

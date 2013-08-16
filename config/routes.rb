@@ -35,6 +35,10 @@ GroupExpenser::Application.routes.draw do
   get '/twitter_friends/find/:handle', :to => 'find_friends#find_twitter_user'
   post '/twitter_friends/invite', :to => 'find_friends#invite_twitter_friend'
 
+  get '/facebook_friends', :to => 'find_friends#facebook_friends'
+  get '/facebook_friends/find/:name', :to => 'find_friends#find_facebook_user'
+  post '/facebook_friends/invite', :to => 'find_friends#invite_facebook_friend'
+
   get '/auth/:provider/callback', :to =>'sessions#create', :as =>'callback'
   get '/auth/failure', :to =>'sessions#error', :as =>'failure'
   get '/profile', :to =>'sessions#show', :as =>'show'

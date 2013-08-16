@@ -1,17 +1,31 @@
-<div ng-show="fetchingFriends">
-    <h4>Fetching Twitter Friends...</h4>
-    <div class="progress progress-striped active row">
-        <div class="bar span12" style="width:100%"></div>
+<span class="span12">
+    <div class="row-fluid social">
+        <a href="javascript:;" ng-class="{'active': isActiveSocial('TripSplit')}" ng-click="switchSocial('TripSplit')">
+            <img src="/images/592d1d4b.tripsplit-logo-small.png" alt="TripSplit">
+        </a>
+        <a href="javascript:;" ng-show="currentUser.twitter_id" ng-class="{'active': isActiveSocial('Twitter')}" ng-click="switchSocial('Twitter')">
+            <img src="/images/d9c4b3fa.twitter-small.png" alt="Twitter">
+        </a>
+        <a href="javascript:;" ng-show="currentUser.facebook_id" ng-class="{'active': isActiveSocial('Facebook')}" ng-click="switchSocial('Facebook')">
+            <img src="/images/2ec24343.facebook-small.png" alt="Facebook">
+        </a>
     </div>
-</div>
-<div class="row" ng-hide="fetchingFriends">
-    <input class="span2" tye="text" ng-model="friendSearch" placeholder="Search...">
-</div>
+    <div ng-switch="" on="social">
+        <div ng-switch-when="Twitter" ng-include="'/views/members/find_twitter_friends.html'">
+        </div>
 
-<norm-row title="{{friend.name}} (@{{friend.screen_name}}" ng-class="{'invited': friend.invited}" href="#/trips/{{currentTrip.id}}/members/{{member.id}}" src="{{friend.profile_image_url}}" ng-repeat="friend in twitterFriends | filter:friendSearch">
-    <div class="user-details">
-        <a class="btn" href="javascript:;" ng-click="invite($index)">Invite</a>
-        <span class="invited-text">Invited</span>
-        <em>{{friend.status.text}}</em>
+        <div ng-switch-when="Facebook" ng-include="'/views/members/find_facebook_friends.html'">
+        </div>
+
+        <div ng-switch-default="">
+            <div class="row-fluid">
+                <input class="span2" tye="text" ng-model="friendSearch" placeholder="Search...">
+            </div>
+
+            <norm-row title="{{friend.name}}" class="friend" src="{{friend.profile_image_url}}" ng-repeat="friend in friends | filter:friendSearch">
+                <a class="btn" href="javascript:;" ng-hide="isInvited(friend)" ng-click="invite($index)">Invite</a>
+                <span ng-show="isInvited(friend)" class="invited">Invited</span>
+            </norm-row>
+        </div>
     </div>
-</norm-row>
+</span>

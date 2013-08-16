@@ -1,12 +1,8 @@
 class FindFriendsController < ApplicationController
 	respond_to :json
 
-	def twitter_friends
-		# respond_with client.friends
-	end
-
 	def find_twitter_user
-		respond_with client.user_search(params[:handle])
+		respond_with twitter_client.user_search(params[:handle])
 	end
 
 	def invite_twitter_friend
@@ -17,10 +13,34 @@ class FindFriendsController < ApplicationController
 			@member = User.new
 			@member.name = params[:name]
 			@member.twitter_id = params[:twitter_id]
+			@member.profile_image_url = params[:profile_image_url]
 			@member.save!
 		end
 
-		client.direct_message_create(params[:twitter_id].to_i, "Let's get weird during #{@trip.name}. http://www.group-expenser.dev:9000/#/join/#{@member.id}") unless Rails.env.test?
+		twitter_client.direct_message_create(params[:twitter_id].to_i, "Let's get weird during #{@trip.name}. http://#{request.host}#{":9000" if Rails.env.development?}/#/join/#{@member.id}") unless Rails.env.test?
+
+		@membership = @trip.add_member(@member)
+
+		respond_with @membership
+	end
+
+	def find_facebook_user
+		respond_with facebook_client.fql_query("SELECT uid, name, pic_square, status FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) AND strpos(name,'#{params[:name]}') >=0")
+	end
+
+	def invite_facebook_friend
+		@trip = Trip.find(params[:trip_id])
+		@member = User.find_by_facebook_id(params[:twitter_id])
+
+		unless @member
+			@member = User.new
+			@member.name = params[:name]
+			@member.facebook_id = params[:facebook_id]
+			@member.profile_image_url = params[:profile_image_url]
+			@member.save!
+		end
+
+		facebook_client.put_wall_post("Let's get weird during #{@trip.name}. http://#{request.host}#{":9000" if Rails.env.development?}/#/join/#{@member.id}", {:name => "Ryan Norman"}, @member.facebook_id)
 
 		@membership = @trip.add_member(@member)
 
