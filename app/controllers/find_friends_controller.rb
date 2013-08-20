@@ -40,11 +40,7 @@ class FindFriendsController < ApplicationController
 			@member.save!
 		end
 
-
-
 		@membership = @trip.add_member(@member)
-
-		raise @member.inspect
 
 		respond_with @membership
 	end

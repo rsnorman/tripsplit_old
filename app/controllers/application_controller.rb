@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
 
+  before_filter :redirect_to_hash_path
   before_filter :set_user_from_header
   private
 
@@ -19,5 +20,11 @@ class ApplicationController < ActionController::Base
 
   def facebook_client
     @facebook_client ||= Koala::Facebook::API.new(@user.facebook_access_token)
+  end
+
+  def redirect_to_hash_path
+    if request.format.symbol != :json
+      redirect_to "#{":9000" if Rails.env.development?}/##{request.original_fullpath}" and return false
+    end
   end
 end
