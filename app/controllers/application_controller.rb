@@ -23,7 +23,8 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_to_hash_path
-    if request.format.symbol != :json
+    if request.format.symbol != :json && params[:provider].nil?
+      Rails.logger.info request.original_fullpath
       redirect_to "#{":9000" if Rails.env.development?}/##{request.original_fullpath}" and return false
     end
   end
