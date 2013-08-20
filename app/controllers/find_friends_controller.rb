@@ -25,12 +25,12 @@ class FindFriendsController < ApplicationController
 	end
 
 	def find_facebook_user
-		respond_with facebook_client.fql_query("SELECT uid, name, pic_square, status FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) AND strpos(name,'#{params[:name]}') >=0")
+		respond_with facebook_client.fql_query("SELECT uid, name, pic_square, status FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) AND strpos(lower(name),lower('#{params[:name]}')) >=0")
 	end
 
 	def invite_facebook_friend
 		@trip = Trip.find(params[:trip_id])
-		@member = User.find_by_facebook_id(params[:twitter_id])
+		@member = User.find_by_facebook_id(params[:facebook_id])
 
 		unless @member
 			@member = User.new
@@ -40,9 +40,11 @@ class FindFriendsController < ApplicationController
 			@member.save!
 		end
 
-		facebook_client.put_wall_post("Let's get weird during #{@trip.name}. http://#{request.host}#{":9000" if Rails.env.development?}/#/join/#{@member.id}", {:name => "Ryan Norman"}, @member.facebook_id)
+
 
 		@membership = @trip.add_member(@member)
+
+		raise @member.inspect
 
 		respond_with @membership
 	end

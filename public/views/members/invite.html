@@ -23,7 +23,7 @@
             </div>
 
             <norm-row title="{{friend.name}}" class="friend" src="{{friend.profile_image_url}}" ng-repeat="friend in friends | filter:friendSearch">
-                <a class="btn" href="javascript:;" ng-hide="isInvited(friend)" ng-click="invite($index)">Invite</a>
+                <a class="btn" href="javascript:;" ng-hide="isInvited(friend)" ng-click="invite(friend)">Invite</a>
                 <span ng-show="isInvited(friend)" class="invited">Invited</span>
             </norm-row>
         </div>

@@ -18,8 +18,8 @@
 
     <norm-row title="{{friend.name}}" class="friend twitter-friend" href="#/trips/{{currentTrip.id}}/members/{{member.id}}" src="{{friend.profile_image_url}}" ng-repeat="friend in twitterers | filter:friendSearch">
         <div class="friend-details">
-            <a class="btn" href="javascript:;" ng-hide="friend.invited" ng-click="invite($index)">Invite</a>
-            <span class="invited" ng-show="friend.invited">Invited</span>
+            <a class="btn" href="javascript:;" ng-hide="friend.invited || twitterInvited(friend)" ng-click="inviteTwitterer(friend)">Invite</a>
+            <span class="invited" ng-show="friend.invited || twitterInvited(friend)">Invited</span>
             <span class="description">@{{friend.screen_name}} &mdash; {{friend.description}}</span>
         </div>
     </norm-row>
