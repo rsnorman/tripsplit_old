@@ -1,7 +1,8 @@
 class Trip < ActiveRecord::Base
   include ActionView::Helpers::NumberHelper
 
-  attr_accessible :name, :location, :starts_on, :ends_on
+  attr_accessible :name, :location, :starts_on, :ends_on, :description, :needs_facebook_event
+  attr_accessor :needs_facebook_event
 
   belongs_to :organizer, :class_name => User
   has_many :memberships, :class_name => TripMembership, :dependent => :destroy
@@ -10,7 +11,21 @@ class Trip < ActiveRecord::Base
   has_many :obligations, :through => :expenses
   has_many :contributions, :through => :expenses
 
+  before_save :create_facebook_event, :if => lambda { self.needs_facebook_event }
   after_create :add_organizer_as_member
+
+  def create_facebook_event
+    fb_event = Koala::Facebook::API.new(self.organizer.facebook_access_token).put_connections(self.organizer.facebook_id, 'events', {
+      :name => self.name,
+      :start_time => self.starts_on,
+      :end_time => self.ends_on,
+      :location => self.location,
+      :description => "#{self.description} \n\nManage event expenses: http://www.tripsplit.com/#/trips/#{self.id}/join",
+      :privacy_type => 'SECRET'
+      })
+
+    self.facebook_event_id = fb_event['id']
+  end
 
   # Adds the organizer as a member of the trip
   def add_organizer_as_member

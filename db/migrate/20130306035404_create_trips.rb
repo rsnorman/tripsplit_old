@@ -3,6 +3,8 @@ class CreateTrips < ActiveRecord::Migration
     create_table :trips do |t|
     	t.references :organizer
       t.string :name
+      t.text :description
+      t.string :facebook_event_id
 
       t.timestamps
     end
