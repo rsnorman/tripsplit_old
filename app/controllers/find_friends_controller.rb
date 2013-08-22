@@ -40,6 +40,8 @@ class FindFriendsController < ApplicationController
 			@member.save!
 		end
 
+		facebook_client
+
 		@membership = @trip.add_member(@member)
 
 		respond_with @membership

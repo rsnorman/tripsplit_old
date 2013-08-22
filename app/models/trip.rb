@@ -14,6 +14,7 @@ class Trip < ActiveRecord::Base
   before_save :create_facebook_event, :if => lambda { self.needs_facebook_event }
   after_create :add_organizer_as_member
 
+  # TODO: Test that this works
   def create_facebook_event
     fb_event = Koala::Facebook::API.new(self.organizer.facebook_access_token).put_connections(self.organizer.facebook_id, 'events', {
       :name => self.name,

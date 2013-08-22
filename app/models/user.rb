@@ -13,22 +13,75 @@ class User < ActiveRecord::Base
   has_many :friendships, :dependent => :destroy
   has_many :friends, :through => :friendships
 
+  # Connects two accounts that are the same person but were created using different social medial log ins
+  # @param [User] user with second account
+  def connect(user)
+
+
+    user.purchases.each do |purchase|
+      purchase.purchaser_id = self.id
+      purchase.save
+    end
+
+    user.contributions.each do |contribution|
+      contribution.user_id = self.id
+      contribution.save
+    end
+
+    user.obligations.each do |obligation|
+      obligation.user_id = self.id
+      obligation.save
+    end
+
+    user.friendships.each do |friendship|
+      friendship.user_id = self.id
+      friendship.save
+    end
+
+    Friendship.find_all_by_friend_id(user.id).each do |friendship|
+      friendship.friend_id = self.id
+      friendship.save
+    end
+
+    user.memberships.each do |membership|
+      membership.user_id = self.id
+      membership.save
+    end
+
+    user.organized_trips.each do |trip|
+      trip.organizer_id = self.id
+      trip.save
+    end
+
+    self.facebook_id ||= user.facebook_id
+    self.facebook_access_token ||= user.facebook_access_token
+    self.facebook_access_token_expires_at ||= user.facebook_access_token_expires_at
+
+    self.twitter_id ||= user.twitter_id
+    self.twitter_access_token ||= user.twitter_access_token
+    self.twitter_access_secret ||= user.twitter_access_secret
+
+    self.save
+
+    User.destroy(user.id)
+  end
+
   # Calculates the total cost of the expenses paid for by user of all the trips taken
   # return [BigDecimal] total cost of expenses
   def total_purchases_cost
-  	purchases.to_a.sum(&:cost)
+    purchases.to_a.sum(&:cost)
   end
 
   # Calculates the total cost of the expenses paid for by the user for a single trip
   # retun [BigDecimal] total cost of expenses for trip
   def total_trip_purchases_cost(trip)
-  	purchases.select{|x| x.trip_id == trip.id}.sum(&:cost)
+    purchases.select{|x| x.trip_id == trip.id}.sum(&:cost)
   end
 
   # Returns the key assigned to the user
   # @return [String, Int] key of the user
   def key
-  	self.id
+    self.id
   end
 
   # Adds an expense to the trip from the user

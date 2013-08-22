@@ -3,6 +3,12 @@ FactoryGirl.define do
   factory :user do
     name "Ryan Norman"
     email  "rsnorman15@gmail.com"
+    # facebook_access_token "CAAFKoEw0PJABAHkXnS2ug68rYpg8l2VjdZAt9IIhKvPhZCnkR9"
+    # facebook_access_token_expires_at Time.now
+    # facebook_id "234234"
+    # twitter_access_token "16950200-zfRfnbhjJRnJNFQ7NYJO8M015aaucrCGqJ81zOg"
+    # twitter_access_secret "1KfojHF14c28GTirds8yZnZrT18Ib1hDZ5WSP2p4"
+    # twitter_id "16950200"
   end
 
   factory :trip do

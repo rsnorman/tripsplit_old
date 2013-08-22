@@ -22,7 +22,8 @@
     <div class="row-fluid">
         <label class="span2" for="name">Create Facebook Event?</label>
         <div class="span6">
-            <input type="checkbox" ng-model="trip.needs_facebook_event">
+            <span ui-if="!currentUser.facebook_id">You must first connect your account to Facebook</span>
+            <input ui-if="currentUser.facebook_id" type="checkbox" ng-model="trip.needs_facebook_event">
         </div>
     </div>
     <div class="row-fluid">

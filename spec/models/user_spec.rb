@@ -116,4 +116,93 @@ describe User do
       @member.amount_due_to(@user).should eq 0
     end
   end
+
+  describe "#connect_accounts" do
+    before(:each) do
+      @user2 = Factory(:user)
+    end
+
+    it "should delete the second account" do
+      @user.connect(@user2)
+      User.exists?(@user2.id).should be_false
+    end
+
+    it "should transfer all organized trips from second account to first account" do
+      trip = Factory(:trip, :organizer => @user2)
+      @user.connect(@user2)
+
+      trip.reload
+      trip.organizer.should eq @user
+    end
+
+    it "should transfer all expenses from second account to first account" do
+      trip = Factory(:trip, :organizer => @user2)
+      expense = Factory(:expense, :purchaser => @user2, :trip => trip)
+      @user.connect(@user2)
+
+      expense.reload
+      expense.purchaser.should eq @user
+    end
+
+    it "should transfer all memberships from second account to first account" do
+      trip = Factory(:trip, :organizer => Factory(:user))
+      membership = trip.add_member(@user2)
+      @user.connect(@user2)
+
+      membership.reload
+      membership.user.should eq @user
+    end
+
+    it "should transfer all contributions from second account to first account" do
+      contribution = Factory(:contribution, :user => @user2)
+
+      @user.connect(@user2)
+
+      contribution.reload
+      contribution.user.should eq @user
+    end
+
+    it "should transfer all contributions from second account to first account" do
+      obligation = Factory(:obligation, :user => @user2)
+
+      @user.connect(@user2)
+
+      obligation.reload
+      obligation.user.should eq @user
+    end
+
+    it "should transfer all friendships from second account to first account" do
+      friendship = Factory(:friendship, :user => @user2)
+      @user.connect(@user2)
+
+      friendship.reload
+      friendship.user.should eq @user
+    end
+
+    it "should transfer all friendships tied to second account from other users to first account" do
+      friendship = Factory(:friendship, :friend => @user2)
+      @user.connect(@user2)
+
+      friendship.reload
+      friendship.friend.should eq @user
+    end
+
+    it "should transfer over all facebook fields" do
+      now = Time.now
+      user3 = Factory(:user, :facebook_id => "1", :facebook_access_token_expires_at => now, :facebook_access_token => "12345")
+      @user.connect(user3)
+      @user.facebook_id.should eq "1"
+      @user.facebook_access_token_expires_at.should eq now
+      @user.facebook_access_token.should eq "12345"
+    end
+
+    it "should transfer over all twitter fields" do
+      now = Time.now
+      user3 = Factory(:user, :twitter_id => "1", :twitter_access_token => "9876", :twitter_access_secret => "12345")
+      @user.connect(user3)
+      @user.twitter_id.should eq "1"
+      @user.twitter_access_token.should eq "9876"
+      @user.twitter_access_secret.should eq "12345"
+    end
+  end
 end

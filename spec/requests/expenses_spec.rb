@@ -79,7 +79,7 @@ describe "/expenses" do
       expense_attrs = Factory.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 2, :expense_type => "Food")
       expense_attrs.delete(:user_id)
       expense_attrs.delete(:trip_id)
-      expect { post "/expenses", {:format => :json, :expense => expense_attrs}, auth_parameters }.to raise_exception ActionController::RoutingError
+      expect { post "/expenses", {:format => :json, :expense => expense_attrs}, auth_parameters }.to raise_exception
     end
 
     it "should return an error if trip does not exist that expense is being added to" do
