@@ -145,4 +145,21 @@ describe Expense do
       @expense.cost_for_purchaser.should eq 90
     end
   end
+
+  describe "#is_loan" do
+    it "should only create an obligation for the user that matches the loanee_id" do
+      loaner = Factory(:user)
+      loanee = Factory(:user)
+      trip = Factory(:trip, :organizer => loaner)
+      trip.add_member(loanee)
+
+      expense = Factory(:expense, :trip => trip, :cost => 100, :loanee_id => loanee.id)
+
+      expense.is_loan.should eq true
+      expense.reload
+      expense.obligations.size.should eq 1
+      expense.obligations.first.user.should eq loanee
+      expense.obligations.first.amount.should eq 100
+    end
+  end
 end

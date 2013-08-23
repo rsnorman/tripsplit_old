@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130810213400) do
+ActiveRecord::Schema.define(:version => 20130823023459) do
 
   create_table "expense_contributions", :force => true do |t|
     t.integer  "user_id"
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(:version => 20130810213400) do
     t.datetime "updated_at",                                                    :null => false
     t.decimal  "tip",          :precision => 8, :scale => 2, :default => 0.0
     t.boolean  "tip_included",                               :default => false
+    t.boolean  "is_loan"
   end
 
   add_index "expenses", ["purchaser_id"], :name => "index_expenses_on_purchaser_id"
@@ -75,12 +76,14 @@ ActiveRecord::Schema.define(:version => 20130810213400) do
   create_table "trips", :force => true do |t|
     t.integer  "organizer_id"
     t.string   "name"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
     t.string   "location"
     t.date     "starts_on"
     t.date     "ends_on"
     t.string   "cover_photo"
+    t.text     "description"
+    t.string   "facebook_event_id"
   end
 
   add_index "trips", ["organizer_id"], :name => "index_trips_on_organizer_id"

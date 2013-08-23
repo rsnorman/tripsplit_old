@@ -44,6 +44,20 @@ describe "/contributions" do
       contribution = JSON.parse(response.body)
       @user2.reload.contributions.first.amount.should eq 20
     end
+
+    it "should let the organizer of the trip create contributions for another member" do
+      post "/expenses/#{@expense.id}/contributions", {:format => :json, :expense_contribution => {:user_id => @user2.id, :amount => 20}}, auth_parameters(@user)
+
+      response.status.should eq 201
+      contribution = JSON.parse(response.body)
+      @user2.reload.contributions.first.amount.should eq 20
+    end
+
+    it "should not let a non-organizer of the trip create contributions for another member" do
+      post "/expenses/#{@expense.id}/contributions", {:format => :json, :expense_contribution => {:user_id => @user.id, :amount => 20}}, auth_parameters(@user2)
+
+      response.status.should eq 422
+    end
   end
 
   describe "PUT /contributions/:id" do

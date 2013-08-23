@@ -54,10 +54,24 @@ class ExpenseContributionsController < ApplicationController
   #    "amount" => "15.0"
   #   }
 	def create
-		@contribution = @user.contributions.build(params[:expense_contribution])
+    @contribution = ExpenseContribution.new
 		@expense = @user.expenses.find(params[:expense_id])
 		@contribution.expense = @expense
-		@contribution.save
+
+    if params[:expense_contribution][:user_id]
+      if @expense.trip.organizer_id == @user.id
+        user_id = params[:expense_contribution].delete(:user_id)
+        @contribution.attributes = params[:expense_contribution]
+        @contribution.user_id = user_id
+		    @contribution.save
+      else
+        @contribution.errors[:user_id] = ["Only organizer can add contributions for other members"]
+      end
+    else
+      @contribution.attributes = params[:expense_contribution]
+      @contribution.user = @user
+      @contribution.save
+    end
 
 		respond_with @contribution
 	end

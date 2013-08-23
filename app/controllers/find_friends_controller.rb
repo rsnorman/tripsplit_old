@@ -40,7 +40,7 @@ class FindFriendsController < ApplicationController
 			@member.save!
 		end
 
-		facebook_client
+		facebook_client.put_connections(@trip.facebook_event_id, "invited/#{@member.facebook_id}")
 
 		@membership = @trip.add_member(@member)
 

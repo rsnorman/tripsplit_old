@@ -1,6 +1,6 @@
 class Expense < ActiveRecord::Base
-  attr_accessible :cost, :expense_type, :name, :tip, :tip_included
-  attr_accessor :full_detail, :with_purchaser
+  attr_accessible :cost, :expense_type, :name, :tip, :tip_included, :is_loan, :loanee_id
+  attr_accessor :full_detail, :with_purchaser, :loanee_id
 
   belongs_to :purchaser, :class_name => User
   belongs_to :trip
@@ -8,11 +8,19 @@ class Expense < ActiveRecord::Base
   has_many :contributions, :class_name => ExpenseContribution, :dependent => :destroy
   has_many :obligations, :class_name => ExpenseObligation, :dependent => :destroy
 
-  after_create :create_obligations_for_trip_members
+  after_create :create_loan, :if => lambda{ self.loanee_id }
+  after_create :create_obligations_for_trip_members, :unless => lambda{ self.loanee_id }
   after_update :reaverage_obligations, :if => lambda{ self.cost_was != self.cost }
   after_update :add_tip_obligations, :if => lambda{ self.tip_was.zero? && !self.tip.zero? }
   after_update :reaverage_tip_obligations, :if => lambda{ self.tip_was != self.tip && !self.tip.zero? }
   after_update :remove_tip_obligations, :if => lambda{ !self.tip_was.zero? && self.tip.zero?}
+
+  # Creates an expense that acts like a loan
+  def create_loan
+    self.update_column(:is_loan, true)
+    self.update_column(:name, self.name || 'Loan')
+    trip.members.find(self.loanee_id).add_obligation(self, "Loan Obligation", self.read_attribute(:cost))
+  end
 
   # Creates obligations for each trip member so that expense and tip is evenly divided
   def create_obligations_for_trip_members
@@ -110,8 +118,12 @@ class Expense < ActiveRecord::Base
       args[0][:include] = [:purchaser]
     end
 
+    _hash = super
 
+    if self.is_loan
+      _hash[:loanee] = self.obligations.first.user
+    end
 
-    super
+    _hash
   end
 end

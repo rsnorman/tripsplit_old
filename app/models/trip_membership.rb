@@ -32,4 +32,10 @@ class TripMembership < ActiveRecord::Base
       self.user.friendships << Friendship.new(:friend_id => member.id)
     end
   end
+
+  before_destroy :destroy_facebook_invite, :if => lambda { self.user.facebook_id && self.trip.facebook_event_id }
+
+  def destroy_facebook_invite
+    Koala::Facebook::API.new(self.trip.organizer.facebook_access_token).delete_connections(self.trip.facebook_event_id, "invited/#{self.user.facebook_id}")
+  end
 end

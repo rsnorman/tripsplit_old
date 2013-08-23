@@ -12,6 +12,7 @@ class Trip < ActiveRecord::Base
   has_many :contributions, :through => :expenses
 
   before_save :create_facebook_event, :if => lambda { self.needs_facebook_event }
+  before_save :remove_facebook_event, :if => lambda { self.needs_facebook_event == false && self.facebook_event_id }
   after_create :add_organizer_as_member
 
   # TODO: Test that this works
@@ -26,6 +27,11 @@ class Trip < ActiveRecord::Base
       })
 
     self.facebook_event_id = fb_event['id']
+  end
+
+  # TODO: Test that this works
+  def remove_facebook_event
+    Koala::Facebook::API.new(self.organizer.facebook_access_token).delete_object(self.facebook_event_id)
   end
 
   # Adds the organizer as a member of the trip
