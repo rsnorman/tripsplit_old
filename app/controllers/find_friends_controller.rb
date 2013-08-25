@@ -17,7 +17,7 @@ class FindFriendsController < ApplicationController
 			@member.save!
 		end
 
-		twitter_client.direct_message_create(params[:twitter_id].to_i, "Let's get weird during #{@trip.name}. http://#{request.host}#{":9000" if Rails.env.development?}/#/join/#{@member.id}") unless Rails.env.test?
+		twitter_client.direct_message_create(params[:twitter_id].to_i, "Let's get weird during #{@trip.name}. http://#{request.host}#{":9000" if Rails.env.development?}/#/trips/#{@trip.id}/join") unless Rails.env.test?
 
 		@membership = @trip.add_member(@member)
 

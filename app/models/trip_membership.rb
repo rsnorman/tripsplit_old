@@ -7,6 +7,7 @@ class TripMembership < ActiveRecord::Base
 
   after_create :add_obligations
 
+  # TO DO: Write a test to make sure loan expenses don't have obligations added
   def add_obligations
   	self.trip.expenses.where(:is_loan => false).each do |e|
   		user.add_obligation(e, "Expense Obligation", e.cost / self.trip.members.size)

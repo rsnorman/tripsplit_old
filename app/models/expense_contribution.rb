@@ -1,7 +1,7 @@
 class ExpenseContribution < ActiveRecord::Base
   belongs_to :user
   belongs_to :expense
-  attr_accessible :amount
+  attr_accessible :amount, :user_id
 
 	validates_uniqueness_of :user_id, :scope => :expense_id
 	

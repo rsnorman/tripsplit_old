@@ -28,7 +28,7 @@
     </div>
     <div ng-show="expense.isLoan()" class="row-fluid">
         <label class="span2" for="name">Loan To</label>
-        <select class="span6" required="" ng-model="expense.loanee_id" ng-options="member.id as member.name for member in members">
+        <select class="span6" ng-required="expense.isLoan()" ng-model="expense.loanee_id" ng-options="member.id as member.name for member in members">
             <option value="">-- Choose --</option>
         </select>
     </div>

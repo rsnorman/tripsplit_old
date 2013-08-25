@@ -2,7 +2,7 @@ class SessionsController < ApplicationController
 
   def create
     client = env['omniauth.auth']
-    cookie_user = JSON.parse(cookies['User']) if cookies['User'] && cookies['User'] != 'null'
+    cookie_user = JSON.parse(request.env["HTTP_USER"]) if request.env["HTTP_USER"]
     @logged_in_user = User.find(cookie_user['id']) if cookie_user && cookie_user['id']
 
     if params[:provider] == 'twitter'
@@ -58,6 +58,11 @@ class SessionsController < ApplicationController
     end
 
     @user.save!
+
+    if cookies["trip"]
+      @trip = Trip.find(JSON.parse(cookies["trip"])['id'])
+      @trip.add_member(@user) unless @trip.members.include?(@user)
+    end
 
     unless cookie_user
       redirect_to "http://#{request.host}#{":9000" if Rails.env.development?}/#/users/#{@user.id}"
