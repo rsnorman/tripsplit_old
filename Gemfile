@@ -12,6 +12,7 @@ end
 group :production do
 	gem 'pg'
   gem 'heroku-deflater'
+  gem 'newrelic_rpm'
 end
 
 gem 'json'

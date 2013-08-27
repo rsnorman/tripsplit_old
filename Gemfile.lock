@@ -81,6 +81,7 @@ GEM
     mime-types (1.21)
     multi_json (1.6.1)
     multipart-post (1.2.0)
+    newrelic_rpm (3.6.6.147)
     nokogiri (1.5.6)
     oauth (0.4.7)
     oauth2 (0.8.1)
@@ -193,6 +194,7 @@ DEPENDENCIES
   heroku-deflater
   json
   koala (~> 1.7.0rc1)
+  newrelic_rpm
   omniauth
   omniauth-facebook
   omniauth-twitter
