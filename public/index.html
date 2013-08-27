@@ -20,7 +20,7 @@
 
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="stylesheet" href="styles/d89bf9df.main.css">
+    <link rel="stylesheet" href="styles/1b47660e.main.css">
 
   </head>
   <body ng-cloak="">
@@ -33,7 +33,7 @@
       <script src="components/json3/lib/json3.min.js"></script>
     <![endif]-->
 
-    <div id="settings" class="container" norm-settings="" trigger="#settings_button" main-container=".wrapper">
+    <div id="settings" class="container" norm-settings="" trigger="#settings_button" main-container=".wrapper,.footer,.navigation">
         <ul>
             <li>
                 {{currentUser.name}}
@@ -50,12 +50,11 @@
         </ul>
     </div>
 
+    <nav ui-if="!hideNavigation" class="nav row-fluid">
+        <norm-navigation class="span12">
+        </norm-navigation>
+    </nav>
     <div class="wrapper" ng-class="{'settings-open': settingsOpen}">
-        <nav ui-if="!hideNavigation" class="nav row-fluid">
-            <norm-navigation class="span12">
-            </norm-navigation>
-        </nav>
-    
         <div id="main" class="container">
 
             <header ui-if="mainHeader" class="header row-fluid">
@@ -75,24 +74,23 @@
 
 
         </div>
-        <footer norm-tabs="" ng-show="currentTrip" class="footer row-fluid" norm-scroll-shadow="">
-            <a class="tab" ng-href="#/trips/{{currentTrip.id}}">
-                <i class="icon icon-road"></i>
-            </a>
-            <a class="tab" ng-href="#/trips/{{currentTrip.id}}/expenses">
-                $
-            </a>
-            <a class="tab" ng-href="#/trips/{{currentTrip.id}}/members">
-                <i class="icon icon-group"></i>
-            </a>
-            <a class="tab" ng-href="#/trips/{{currentTrip.id}}/individual">
-                <i class="icon icon-user"></i>
-            </a>
-
-        </footer>
     </div>
 
+    <footer norm-tabs="" ng-show="currentTrip" class="footer row-fluid" norm-scroll-shadow="">
+        <a class="tab" ng-href="#/trips/{{currentTrip.id}}">
+            <i class="icon icon-road"></i>
+        </a>
+        <a class="tab" ng-href="#/trips/{{currentTrip.id}}/expenses">
+            $
+        </a>
+        <a class="tab" ng-href="#/trips/{{currentTrip.id}}/members">
+            <i class="icon icon-group"></i>
+        </a>
+        <a class="tab" ng-href="#/trips/{{currentTrip.id}}/individual">
+            <i class="icon icon-user"></i>
+        </a>
 
+    </footer>
 
     <norman-loader></norman-loader>
 
@@ -101,7 +99,7 @@
 
     <script src="scripts/25e920e4.modules.js"></script>
 
-    <script src="scripts/7c64dbf0.scripts.js"></script>
+    <script src="scripts/c7c9550d.scripts.js"></script>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
