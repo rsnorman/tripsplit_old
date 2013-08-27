@@ -16,8 +16,6 @@ class User < ActiveRecord::Base
   # Connects two accounts that are the same person but were created using different social medial log ins
   # @param [User] user with second account
   def connect(user)
-
-
     user.purchases.each do |purchase|
       purchase.purchaser_id = self.id
       purchase.save
@@ -136,7 +134,7 @@ class User < ActiveRecord::Base
 
   # Override so that password is not sent in JSON, XML, etc
   def serializable_hash(*args)
-    args[0] = (args[0] || {}).merge(:except => :password)
+    args[0] = (args[0] || {}).merge(:except => [:password, :twitter_access_token, :twitter_access_secret, :facebook_access_token] )
     user_hash = super
 
     if self.current_trip

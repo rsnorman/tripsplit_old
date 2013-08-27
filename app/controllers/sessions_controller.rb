@@ -57,6 +57,8 @@ class SessionsController < ApplicationController
 
     end
 
+    @user.last_logged_in_at = Time.now
+
     @user.save!
 
     if cookies["trip"]
