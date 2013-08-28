@@ -59,13 +59,13 @@ class ExpenseContributionsController < ApplicationController
 		@contribution.expense = @expense
 
     if params[:expense_contribution][:user_id]
-      if @expense.trip.organizer_id == @user.id
+      if @expense.trip.organizer_id == @user.id || @expense.purchaser_id == @user.id
         user_id = params[:expense_contribution].delete(:user_id)
         @contribution.attributes = params[:expense_contribution]
         @contribution.user_id = user_id
 		    @contribution.save
       else
-        @contribution.errors[:user_id] = ["Only organizer can add contributions for other members"]
+        @contribution.errors[:user_id] = ["Only purchaser or organizer can add contributions for other members"]
       end
     else
       @contribution.attributes = params[:expense_contribution]
