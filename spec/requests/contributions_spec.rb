@@ -53,6 +53,17 @@ describe "/contributions" do
       @user2.reload.contributions.first.amount.should eq 20
     end
 
+    it "should let the purchaser of the expense create contributions for another member" do
+      @user3 = Factory(:user)
+      @trip.add_member(@user3)
+      @expense2 = Factory(:expense, :trip => @trip, :purchaser => @user2, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
+      post "/expenses/#{@expense2.id}/contributions", {:format => :json, :expense_contribution => {:user_id => @user3.id, :amount => 20}}, auth_parameters(@user2)
+
+      response.status.should eq 201
+      contribution = JSON.parse(response.body)
+      @user3.reload.contributions.first.amount.should eq 20
+    end
+
     it "should not let a non-organizer of the trip create contributions for another member" do
       post "/expenses/#{@expense.id}/contributions", {:format => :json, :expense_contribution => {:user_id => @user.id, :amount => 20}}, auth_parameters(@user2)
 
