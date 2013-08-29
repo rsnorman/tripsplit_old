@@ -123,15 +123,19 @@ class User < ActiveRecord::Base
   # Returns the amount owed from a member on a trip to the user
   # @param [User] member that owes money
   # @return [BigDecimal] amount the user is owed from trip member
-  def amount_owed_from(member)
-    [(member.obligations.where(:expense_id => self.purchases.collect(&:id)).sum(:amount) - member.contributions.where(:expense_id => self.purchases.collect(&:id)).sum(:amount)) - (self.obligations.where(:expense_id => member.purchases.collect(&:id)).sum(:amount) - self.contributions.where(:expense_id => member.purchases.collect(&:id)).sum(:amount)), 0].max
+  def amount_owed_from(member, trip = nil)
+    purchases_ids = trip ? self.purchases.where(:trip_id => trip.id).collect(&:id) : self.purchases.collect(&:id)
+    member_purchases_ids = trip ? member.purchases.where(:trip_id => trip.id).collect(&:id) : member.purchases.collect(&:id)
+    [(member.obligations.where(:expense_id => purchases_ids).sum(:amount) - member.contributions.where(:expense_id => purchases_ids).sum(:amount)) - (self.obligations.where(:expense_id => member_purchases_ids).sum(:amount) - self.contributions.where(:expense_id => member_purchases_ids).sum(:amount)), 0].max
   end
 
   # Returns the amount due to a member on a trip from the user
   # @param [User] member that is due money
   # @return [BigDecimal] amount the member is due from user
-  def amount_due_to(member)
-    [(self.obligations.where(:expense_id => member.purchases.collect(&:id)).sum(:amount) - self.contributions.where(:expense_id => member.purchases.collect(&:id)).sum(:amount)) - (member.obligations.where(:expense_id => self.purchases.collect(&:id)).sum(:amount) - member.contributions.where(:expense_id => self.purchases.collect(&:id)).sum(:amount)), 0].max
+  def amount_due_to(member, trip = nil)
+    purchases_ids = trip ? self.purchases.where(:trip_id => trip.id).collect(&:id) : self.purchases.collect(&:id)
+    member_purchases_ids = trip ? member.purchases.where(:trip_id => trip.id).collect(&:id) : member.purchases.collect(&:id)
+    [(self.obligations.where(:expense_id => member_purchases_ids).sum(:amount) - self.contributions.where(:expense_id => member_purchases_ids).sum(:amount)) - (member.obligations.where(:expense_id => purchases_ids).sum(:amount) - member.contributions.where(:expense_id => purchases_ids).sum(:amount)), 0].max
   end
 
   # Override so that password is not sent in JSON, XML, etc
@@ -148,8 +152,8 @@ class User < ActiveRecord::Base
       user_hash[:contributions] = self.contributions.includes(:expense).where(["expenses.trip_id = ?", self.current_trip.id])
       user_hash[:obligations] = self.obligations.includes(:expense).where(["expenses.trip_id = ?", self.current_trip.id])
 
-      user_hash[:owe_members] = self.current_trip.members.collect{|x| {:user => x, :amount => self.amount_owed_from(x)}}.select{|x| !x[:amount].zero?}
-      user_hash[:due_members] = self.current_trip.members.collect{|x| {:user => x, :amount => self.amount_due_to(x)}}.select{|x| !x[:amount].zero?}
+      user_hash[:owe_members] = self.current_trip.members.collect{|x| {:user => x, :amount => self.amount_owed_from(x, self.current_trip)}}.select{|x| !x[:amount].zero?}
+      user_hash[:due_members] = self.current_trip.members.collect{|x| {:user => x, :amount => self.amount_due_to(x, self.current_trip)}}.select{|x| !x[:amount].zero?}
     end
 
     user_hash

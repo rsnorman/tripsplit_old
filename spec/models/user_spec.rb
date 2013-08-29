@@ -75,6 +75,10 @@ describe User do
       Factory(:expense, :purchaser => @member, :cost => 150, :trip => @trip)
       @user.amount_owed_from(@member).should eq 0
     end
+
+    it "should not include expenses from other trips" do
+      puts "TODO: need to write test to make sure expenses are not included from other trips"
+    end
   end
 
   describe "#amount_due_to" do
@@ -114,6 +118,10 @@ describe User do
     it "should return 0 if the user owes the member money" do
       Factory(:expense, :purchaser => @member, :cost => 150, :trip => @trip)
       @member.amount_due_to(@user).should eq 0
+    end
+
+    it "should not include expenses from other trips" do
+      puts "TODO: need to write test to make sure expenses are not included from other trips"
     end
   end
 
