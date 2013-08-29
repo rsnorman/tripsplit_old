@@ -1,5 +1,5 @@
 class Expense < ActiveRecord::Base
-  attr_accessible :cost, :expense_type, :name, :tip, :tip_included, :is_loan, :loanee_id
+  attr_accessible :cost, :expense_type, :name, :tip, :tip_included, :is_loan, :loanee_id, :obligations_attributes, :contributions_attributes
   attr_accessor :full_detail, :with_purchaser, :loanee_id
 
   belongs_to :purchaser, :class_name => User
@@ -15,6 +15,8 @@ class Expense < ActiveRecord::Base
   after_update :reaverage_tip_obligations, :if => lambda{ self.tip_was != self.tip && !self.tip.zero? }
   after_update :remove_tip_obligations, :if => lambda{ !self.tip_was.zero? && self.tip.zero?}
 
+  accepts_nested_attributes_for :obligations, :contributions
+
   # Creates an expense that acts like a loan
   def create_loan
     self.update_column(:is_loan, true)
@@ -28,6 +30,8 @@ class Expense < ActiveRecord::Base
       member.add_obligation(self, "Expense Obligation", self.read_attribute(:cost) / trip.members.size)
       member.add_obligation(self, "Tip Obligation", self.tip / trip.members.size, false) unless self.tip.nil? || self.tip.zero?
     end
+
+    true
   end
 
   # Reaverages the obligations to make sure the full cost is covered of the expense
@@ -38,6 +42,8 @@ class Expense < ActiveRecord::Base
     averaged_obligations.each do |obligation|
       obligation.update_column(:amount, averaged_amount)
     end
+
+    true
   end
 
   # Adds tip obligations if tip was added to expense

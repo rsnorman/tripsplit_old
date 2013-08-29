@@ -95,6 +95,86 @@ describe "/expenses" do
       expense_attrs.delete(:trip_id)
       expect { post "/trips/#{Factory(:trip).id}/expenses", {:format => :json, :expense => expense_attrs}, auth_parameters }.to raise_exception ActiveRecord::RecordNotFound
     end
+
+    it "should set create an obligation for a user through nested attributes" do
+      user2 = Factory(:user)
+      @trip.add_member(user2)
+
+      expense_attrs = Factory.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 20, :expense_type => "Food")
+      expense_attrs.delete(:user_id)
+      expense_attrs.delete(:trip_id)
+      obligation_attrs = Factory.attributes_for(:obligation, :expense => nil, :user_id => user2.id, :amount => 5, :is_average => false)
+      obligation_attrs.delete(:expense)
+      obligation_attrs.delete(:is_tip)
+      post "/trips/#{@trip.id}/expenses", {:format => :json, :expense => expense_attrs.merge(:obligations_attributes => [obligation_attrs])}, auth_parameters
+
+      response.status.should eq 201
+      expense = JSON.parse(response.body)
+
+      Expense.find(expense['id']).obligations.where(:user_id => user2.id).first.amount.should eq 5
+    end
+
+    it "should remove an obligation for a user through nested attributes" do
+      user2 = Factory(:user)
+      @trip.add_member(user2)
+
+      expense_attrs = Factory.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 20, :expense_type => "Food")
+      expense_attrs.delete(:user_id)
+      expense_attrs.delete(:trip_id)
+      obligation_attrs = Factory.attributes_for(:obligation, :expense => nil, :user_id => user2.id, :amount => 0, :is_average => false)
+      obligation_attrs.delete(:expense)
+      obligation_attrs.delete(:is_tip)
+      post "/trips/#{@trip.id}/expenses", {:format => :json, :expense => expense_attrs.merge(:obligations_attributes => [obligation_attrs])}, auth_parameters
+
+      response.status.should eq 201
+      expense = JSON.parse(response.body)
+      Expense.find(expense['id']).obligations.size.should eq 2
+      Expense.find(expense['id']).obligations.where(:user_id => user2.id).first.amount.should eq 0
+    end
+
+    it "should set create a contribution for a user through nested attributes" do
+      user2 = Factory(:user)
+      @trip.add_member(user2)
+
+      expense_attrs = Factory.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 20, :expense_type => "Food")
+      expense_attrs.delete(:user_id)
+      expense_attrs.delete(:trip_id)
+      contribution_attrs = Factory.attributes_for(:contribution, :expense => nil, :user_id => user2.id, :amount => 5)
+      contribution_attrs.delete(:expense)
+      contribution_attrs.delete(:is_tip)
+      post "/trips/#{@trip.id}/expenses", {:format => :json, :expense => expense_attrs.merge(:contributions_attributes => [contribution_attrs])}, auth_parameters
+
+      response.status.should eq 201
+      expense = JSON.parse(response.body)
+
+      Expense.find(expense['id']).contributions.where(:user_id => user2.id).first.amount.should eq 5
+    end
+
+    it "should set create a contribution for a user through nested attributes that is completely paid" do
+      user2 = Factory(:user)
+      @trip.add_member(user2)
+
+      expense_attrs = Factory.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 20, :expense_type => "Food")
+      expense_attrs.delete(:user_id)
+      expense_attrs.delete(:trip_id)
+      contribution_attrs = Factory.attributes_for(:contribution, :expense => nil, :user_id => user2.id, :is_paid => true)
+      contribution_attrs.delete(:expense)
+      contribution_attrs.delete(:is_tip)
+      post "/trips/#{@trip.id}/expenses", {:format => :json, :expense => expense_attrs.merge(:contributions_attributes => [contribution_attrs])}, auth_parameters
+
+      response.status.should eq 201
+      expense = JSON.parse(response.body)
+
+      Expense.find(expense['id']).contributions.where(:user_id => user2.id).first.amount.should eq 10
+      Expense.find(expense['id']).contributions.where(:user_id => user2.id).first.is_paid.should eq true
+    end
+
+  end
+
+  describe "PUT /expenses" do
+    it "should" do
+      puts "Need to write tests to make sure update expenses can handle nested attributes"
+    end
   end
 
 end

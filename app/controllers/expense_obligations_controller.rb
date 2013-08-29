@@ -2,7 +2,7 @@
 class ExpenseObligationsController < ApplicationController
 	respond_to :json
 
-	# Gets a list of all the obligations for an expense for a user. 
+	# Gets a list of all the obligations for an expense for a user.
   #
   # @example
   #  #GET /expenses/1/obligations
@@ -21,7 +21,7 @@ class ExpenseObligationsController < ApplicationController
 		respond_with @obligations
 	end
 
-  # Gets a list of all the obligations for an expense for a user. 
+  # Gets a list of all the obligations for an expense for a user.
   #
   # @example
   #  #GET /expenses/1/obligations
@@ -45,7 +45,7 @@ class ExpenseObligationsController < ApplicationController
 	# @example
 	#  #POST /expenses/1/obligations, {
   #    expense: {
-  #      name: '2 Killians', 
+  #      name: '2 Killians',
   #      cost:  10
   #    }
   #  }
@@ -72,7 +72,7 @@ class ExpenseObligationsController < ApplicationController
 	# @example
 	#  #PUT /obligations, {
   #    expense: {
-  #      name: '2 Killians', 
+  #      name: '2 Killians',
   #      cost:  10
   #    }
   #  }

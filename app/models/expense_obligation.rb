@@ -9,10 +9,10 @@ end
 class ExpenseObligation < ActiveRecord::Base
   belongs_to :user
   belongs_to :expense
-  attr_accessible :amount, :name
+  attr_accessible :amount, :name, :user_id, :is_average
 
   validates_with ObligationsMeetCost, :if => lambda { !self.id.nil? && self.amount != self.amount_was && self.is_average }
-  validates_presence_of :amount, :user_id, :expense_id
+  validates_presence_of :amount, :user_id
   validates_uniqueness_of :user_id, :scope => [:expense_id, :is_tip]
 
   scope :averaged, where(:is_average => true)
@@ -24,6 +24,7 @@ class ExpenseObligation < ActiveRecord::Base
   after_update :adjust_other_expense_obligations, :if => lambda{ self.amount_was != self.amount }
   after_create :adjust_other_expense_obligations
   after_destroy :remove_tip, :if => lambda { self.user.obligations.editable.where(:expense_id => self.expense_id).empty? }
+  after_save :pay_off_obligation, :if => lambda{ self.amount_was != self.amount }
 
   # Sets the obligation as customized if the amount has been changed
   def set_as_not_average
@@ -45,6 +46,14 @@ class ExpenseObligation < ActiveRecord::Base
   # Removes a tip obligation if the main portion obligation has been removed
   def remove_tip
     self.user.obligations.tips.where(:expense_id => self.expense_id).each{|x| x.destroy}
+  end
+
+  def pay_off_obligation
+    contribution = self.user.contributions.where(:expense_id => self.expense_id).first
+    if contribution && contribution.is_paid
+      contribution.pay_expense
+      contribution.save
+    end
   end
 
   def serializable_hash(*args)

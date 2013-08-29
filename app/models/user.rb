@@ -98,6 +98,8 @@ class User < ActiveRecord::Base
   # @param [Expense] expense that user has an obligation to pay
   # @param [BigDecimal] amount the user is obligated to the bill
   def add_obligation(expense, name, amount, is_editable = true, is_average = true)
+    return unless expense.obligations.where(:user_id => self.id, :is_tip => !is_editable).empty?
+
     obligation = ExpenseObligation.new(:name => name, :amount => amount)
     obligation.user = self
     obligation.expense = expense

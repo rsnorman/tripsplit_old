@@ -32,6 +32,20 @@
             <option value="">-- Choose --</option>
         </select>
     </div>
+    <div class="edit-obligations-contributions" ng-show="!expense.isLoan()" class="row-fluid">
+        <a class="span2" href="javascript:;" ng-click="toggleEditObligationsContributions()"><i ng-show="!editObligationsContributions" class="icon-plus icon-white"></i><i ng-show="editObligationsContributions" class="icon-minus icon-white"></i> Edit Contributions/Obligations</a>
+        <div ng-show="editObligationsContributions">
+            <norm-row title="{{member.name}}" src="{{member.profile_image_url}}" ng-repeat="member in members">
+                Obligated: <span ng-bind-html-unsafe="averageCost() | currency | normCurrency"></span>
+                <a class="btn" ng-hide="isPaid(member) || !isObligated(member)" href="javascript:;" ng-click="markMemberPaid(member)">Paid</a>
+                <a class="btn" ng-show="isPaid(member) && isObligated(member)" href="javascript:;" ng-click="markMemberNotPaid(member)">Not Paid</a>
+                <a class="btn" ng-show="isObligated(member)" href="javascript:;" ng-click="markMemberRemoved(member)">Remove</a>
+                <a class="btn" ng-hide="isObligated(member)" href="javascript:;" ng-click="markMemberUnremoved(member)">Add</a>
+
+
+            </norm-row>
+        </div>
+    </div>
     <div class="row-fluid">
         <button type="submit" class="span6 btn btn-large">{{action}} Expense</button>
     </div>

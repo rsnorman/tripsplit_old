@@ -87,10 +87,10 @@ class ExpensesController < ApplicationController
   #   }
 	def create
 		render :json => { :errors => ["Must pass id of existing trip to add expense"] }, :status => :unprocessable_entity if @trip.nil?
-
 		@expense = @trip.expenses.build(params[:expense])
 		@expense.purchaser = @user
 		@expense.save
+
 		respond_with @expense
 	end
 

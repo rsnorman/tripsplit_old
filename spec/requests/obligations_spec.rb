@@ -35,15 +35,15 @@ describe "/obligations" do
 
   end
 
-  describe "POST /expense/:expense_id/obligations/:id" do
-    it "should create an obligation with all the attributes" do
-      post "/expenses/#{@expense.id}/obligations", {:format => :json, :expense_obligation => {:amount => 10, :name => 'Whisky'} }, auth_parameters
+  # describe "POST /expense/:expense_id/obligations/:id" do
+  #   it "should create an obligation with all the attributes" do
+  #     post "/expenses/#{@expense.id}/obligations", {:format => :json, :expense_obligation => {:amount => 10, :name => 'Whisky'} }, auth_parameters
 
-      response.status.should eq 201
-      obligation = JSON.parse(response.body)
-      obligation['amount'].should eq '10.0'
-    end
-  end
+  #     response.status.should eq 201
+  #     obligation = JSON.parse(response.body)
+  #     obligation['amount'].should eq '10.0'
+  #   end
+  # end
 
   describe "PUT /obligations/:id" do
     it "should update an obligation with all the attributes" do

@@ -20,7 +20,7 @@
 
 <h3>Obligations</h3>
 <div ng-switch="canEditObligation(obligation)" ng-repeat="obligation in expense.obligations">
-    <norm-row ng-switch-when="true" title="{{obligation.user.name}}" href="#/trips/{{expense.trip_id}}/expenses/{{expense.id}}/obligations/{{obligation.id}}/edit">
+    <norm-row ng-switch-when="true" src="{{obligation.user.profile_image_url}}" title="{{obligation.user.name}}" href="#/trips/{{expense.trip_id}}/expenses/{{expense.id}}/obligations/{{obligation.id}}/edit">
         <span ng-bind-html-unsafe="obligation.amount | currency | normCurrency"></span>
     </norm-row>
 

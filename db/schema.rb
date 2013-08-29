@@ -10,14 +10,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130823023459) do
+ActiveRecord::Schema.define(:version => 20130829022629) do
 
   create_table "expense_contributions", :force => true do |t|
     t.integer  "user_id"
     t.integer  "expense_id"
     t.decimal  "amount",     :precision => 8, :scale => 2
-    t.datetime "created_at",                               :null => false
-    t.datetime "updated_at",                               :null => false
+    t.datetime "created_at",                                                  :null => false
+    t.datetime "updated_at",                                                  :null => false
+    t.boolean  "is_paid",                                  :default => false
   end
 
   add_index "expense_contributions", ["expense_id"], :name => "index_expense_contributions_on_expense_id"
@@ -47,7 +48,7 @@ ActiveRecord::Schema.define(:version => 20130823023459) do
     t.datetime "updated_at",                                                    :null => false
     t.decimal  "tip",          :precision => 8, :scale => 2, :default => 0.0
     t.boolean  "tip_included",                               :default => false
-    t.boolean  "is_loan"
+    t.boolean  "is_loan",                                    :default => false
   end
 
   add_index "expenses", ["purchaser_id"], :name => "index_expenses_on_purchaser_id"
@@ -76,14 +77,12 @@ ActiveRecord::Schema.define(:version => 20130823023459) do
   create_table "trips", :force => true do |t|
     t.integer  "organizer_id"
     t.string   "name"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.string   "location"
     t.date     "starts_on"
     t.date     "ends_on"
     t.string   "cover_photo"
-    t.text     "description"
-    t.string   "facebook_event_id"
   end
 
   add_index "trips", ["organizer_id"], :name => "index_trips_on_organizer_id"
@@ -91,9 +90,9 @@ ActiveRecord::Schema.define(:version => 20130823023459) do
   create_table "users", :force => true do |t|
     t.string   "name"
     t.string   "email"
+    t.string   "password"
     t.datetime "created_at",                       :null => false
     t.datetime "updated_at",                       :null => false
-    t.string   "password"
     t.string   "twitter_access_token"
     t.string   "twitter_access_secret"
     t.string   "twitter_id"
