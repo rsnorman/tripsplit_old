@@ -87,6 +87,8 @@ class ExpensesController < ApplicationController
   #   }
 	def create
 		render :json => { :errors => ["Must pass id of existing trip to add expense"] }, :status => :unprocessable_entity if @trip.nil?
+    params[:expense].delete(:contributions_attributes) if params[:expense][:contributions_attributes].nil?
+    params[:expense].delete(:obligations_attributes) if params[:expense][:obligations_attributes].nil?
 		@expense = @trip.expenses.build(params[:expense])
 		@expense.purchaser = @user
 		@expense.save
