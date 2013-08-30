@@ -105,6 +105,14 @@ describe Expense do
       @expense.update_attributes(:cost => 200)
       @expense.obligations.collect(&:amount).should eq [50, 200]
     end
+
+    it "should update the averaged obligations when expense amount is increased and update contributions marked as paid" do
+      @contribution = Factory(:contribution, :user => @member, :expense => @expense, :is_paid => true)
+      @contribution.amount.should eq 50
+      @expense.update_attributes(:cost => 200)
+      @expense.obligations.collect(&:amount).should eq [100, 100]
+      @contribution.reload.amount.should eq 100
+    end
   end
 
   describe "#contribution_from" do

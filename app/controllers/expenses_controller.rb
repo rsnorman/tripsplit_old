@@ -109,6 +109,8 @@ class ExpensesController < ApplicationController
   #  [204 NO CONTENT] Successfully updated a expense
 	def update
 		@expense = @user.purchases.find(params[:id])
+    params[:expense].delete(:contributions_attributes) if params[:expense][:contributions_attributes].nil?
+    params[:expense].delete(:obligations_attributes) if params[:expense][:obligations_attributes].nil?
 		@expense.update_attributes(params[:expense])
 		respond_with @expense
 	end

@@ -37,7 +37,7 @@
         <div ng-show="editObligationsContributions">
             <norm-row title="{{member.name}}" src="{{member.profile_image_url}}" ng-repeat="member in members">
                 Obligated: <span ng-bind-html-unsafe="averageCost() | currency | normCurrency"></span>
-                <a class="btn" ng-hide="isPaid(member) || !isObligated(member)" href="javascript:;" ng-click="markMemberPaid(member)">Paid</a>
+                <a class="btn" ng-show="!isPaid(member) && isObligated(member)" href="javascript:;" ng-click="markMemberPaid(member)">Paid</a>
                 <a class="btn" ng-show="isPaid(member) && isObligated(member)" href="javascript:;" ng-click="markMemberNotPaid(member)">Not Paid</a>
                 <a class="btn" ng-show="isObligated(member)" href="javascript:;" ng-click="markMemberRemoved(member)">Remove</a>
                 <a class="btn" ng-hide="isObligated(member)" href="javascript:;" ng-click="markMemberUnremoved(member)">Add</a>

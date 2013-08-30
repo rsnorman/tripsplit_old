@@ -22,7 +22,7 @@ class Trip < ActiveRecord::Base
       :start_time => self.starts_on,
       :end_time => self.ends_on,
       :location => self.location,
-      :description => "#{self.description} \n\nManage event expenses: http://www.tripsplit.com/#/trips/#{self.id}/join",
+      :description => "#{self.description} \n\nManage event expenses: http://tripsplit.herokuapp.com/#/trips/#{self.id}/join",
       :privacy_type => 'SECRET'
       })
 

@@ -12,6 +12,7 @@ class ExpenseContribution < ActiveRecord::Base
   end
 
   before_save :pay_expense, :if => lambda{self.is_paid}
+  after_save :destroy, :if => lambda{ (self.is_paid_was && !self.is_paid) || (self.amount_was && self.amount.zero?) }
 
   def pay_expense
     self.amount = self.expense.obligations.where(:user_id => self.user_id).first.amount rescue nil

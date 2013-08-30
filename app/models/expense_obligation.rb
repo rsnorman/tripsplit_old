@@ -25,6 +25,11 @@ class ExpenseObligation < ActiveRecord::Base
   after_create :adjust_other_expense_obligations
   after_destroy :remove_tip, :if => lambda { self.user.obligations.editable.where(:expense_id => self.expense_id).empty? }
   after_save :pay_off_obligation, :if => lambda{ self.amount_was != self.amount }
+  after_update :reaverage, :if => lambda { self.is_average_was == false && self.is_average }
+
+  def reaverage
+    expense.reaverage_obligations
+  end
 
   # Sets the obligation as customized if the amount has been changed
   def set_as_not_average
@@ -46,6 +51,12 @@ class ExpenseObligation < ActiveRecord::Base
   # Removes a tip obligation if the main portion obligation has been removed
   def remove_tip
     self.user.obligations.tips.where(:expense_id => self.expense_id).each{|x| x.destroy}
+  end
+
+  def update_column(*args)
+    super
+
+    pay_off_obligation if args[0].to_sym == :amount
   end
 
   def pay_off_obligation

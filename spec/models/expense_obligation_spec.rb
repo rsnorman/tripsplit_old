@@ -94,5 +94,28 @@ describe ExpenseObligation do
       Factory(:user).add_obligation(@expense, "Fries", 20, true, false)
       @expense.obligations.collect(&:amount).should eq [20, 20, 20, 20, 20]
     end
+
+    it "should update the obligations that are not customized after a new obligation is added" do
+      Factory(:user).add_obligation(@expense, "Fries", 20, true, false)
+      @expense.obligations.collect(&:amount).should eq [20, 20, 20, 20, 20]
+    end
+  end
+
+    describe "#reaverage" do
+    before(:each) do
+      @trip = Factory(:trip)
+      3.times do
+        @trip.add_member(Factory(:user))
+      end
+
+      @expense = Factory(:expense, :purchaser => @purchaser, :trip => @trip, :cost => 100)
+    end
+
+    it "should reaverage the updated obligation after is_average is set back to true" do
+      @expense.obligations.first.update_attributes(:amount => 40)
+      @expense.reload.obligations.collect(&:amount).should eq [40, 20, 20, 20]
+      @expense.obligations.first.update_attributes(:is_average => true)
+      @expense.reload.obligations.collect(&:amount).should eq [25, 25, 25, 25]
+    end
   end
 end
