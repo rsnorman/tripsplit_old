@@ -3,20 +3,22 @@
         <label class="span2" for="name">Amount</label>
         <input class="span6" type="number" required="" ng-model="contribution.amount">
     </div>
-    <div ng-show="isMine(expense, 'purchaser_id')" class="row-fluid">
-        <label class="span2" for="name">From Other Member?</label>
-        <div class="span6">
-            <input type="checkbox" ng-model="fromOtherMember">
+    <div ng-show="members.length > 0 && (isMine(expense, 'purchaser_id') || isOrganizer())">
+        <div ng-hide="isMine(expense, 'purchaser_id')" class="row-fluid">
+            <label class="span2" for="name">From Other Member?</label>
+            <div class="span6">
+                <input type="checkbox" ng-model="fromOtherMember">
+            </div>
+        </div>
+        <div ng-show="fromOtherMember" class="row-fluid">
+            <label class="span2" for="name">Contribution From</label>
+            <select class="span6" ng-required="fromOtherMember" ng-model="contribution.user_id" ng-options="member.id as member.name for member in members">
+                <option value="">-- Choose --</option>
+            </select>
         </div>
     </div>
-    <div ng-show="fromOtherMember" class="row-fluid">
-        <label class="span2" for="name">Contribution From</label>
-        <select class="span6" ng-required="fromOtherMember" ng-model="contribution.user_id" ng-options="member.id as member.name for member in members">
-            <option value="">-- Choose --</option>
-        </select>
-    </div>
     <div class="row-fluid">
-        <button type="submit" class="span6 btn btn-large">Add Contribution</button>
+        <button type="submit" class="span6 btn btn-large">{{action}} Contribution</button>
     </div>
     <div class="row-fluid">
         <button type="button" ng-show="contribution.id" class="span6 btn btn-large" ng-click="delete()">Delete Contribution

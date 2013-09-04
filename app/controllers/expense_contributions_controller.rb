@@ -2,7 +2,7 @@
 class ExpenseContributionsController < ApplicationController
 	respond_to :json
 
-	# Gets a list of all the contributions for an expense for a user. 
+	# Gets a list of all the contributions for an expense for a user.
   #
   # @example
   #  #GET /expenses/1/contributions
@@ -18,11 +18,15 @@ class ExpenseContributionsController < ApplicationController
   #    "amount" => "15.0"
   #   }]
 	def index
-		@contributions = @user.contributions.where(:expense_id => params[:expense_id])
+    if params[:expense_id]
+      @contributions = Expense.find(params[:expense_id]).contributions
+    else
+		  @contributions = @user.contributions
+    end
 		respond_with @contributions
 	end
 
-  # Gets a list of all the contributions for an expense for a user. 
+  # Gets a list of all the contributions for an expense for a user.
   #
   # @example
   #  #GET /expenses/1/contributions
@@ -61,9 +65,14 @@ class ExpenseContributionsController < ApplicationController
     if params[:expense_contribution][:user_id]
       if @expense.trip.organizer_id == @user.id || @expense.purchaser_id == @user.id
         user_id = params[:expense_contribution].delete(:user_id)
-        @contribution.attributes = params[:expense_contribution]
-        @contribution.user_id = user_id
-		    @contribution.save
+        Rails.logger.info [user_id, @expense.purchaser_id].inspect
+        if user_id.to_i != @expense.purchaser_id
+          @contribution.attributes = params[:expense_contribution]
+          @contribution.user_id = user_id
+		      @contribution.save
+        else
+          @contribution.errors[:user_id] = ["Purchaser cannot have a contribution for expense"]
+        end
       else
         @contribution.errors[:user_id] = ["Only purchaser or organizer can add contributions for other members"]
       end
@@ -88,7 +97,7 @@ class ExpenseContributionsController < ApplicationController
   # [URL] /contributions [PUT]
   #  [204 NO CONTENT] Successfully updated an contribution
 	def update
-		@contribution = @user.contributions.find(params[:id])
+		@contribution = get_contribution
 		@contribution.update_attributes(params[:expense_contribution])
 		respond_with @contribution
 	end
@@ -109,6 +118,12 @@ class ExpenseContributionsController < ApplicationController
   private
 
   def get_contribution
-    @user.contributions.find(params[:id]) rescue @user.purchases.find(params[:expense_id]).contributions.find(params[:id])
+    @contribution = ExpenseContribution.find(params[:id])
+
+    unless @contribution.user_id == @user.id || @contribution.expense.purchaser_id == @user.id || @contribution.expense.trip.organizer_id == @user.id
+      raise ActiveRecord::RecordNotFound
+    end
+
+    @contribution
   end
 end
