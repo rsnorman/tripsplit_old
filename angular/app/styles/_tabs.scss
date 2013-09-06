@@ -1,0 +1,53 @@
+.footer{
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	transform: translate3d(0,0,0);
+	-webkit-transform: translate3d(0,0,0);
+	-moz-transform: translate3d(0,0,0);
+	-webkit-transform: translate3d(0,0,0);
+	-moz-transition:left .5s;
+	-webkit-transition:left .5s;
+	-o-transition:left .5s;
+	transition:left .5s;
+	width: 90%;
+	padding: 5px 5%;
+	background: $background;
+	z-index: 4;
+	-webkit-box-shadow: 0px -5px 5px rgba(50, 50, 50, 0.75);
+	-moz-box-shadow:    0px -5px 5px rgba(50, 50, 50, 0.75);
+	box-shadow:         0px -5px 5px rgba(50, 50, 50, 0.75);
+}
+
+.tab{
+	border-right: 2px solid #FFFFFF;
+	width: 24%;
+	display: block;
+    float: left;
+    font-size: 35px;
+    height: 42px;
+    line-height: 40px;
+    text-align: center;
+
+
+	&:active, &:hover, &:focus{
+		border-right: 2px solid #ffffff;
+	}
+}
+
+.tab.active{
+	color: $gray;
+
+	&:hover{
+		color: #ffffff;
+	}
+}
+
+.tab:last-child {
+	border: none;
+	width: 23%;
+
+	&:active, &:hover, &:focus{
+		border: none;
+	}
+};

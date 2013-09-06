@@ -1,0 +1,41 @@
+.navigation{
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -moz-transition:left .5s;
+  -webkit-transition:left .5s;
+  -o-transition:left .5s;
+  transition:left .5s;
+  z-index: 3;
+  height: 40px;
+  width: 90%;
+  padding: 5px 5%;
+  background: $background;
+
+  .icon{
+    float: right;
+    font-size: 25px;
+    color: #ffffff;
+    margin-top: 5px;
+    padding: 5px 0 10px 20px;
+
+  }
+
+  .icon:last-child{
+
+  }
+
+  .icon-tasks{
+    float: left;
+    padding: 5px 20px 10px 0;
+  }
+
+  .icon-arrow-left{
+    float: left;
+    padding: 5px 20px 10px 0;
+  }
+}
