@@ -5,10 +5,7 @@
     </div>
     <div ng-show="members.length > 0 && (isMine(expense, 'purchaser_id') || isOrganizer())">
         <div ng-hide="isMine(expense, 'purchaser_id')" class="row-fluid">
-            <label class="span8" for="name">From Other Member?
-                <input type="checkbox" ng-model="fromOtherMember" class="ios-switch">
-                <div class="switch"></div>
-            </label>
+            <norm-input-switch class="span8" label="From Other Member?" ng-model="fromOtherMember">
         </div>
         <div ng-show="fromOtherMember" class="row-fluid">
             <label class="span2" for="name">Contribution From</label>
