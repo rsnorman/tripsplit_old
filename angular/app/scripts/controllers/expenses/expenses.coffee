@@ -3,7 +3,7 @@ angular.module("groupExpenserClientApp")
   $scope.expenses = expenses
 
   $scope.showTasksButton()
-  $scope.addRightButton("/trips/#{$scope.currentTrip.id}/expenses/new", "plus")
+  $scope.addRightButton("/expenses/new", "plus")
 
   $scope.setMainHeader $scope.currentTrip.name
   $scope.setSecondaryHeader "Expenses"

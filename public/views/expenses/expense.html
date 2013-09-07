@@ -20,7 +20,7 @@
 
 <h3>Obligations</h3>
 <div ng-switch="canEditObligation(obligation)" ng-repeat="obligation in expense.obligations">
-    <norm-row ng-switch-when="true" src="{{obligation.user.profile_image_url}}" title="{{obligation.user.name}}" href="#/trips/{{expense.trip_id}}/expenses/{{expense.id}}/obligations/{{obligation.id}}/edit">
+    <norm-row ng-switch-when="true" src="{{obligation.user.profile_image_url}}" title="{{obligation.user.name}}" href="#/expenses/{{expense.id}}/obligations/{{obligation.id}}/edit">
         <span ng-bind-html-unsafe="obligation.amount | currency | normCurrency"></span>
     </norm-row>
 
@@ -33,10 +33,10 @@
 </div>
 
 <h3>Contributions</h3>
-<norm-row title="{{contribution.user.name}}" src="{{contribution.user.profile_image_url}}" href="#/trips/{{expense.trip_id}}/expenses/{{expense.id}}/contributions/{{contribution.id}}/edit" ng-repeat="contribution in expense.contributions">
+<norm-row title="{{contribution.user.name}}" src="{{contribution.user.profile_image_url}}" href="#/expenses/{{expense.id}}/contributions/{{contribution.id}}/edit" ng-repeat="contribution in expense.contributions">
     <span ng-bind-html-unsafe="contribution.amount | currency | normCurrency"></span>
 </norm-row>
 
-<a ng-href="#/trips/{{expense.trip_id}}/expenses/{{expense.id}}/contributions/new" ng-show="canAddContribution()">
+<a ng-href="#/expenses/{{expense.id}}/contributions/new" ng-show="canAddContribution()">
     <em>Add Contribution</em>
 </a>

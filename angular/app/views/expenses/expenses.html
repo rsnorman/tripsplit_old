@@ -1,4 +1,4 @@
-<norm-row title="{{expense.name}}" href="#/trips/{{currentTrip.id}}/expenses/{{expense.id}}" icon="{{expense.expense_type | normExpenseIcon}}" ng-repeat="expense in expenses">
+<norm-row title="{{expense.name}}" href="#/expenses/{{expense.id}}" icon="{{expense.expense_type | normExpenseIcon}}" ng-repeat="expense in expenses">
 	<span ui-if="!expense.isLoan()">
 		Purchased by {{expense.purchaser.name}} for
 	</span>

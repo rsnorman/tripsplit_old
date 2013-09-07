@@ -3,6 +3,9 @@
  * by Lea Verou http://lea.verou.me
  */
 
+$switchTransitionLength: .2s;
+$switchFontSize: 200%;
+
 .norm-input-switch{
 	margin-top: 15px;
 	margin-bottom: 15px;
@@ -30,13 +33,13 @@ input[type="checkbox"].ios-switch + div {
 	background-origin: border-box;
 	background-clip: border-box;
 	overflow: hidden;
-	transition-duration: .4s;
+	transition-duration: $switchTransitionLength;
 	transition-property: padding, width, background-position, text-indent;
-	-webkit-transition-duration: .4s;
+	-webkit-transition-duration: $switchTransitionLength;
 	-webkit-transition-property: padding, width, background-position, text-indent;
 	box-shadow: 0 .1em .1em rgba(0,0,0,.2) inset,
 	            0 .45em 0 .1em rgba(0,0,0,.05) inset;
-	font-size: 200%; /* change this and see how they adjust! */
+	font-size: $switchFontSize; /* change this and see how they adjust! */
 }
 
 input[type="checkbox"].ios-switch:checked + div {

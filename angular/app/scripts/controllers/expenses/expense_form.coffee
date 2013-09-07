@@ -32,11 +32,11 @@ angular.module("groupExpenserClientApp")
     if $scope.action == 'Add'
       $scope.expense.$save (expense) ->
         $currentTrip.refresh()
-        $location.path "/trips/#{$scope.expense.trip_id}/expenses/#{expense.id}"
+        $location.path "/expenses/#{expense.id}"
     else
       $scope.expense.$update () ->
         $currentTrip.refresh()
-        $location.path "/trips/#{$scope.expense.trip_id}/expenses/#{$scope.expense.id}"
+        $location.path "/expenses/#{$scope.expense.id}"
 
   $scope.addTip = () ->
     $scope.addTipVisible = true
@@ -96,6 +96,6 @@ angular.module("groupExpenserClientApp")
     if confirm "Are you sure you want to delete this expense?"
       $scope.expense.$destroy () ->
         $currentTrip.refresh()
-        $location.path "/trips/#{$scope.expense.trip_id}/expenses"
+        $location.path "/expenses"
 
 ]

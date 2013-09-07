@@ -1,12 +1,12 @@
-<div class='navigation' norm-scroll-shadow>
+<div class='navigation clearfix'>
 	<span ui-if='backButtonVisible' ng-switch on='navigationStack.empty()'>
-    <a ng-switch-when='true' href='javascript:window.history.back()'>
+    <a class='icon-btn' ng-switch-when='true' href='javascript:window.history.back()'>
         <i class='icon icon-arrow-left'></i>
     </a>
-    <a ng-switch-when='false' ng-href='#{{navigationStack.current()}}'>
+    <a class='icon-btn' ng-switch-when='false' ng-href='#{{navigationStack.current()}}'>
         <i class='icon icon-arrow-left'></i>
     </a>
 	</span>
-	<a ui-if='tasksButtonVisible' id='settings_button' href='javascript:;'><i class='icon icon-tasks'></i></a>
-	<a ui-if='rightButton' ng-href='#{{rightButton.link}}'><i class='icon icon-{{rightButton.type}}'></i></a>
+	<a class='icon-btn' ui-if='tasksButtonVisible' id='settings_button' href='javascript:;'><i class='icon icon-tasks'></i></a>
+	<a class='icon-btn' ui-if='rightButton' ng-href='#{{rightButton.link}}'><i class='icon icon-{{rightButton.type}}'></i></a>
 </div>

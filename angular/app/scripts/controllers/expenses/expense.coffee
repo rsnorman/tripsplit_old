@@ -3,7 +3,7 @@ angular.module("groupExpenserClientApp")
   $scope.expense = expense
 
   $scope.showBackButton()
-  $scope.addRightButton("/trips/#{expense.trip_id}/expenses/#{$scope.expense.id}/edit", "edit") if $scope.isMine($scope.expense, 'purchaser_id')
+  $scope.addRightButton("/expenses/#{$scope.expense.id}/edit", "edit") if $scope.isMine($scope.expense, 'purchaser_id')
 
   $scope.setMainHeader expense.name
   $scope.setSecondaryHeader expense.cost, true

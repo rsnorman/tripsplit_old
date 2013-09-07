@@ -82,20 +82,22 @@
         </div>
     </div>
 
-    <footer norm-tabs ng-show='currentTrip' class='footer row-fluid' norm-scroll-shadow>
-        <a class='tab' ng-href='#/trips/{{currentTrip.id}}'>
-            <i class='icon icon-road'></i>
-        </a>
-        <a class='tab' ng-href='#/trips/{{currentTrip.id}}/expenses'>
-            $
-        </a>
-        <a class='tab' ng-href='#/trips/{{currentTrip.id}}/members'>
-            <i class='icon icon-group'></i>
-        </a>
-        <a class='tab' ng-href='#/trips/{{currentTrip.id}}/individual'>
-            <i class='icon icon-user'></i>
-        </a>
-
+    <footer ng-show='currentTrip' class='footer row-fluid' norm-scroll-shadow>
+        <div class='tabs'>
+            <div class='tab-selector'></div>
+            <norm-tab home='/current_trip'>
+                <i class='icon icon-road'></i>
+            </norm-tab>
+            <norm-tab home='/expenses'>
+                $
+            </norm-tab>
+            <norm-tab home='/members'>
+                <i class='icon icon-group'></i>
+            </norm-tab>
+            <norm-tab home='/individual'>
+                <i class='icon icon-user'></i>
+            </norm-tab>
+        </div>
     </footer>
 
 
@@ -114,6 +116,7 @@
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-touch/angular-touch.js"></script>
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -155,6 +158,7 @@
     <script src="scripts/controllers/trips/trip.js"></script>
     <script src="scripts/controllers/trips/trip_form.js"></script>
     <script src="scripts/controllers/trips/join.js"></script>
+    <script src="scripts/controllers/trips/current_trip.js"></script>
 
 
     <script src="scripts/controllers/users/log_in.js"></script>

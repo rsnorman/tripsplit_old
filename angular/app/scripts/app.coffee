@@ -1,6 +1,6 @@
 angular
 
-.module('groupExpenserClientApp',  ['ngResource', 'http-auth-interceptor', 'ngCookies', 'ui'])
+.module('groupExpenserClientApp',  ['ngResource', 'http-auth-interceptor', 'ngCookies', 'ngTouch', 'ui'])
 
 .constant('domain', "http://#{window.location.hostname}")
 

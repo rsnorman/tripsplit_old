@@ -1,8 +1,8 @@
 angular.module("groupExpenserClientApp")
-.controller "MemberCtrl", ['$scope', 'member', '$location', '$currentTrip', '$navigationStack', ($scope, member, $location, $currentTrip, $navigationStack) ->
+.controller "MemberCtrl", ['$scope', 'member', '$location', '$navigationStack', ($scope, member, $location, $navigationStack) ->
 
   $scope.member = member
-  if $navigationStack.current() == "/trips/#{$scope.currentTrip.id}/members"
+  if $navigationStack.current() == "/members"
     $scope.showBackButton()
   else
     $scope.showTasksButton()
@@ -39,5 +39,5 @@ angular.module("groupExpenserClientApp")
         if $scope.isMe($scope.member)
           $location.path('/profile')
         else
-          $location.path "/trips/#{$scope.currentTrip.id}/members"
+          $location.path "/members"
 ]

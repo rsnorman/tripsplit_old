@@ -12,24 +12,37 @@
   transition:left .5s;
   z-index: 3;
   height: 40px;
-  width: 90%;
-  padding: 5px 5%;
+  width: 100%;
+  padding: 5px 0;
   background: $background;
+  -webkit-box-shadow: 0px 5px 5px rgba(50, 50, 50, 0.75);
+  -moz-box-shadow:    0px 5px 5px rgba(50, 50, 50, 0.75);
+  box-shadow:         0px 5px 5px rgba(50, 50, 50, 0.75);
 
-  .icon{
-    float: right;
+  .icon-btn{
+
     font-size: 25px;
     color: #ffffff;
     margin-top: 5px;
-    padding: 5px 0 10px 20px;
+
 
   }
 
-  .icon:last-child{
 
+
+  .icon-btn:first-child{
+    float: left;
+    padding: 5px 20px 10px 20px;
   }
 
-  .icon-tasks{
+  .icon-btn:last-child{
+    float: right;
+    padding: 5px 20px 10px 20px;
+  }
+
+
+
+/*  .icon-tasks{
     float: left;
     padding: 5px 20px 10px 0;
   }
@@ -38,4 +51,4 @@
     float: left;
     padding: 5px 20px 10px 0;
   }
-}
+*/}

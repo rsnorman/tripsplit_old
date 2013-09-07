@@ -11,13 +11,13 @@ angular.module("groupExpenserClientApp")
 
   $scope.update = () ->
     $scope.obligation.$update () ->
-      $location.path("/trips/#{$scope.expense.trip_id}/expenses/#{$scope.expense.id}")
+      $location.path("/expenses/#{$scope.expense.id}")
       $currentTrip.refresh()
 
   $scope.delete = () ->
     if confirm "Are you sure you want to delete this obligation?"
       $scope.obligation.amount = 0
       $scope.obligation.$update () ->
-        $location.path("/trips/#{$scope.expense.trip_id}/expenses/#{$scope.expense.id}")
+        $location.path("/expenses/#{$scope.expense.id}")
         $currentTrip.refresh()
 ]

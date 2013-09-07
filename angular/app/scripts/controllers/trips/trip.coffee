@@ -1,11 +1,16 @@
 angular.module("groupExpenserClientApp")
 
-.controller "TripCtrl", ['$scope', '$routeParams', 'trip', '$location', ($scope, $routeParams, trip, $location) ->
+.controller "TripCtrl", ['$scope', '$routeParams', 'Trip', '$currentTrip', '$location', ($scope, $routeParams, Trip, $currentTrip, $location) ->
 
   $scope.showTasksButton()
-  $scope.addRightButton "/trips/#{$scope.currentTrip.id}/edit", "edit" if $scope.isOrganizer()
 
-  $scope.setMainHeader $scope.currentTrip.name
-  $scope.setSecondaryHeader $scope.currentTrip.total_cost, true
+  $scope.setMainHeader "Loading"
+  $scope.setSecondaryHeader "Trip"
+
+  Trip.get
+    id: $routeParams.tripId || $routeParams.id,
+    (trip) ->
+      $currentTrip.set(trip)
+      $location.path "/current_trip"
 ]
 

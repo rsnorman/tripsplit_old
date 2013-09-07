@@ -16,16 +16,16 @@ angular.module("groupExpenserClientApp")
   $scope.save = () ->
     if $scope.action == "Add"
       $scope.contribution.$save () ->
-        $location.path("/trips/#{$scope.expense.trip_id}/expenses/#{$scope.expense.id}")
+        $location.path("/expenses/#{$scope.expense.id}")
         $currentTrip.refresh()
     else
       $scope.contribution.$update () ->
-        $location.path("/trips/#{$scope.expense.trip_id}/expenses/#{$scope.expense.id}")
+        $location.path("/expenses/#{$scope.expense.id}")
         $currentTrip.refresh()
 
   $scope.delete = () ->
     if confirm "Are you sure you want to delete this contribution?"
       $scope.contribution.$delete () ->
-        $location.path("/trips/#{$scope.expense.trip_id}/expenses/#{$scope.expense.id}")
+        $location.path("/expenses/#{$scope.expense.id}")
         $currentTrip.refresh()
 ]

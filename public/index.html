@@ -20,7 +20,7 @@
 
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="stylesheet" href="styles/fbe5a269.main.css">
+    <link rel="stylesheet" href="styles/1e3b3b14.main.css">
 
   </head>
   <body ng-cloak="">
@@ -78,28 +78,30 @@
         </div>
     </div>
 
-    <footer norm-tabs="" ng-show="currentTrip" class="footer row-fluid" norm-scroll-shadow="">
-        <a class="tab" ng-href="#/trips/{{currentTrip.id}}">
-            <i class="icon icon-road"></i>
-        </a>
-        <a class="tab" ng-href="#/trips/{{currentTrip.id}}/expenses">
-            $
-        </a>
-        <a class="tab" ng-href="#/trips/{{currentTrip.id}}/members">
-            <i class="icon icon-group"></i>
-        </a>
-        <a class="tab" ng-href="#/trips/{{currentTrip.id}}/individual">
-            <i class="icon icon-user"></i>
-        </a>
-
+    <footer ng-show="currentTrip" class="footer row-fluid" norm-scroll-shadow="">
+        <div class="tabs">
+            <div class="tab-selector"></div>
+            <norm-tab home="/current_trip">
+                <i class="icon icon-road"></i>
+            </norm-tab>
+            <norm-tab home="/expenses">
+                $
+            </norm-tab>
+            <norm-tab home="/members">
+                <i class="icon icon-group"></i>
+            </norm-tab>
+            <norm-tab home="/individual">
+                <i class="icon icon-user"></i>
+            </norm-tab>
+        </div>
     </footer>
 
 
-    <script src="scripts/8120cd0a.plugins.js"></script>
+    <script src="scripts/1fdf7480.8120cd0a.plugins.js"></script>
 
-    <script src="scripts/25e920e4.modules.js"></script>
+    <script src="scripts/776ddd82.25e920e4.modules.js"></script>
 
-    <script src="scripts/194d11b0.scripts.js"></script>
+    <script src="scripts/bceb3779.194d11b0.scripts.js"></script>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>

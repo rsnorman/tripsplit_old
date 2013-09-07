@@ -38,12 +38,11 @@ angular.module('groupExpenserClientApp')
         TripLoader()
       ]
   .when '/trips/:id',
-    templateUrl: 'views/trips/show.html'
+    templateUrl: 'views/trips/loading.html'
     controller: 'TripCtrl'
-    resolve:
-      trip: ['TripLoader', (TripLoader) ->
-        TripLoader()
-      ]
+  .when '/current_trip',
+    templateUrl: 'views/trips/show.html'
+    controller: 'CurrentTripCtrl'
   .when '/trips/:id/edit',
     templateUrl: 'views/trips/form.html'
     controller: 'TripFormCtrl'
@@ -54,7 +53,7 @@ angular.module('groupExpenserClientApp')
 
 
   # Expenses
-  .when '/trips/:tripId/expenses/new',
+  .when '/expenses/new',
     templateUrl: 'views/expenses/form.html'
     controller: 'ExpenseFormCtrl'
     resolve:
@@ -64,7 +63,7 @@ angular.module('groupExpenserClientApp')
       members: ['MembersLoader', (MembersLoader) ->
         MembersLoader()
       ]
-  .when '/trips/:tripId/expenses/:id/edit',
+  .when '/expenses/:id/edit',
     templateUrl: 'views/expenses/form.html'
     controller: 'ExpenseFormCtrl'
     resolve:
@@ -74,14 +73,14 @@ angular.module('groupExpenserClientApp')
       members: ['MembersLoader', (MembersLoader) ->
         MembersLoader()
       ]
-  .when '/trips/:tripId/expenses/:id',
+  .when '/expenses/:id',
     templateUrl: 'views/expenses/expense.html'
     controller: 'ExpenseCtrl'
     resolve:
       expense: ['ExpenseLoader', (ExpenseLoader) ->
         ExpenseLoader()
       ]
-  .when '/trips/:tripId/expenses',
+  .when '/expenses',
     templateUrl: 'views/expenses/expenses.html'
     controller: 'ExpensesCtrl'
     resolve:
@@ -91,7 +90,7 @@ angular.module('groupExpenserClientApp')
 
 
   # Obligations
-  .when '/trips/:tripId/expenses/:expenseId/obligations/:id/edit',
+  .when '/expenses/:expenseId/obligations/:id/edit',
     templateUrl: 'views/obligations/form.html'
     controller: 'ObligationFormCtrl'
     resolve:
@@ -104,7 +103,7 @@ angular.module('groupExpenserClientApp')
 
 
   # Contributions
-  .when '/trips/:tripId/expenses/:expenseId/contributions/new',
+  .when '/expenses/:expenseId/contributions/new',
     templateUrl: 'views/contributions/form.html'
     controller: 'ContributionFormCtrl'
     resolve:
@@ -117,7 +116,7 @@ angular.module('groupExpenserClientApp')
       members: ['MembersLoader', (MembersLoader) ->
         MembersLoader()
       ]
-  .when '/trips/:tripId/expenses/:expenseId/contributions/:id/edit',
+  .when '/expenses/:expenseId/contributions/:id/edit',
     templateUrl: 'views/contributions/form.html'
     controller: 'ContributionFormCtrl'
     resolve:
@@ -133,14 +132,14 @@ angular.module('groupExpenserClientApp')
 
 
   # Members
-  .when '/trips/:tripId/members',
+  .when '/members',
     templateUrl: 'views/members/members.html'
     controller: 'MembersCtrl'
     resolve:
       members: ['MembersLoader', (MembersLoader) ->
         MembersLoader()
       ]
-  .when '/trips/:tripId/members/invite',
+  .when '/members/invite',
     templateUrl: 'views/members/invite.html'
     controller: 'InviteCtrl'
     resolve:
@@ -150,14 +149,14 @@ angular.module('groupExpenserClientApp')
       members: ['MembersLoader', (MembersLoader) ->
         MembersLoader()
       ]
-  .when '/trips/:tripId/members/:id',
+  .when '/members/:id',
     templateUrl: 'views/members/member.html'
     controller: 'MemberCtrl'
     resolve:
       member: ['MemberLoader', (MemberLoader) ->
         MemberLoader()
       ]
-  .when '/trips/:tripId/individual',
+  .when '/individual',
     templateUrl: 'views/members/member.html'
     controller: 'MemberCtrl'
     resolve:

@@ -2,28 +2,28 @@ angular.module("groupExpenserClientApp")
 
 
 # Expenses
-.factory('ExpensesLoader', ['Expense', '$route', '$q', (Expense, $route, $q) ->
+.factory('ExpensesLoader', ['Expense', '$route', '$q', '$currentTrip', (Expense, $route, $q, $currentTrip) ->
   () ->
     delay = $q.defer()
     Expense.query
-      tripId: $route.current.params.tripId || $route.current.params.id,
+      tripId: $currentTrip.get().id,
       (expenses) ->
         delay.resolve expenses
     delay.promise;
 ])
 
-.factory('ExpenseLoader', ['Expense', '$route', '$q', (Expense, $route, $q) ->
+.factory('ExpenseLoader', ['Expense', '$route', '$q', '$currentTrip', (Expense, $route, $q, $currentTrip) ->
   () ->
     delay = $q.defer()
     if $route.current.params.expenseId || $route.current.params.id
       Expense.get
-        tripId: $route.current.params.tripId,
+        tripId: $currentTrip.get().id,
         id: $route.current.params.expenseId || $route.current.params.id,
         (expense) ->
           delay.resolve expense
     else
       delay.resolve new Expense
-        trip_id: $route.current.params.tripId
+        trip_id: $currentTrip.get().id
     delay.promise;
 ])
 
@@ -69,28 +69,28 @@ angular.module("groupExpenserClientApp")
 ])
 
 # Members
-.factory('MembersLoader', ['Member', '$route', '$q', (Member, $route, $q) ->
+.factory('MembersLoader', ['Member', '$route', '$q', '$currentTrip', (Member, $route, $q, $currentTrip) ->
   () ->
     delay = $q.defer()
     Member.query
-      tripId: $route.current.params.tripId || $route.current.params.id,
+      tripId: $currentTrip.get().id,
       (members) ->
         delay.resolve members
     delay.promise;
 ])
 
-.factory('MemberLoader', ['Member', '$route', '$q', '$currentUser', (Member, $route, $q, $currentUser) ->
+.factory('MemberLoader', ['Member', '$route', '$q', '$currentUser', '$currentTrip', (Member, $route, $q, $currentUser, $currentTrip) ->
   (id) ->
     delay = $q.defer()
     if id || $route.current.params.memberId || $route.current.params.id
       Member.get
-        tripId: $route.current.params.tripId,
+        tripId: $currentTrip.get().id,
         id: id || $route.current.params.memberId || $route.current.params.id,
         (member) ->
           delay.resolve member
     else
       delay.resolve new Member
-        trip_id: $route.current.params.tripId
+        trip_id: $currentTrip.get().id
     delay.promise;
 ])
 
@@ -107,9 +107,9 @@ angular.module("groupExpenserClientApp")
   () ->
     delay = $q.defer()
     unless $currentTrip.get()
-      if $route.current.params.tripId || $route.current.params.id
+      if $currentTrip.get().id || $route.current.params.id
         Trip.get
-          id: $route.current.params.tripId || $route.current.params.id,
+          id: $currentTrip.get().id || $route.current.params.id,
           (trip) ->
             $currentTrip.set(trip)
             delay.resolve trip

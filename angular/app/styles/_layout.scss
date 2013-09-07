@@ -52,6 +52,14 @@ body{
   margin-top: 15px;
 }
 
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
 @import "header";
 @import "navigation";
 @import "main_content";

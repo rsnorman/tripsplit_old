@@ -3,7 +3,7 @@ angular.module("groupExpenserClientApp").controller "MembersCtrl", ['$scope', 'm
 
   $scope.showTasksButton()
 
-  $scope.addRightButton("/trips/#{$scope.currentTrip.id}/members/invite", "plus") if $scope.isOrganizer()
+  $scope.addRightButton("/members/invite", "plus") if $scope.isOrganizer()
 
   $scope.setMainHeader $scope.currentTrip.name
   $scope.setSecondaryHeader "Members"
