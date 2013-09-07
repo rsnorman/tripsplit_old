@@ -1,4 +1,4 @@
-.navigation{
+.nav{
   position: fixed;
   top: 0;
   left: 0;
@@ -28,17 +28,17 @@
 
   }
 
-
+  .icon-btn:last-child{
+    float: right;
+    padding: 5px 20px 10px 20px;
+  }
 
   .icon-btn:first-child{
     float: left;
     padding: 5px 20px 10px 20px;
   }
 
-  .icon-btn:last-child{
-    float: right;
-    padding: 5px 20px 10px 20px;
-  }
+
 
 
 

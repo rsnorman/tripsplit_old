@@ -53,12 +53,31 @@ keyframes rotation {
 	}
 }
 
-#twitter_sign_in, #facebook_sign_in{
+/*#twitter_sign_in, #facebook_sign_in{
 	width: 50%;
 	text-align: center;
 	line-height: 150px;
 	float: left;
+}*/
+
+.social-logins{
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  margin-top: 50px;
 }
+
+.social-login{
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  text-align: center;
+}
+
 .twitter-button{
   background: url('/images/twitter.png') 0 0 no-repeat;
   width: 100px;

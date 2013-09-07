@@ -1,15 +1,15 @@
 <div class="span12">
     <div id="app_title" class="row-fluid">
         <img id="trip_split_logo" src="/images/cff130f0.tripsplit-logo.png" alt="TripSplit Logo">
-        <h1 class="span12">Trip<span class="secondary-color">Split<span></span></span></h1>
+        <h1>Trip<span class="secondary-color">Split<span></span></span></h1>
     </div>
     <div id="sign_in" class="row-fluid">
         <div class="span12">
             <div class="row-fluid">
                 <h2 class="span12">Sign In</h2>
             </div>
-            <div class="row-fluid">
-                <form id="twitter_sign_in" class="span6" method="get" html="classform-horizontal" action="{{domain}}/auth/twitter" accept-charset="UTF-8">
+            <div class="social-logins">
+                <form id="twitter_sign_in" class="social-login" method="get" html="classform-horizontal" action="{{domain}}/auth/twitter" accept-charset="UTF-8">
                     <div style="margin:0;padding:0;display:inline"><input type="hidden" value="✓" name="utf8"></div>
                     <fieldset>
                         <div>
@@ -19,7 +19,7 @@
                     </fieldset>
                 </form>
 
-                <form id="facebook_sign_in" class="span5" method="get" html="classform-horizontal" action="{{domain}}/auth/facebook" accept-charset="UTF-8">
+                <form id="facebook_sign_in" class="social-login" method="get" html="classform-horizontal" action="{{domain}}/auth/facebook" accept-charset="UTF-8">
                     <div style="margin:0;padding:0;display:inline"><input type="hidden" value="✓" name="utf8"></div>
                     <fieldset>
                         <div>
