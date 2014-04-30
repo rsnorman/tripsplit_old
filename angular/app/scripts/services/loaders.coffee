@@ -106,8 +106,9 @@ angular.module("groupExpenserClientApp")
 .factory('TripLoader', ['Trip', '$route', '$q', '$currentTrip', (Trip, $route, $q, $currentTrip) ->
   () ->
     delay = $q.defer()
+
     unless $currentTrip.get()
-      if $currentTrip.get().id || $route.current.params.id
+      if $route.current.params.id
         Trip.get
           id: $currentTrip.get().id || $route.current.params.id,
           (trip) ->
