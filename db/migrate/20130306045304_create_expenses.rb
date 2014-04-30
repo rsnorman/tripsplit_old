@@ -5,7 +5,7 @@ class CreateExpenses < ActiveRecord::Migration
       t.string :name
       t.string :expense_type
       t.decimal :cost, :precision => 8, :scale => 2
-      t.boolean :is_loan, :default => true
+      t.boolean :is_loan, :default => false
       t.text :description
 
       t.timestamps

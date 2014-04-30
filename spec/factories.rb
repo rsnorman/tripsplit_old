@@ -27,6 +27,7 @@ FactoryGirl.define do
   	sequence(:name) {|n| ['BP Gas Station', 'Applebees', 'Paddy\' Pub', 'Walmart'][n % 4] }
   	sequence(:expense_type) {|n| ['Gas', 'Food', 'Alcohol', 'Misc'][n % 4] }
   	sequence(:cost) {|n| [50.00, 25.00, 10.00, 100][n % 4] }
+    is_loan false
   end
 
   factory :contribution, :class => ExpenseContribution do

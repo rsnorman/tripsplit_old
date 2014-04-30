@@ -28,11 +28,11 @@ ActiveRecord::Schema.define(:version => 20130829022629) do
     t.integer  "user_id"
     t.integer  "expense_id"
     t.decimal  "amount",     :precision => 8, :scale => 2
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
+    t.datetime "created_at",                                                  :null => false
+    t.datetime "updated_at",                                                  :null => false
     t.boolean  "is_average",                               :default => true
     t.string   "name"
-    t.boolean  "is_tip",                                   :default => true
+    t.boolean  "is_tip",                                   :default => false
   end
 
   add_index "expense_obligations", ["expense_id"], :name => "index_expense_obligations_on_expense_id"
@@ -44,11 +44,12 @@ ActiveRecord::Schema.define(:version => 20130829022629) do
     t.string   "name"
     t.string   "expense_type"
     t.decimal  "cost",         :precision => 8, :scale => 2
+    t.boolean  "is_loan",                                    :default => false
+    t.text     "description"
     t.datetime "created_at",                                                    :null => false
     t.datetime "updated_at",                                                    :null => false
     t.decimal  "tip",          :precision => 8, :scale => 2, :default => 0.0
     t.boolean  "tip_included",                               :default => false
-    t.boolean  "is_loan",                                    :default => false
   end
 
   add_index "expenses", ["purchaser_id"], :name => "index_expenses_on_purchaser_id"
@@ -77,8 +78,10 @@ ActiveRecord::Schema.define(:version => 20130829022629) do
   create_table "trips", :force => true do |t|
     t.integer  "organizer_id"
     t.string   "name"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.text     "description"
+    t.string   "facebook_event_id"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
     t.string   "location"
     t.date     "starts_on"
     t.date     "ends_on"
@@ -91,6 +94,7 @@ ActiveRecord::Schema.define(:version => 20130829022629) do
     t.string   "name"
     t.string   "email"
     t.string   "password"
+    t.datetime "last_logged_in_at"
     t.datetime "created_at",                       :null => false
     t.datetime "updated_at",                       :null => false
     t.string   "twitter_access_token"
