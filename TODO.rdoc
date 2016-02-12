@@ -1,4 +1,5 @@
 = TODO
+- Fix
 - Create Friends or frequent travelers (model and api)
 - Add images to expenses
 - Create account using twitter x
