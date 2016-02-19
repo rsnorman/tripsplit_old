@@ -2,7 +2,7 @@ angular
 
 .module('groupExpenserClientApp',  ['ngResource', 'http-auth-interceptor', 'ngCookies', 'ngTouch', 'ui'])
 
-.constant('domain', "http://#{window.location.hostname}")
+.constant('domain', "//#{window.location.hostname}")
 
 .run ['$rootScope', '$location', '$routeParams', '$currentUser', '$currentTrip', '$navigationStack', 'authService', 'domain', '$navigation', ($rootScope, $location, $routeParams, $currentUser, $currentTrip, $navigationStack, authService, domain, $navigation) ->
 
