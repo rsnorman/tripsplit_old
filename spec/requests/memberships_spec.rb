@@ -1,17 +1,17 @@
 require "spec_helper"
 require 'support/auth_helper'
 
-describe "/trips" do
+describe "/trips", type: :request  do
   include AuthHelper
 
   before(:each) do
-    @user = Factory(:user)
-    @trip = Factory(:trip, :organizer => @user)
+    @user = FactoryGirl.create(:user)
+    @trip = FactoryGirl.create(:trip, :organizer => @user)
   end
 
   describe "POST /trips" do
     it "should create a membership for the user in a trip" do
-      new_member = Factory(:user)
+      new_member = FactoryGirl.create(:user)
       post "/trips/#{@trip.id}/memberships", {:format => :json, :membership => {:user_id => new_member.id}}, auth_parameters
 
       response.status.should eq 201
@@ -22,7 +22,7 @@ describe "/trips" do
     end
 
     it "should not allow a member that is not the organizer to create a membership" do
-      other_trip = Factory(:trip)
+      other_trip = FactoryGirl.create(:trip)
       expect { post "/trips/#{other_trip.id}/memberships", {:format => :json, :membership => {:user_id => @user.id}}, auth_parameters }.to raise_exception ActiveRecord::RecordNotFound
     end
   end
@@ -30,7 +30,7 @@ describe "/trips" do
 
   describe "DELETE /trips/:id" do
     it "should return a trip matching the id" do
-      user = Factory(:user)
+      user = FactoryGirl.create(:user)
       @trip.add_member(user)
       delete "/trips/#{@trip.id}/memberships/#{@trip.memberships.last.id}", {:format => :json}, auth_parameters
       response.status.should eq 204
@@ -41,8 +41,8 @@ describe "/trips" do
     end
 
     it "should not allow a member that is not the organizer to delete a membership" do
-      other_trip = Factory(:trip)
-      user = Factory(:user)
+      other_trip = FactoryGirl.create(:trip)
+      user = FactoryGirl.create(:user)
       other_trip.add_member(user)
       expect { delete "/trips/#{other_trip.id}/memberships/#{other_trip.memberships.last.id}", {:format => :json}, auth_parameters }.to raise_exception ActiveRecord::RecordNotFound
     end

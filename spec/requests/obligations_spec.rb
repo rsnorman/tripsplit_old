@@ -1,15 +1,15 @@
 require "spec_helper"
 require 'support/auth_helper'
 
-describe "/obligations" do
+describe "/obligations", type: :request  do
   include AuthHelper
 
   before(:each) do
-    @user = Factory(:user)
-    @trip = Factory(:trip, :organizer => @user)
-    @user2 = Factory(:user)
+    @user = FactoryGirl.create(:user)
+    @trip = FactoryGirl.create(:trip, :organizer => @user)
+    @user2 = FactoryGirl.create(:user)
     @trip.add_member(@user2)
-    @expense = Factory(:expense, :trip => @trip, :purchaser => @user, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
+    @expense = FactoryGirl.create(:expense, :trip => @trip, :purchaser => @user, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
   end
 
   describe "GET /expenses/1/obligations" do
@@ -23,7 +23,7 @@ describe "/obligations" do
     end
 
     # it "should not return an expense from another user" do
-    #   other_expense = Factory(:expense)
+    #   other_expense = FactoryGirl.create(:expense)
 
     #   get "/expenses/#{other_expense.id}/obligations", {:format => :json}, auth_parameters
 

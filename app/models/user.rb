@@ -1,6 +1,4 @@
 class User < ActiveRecord::Base
-  attr_accessible :email, :name, :password
-
   attr_accessor :current_trip
 
   has_many :organized_trips, :class_name => Trip, :foreign_key => :organizer_id, :dependent => :destroy
@@ -36,7 +34,7 @@ class User < ActiveRecord::Base
       friendship.save
     end
 
-    Friendship.find_all_by_friend_id(user.id).each do |friendship|
+    Friendship.where(friend: user).each do |friendship|
       friendship.friend_id = self.id
       friendship.save
     end

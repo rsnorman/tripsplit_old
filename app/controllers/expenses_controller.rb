@@ -2,7 +2,7 @@
 class ExpensesController < ApplicationController
 	respond_to :json
 
-	before_filter :get_trip, :only => [:index, :create]
+	before_action :get_trip, :only => [:index, :create]
 
 	# Sets the trip if trip id has been passed
 	def get_trip
@@ -55,7 +55,7 @@ class ExpensesController < ApplicationController
   #    }
   #   }
 	def show
-		@expense = Expense.find(params[:id], :conditions => {:trip_id => @user.trips.collect{|x| x.id}})
+		@expense = Expense.where(trip: @user.trips).find(params[:id])
     @expense.full_detail = true
 		respond_with @expense
 	end
@@ -86,10 +86,9 @@ class ExpensesController < ApplicationController
   #    }
   #   }
 	def create
-		render :json => { :errors => ["Must pass id of existing trip to add expense"] }, :status => :unprocessable_entity if @trip.nil?
-    params[:expense].delete(:contributions_attributes) if params[:expense][:contributions_attributes].nil?
-    params[:expense].delete(:obligations_attributes) if params[:expense][:obligations_attributes].nil?
-		@expense = @trip.expenses.build(params[:expense])
+    expense_params.delete(:contributions_attributes) if expense_params[:contributions_attributes].nil?
+    expense_params.delete(:obligations_attributes) if expense_params[:obligations_attributes].nil?
+		@expense = @trip.expenses.build(expense_params)
 		@expense.purchaser = @user
 		@expense.save
 
@@ -111,9 +110,9 @@ class ExpensesController < ApplicationController
   #  [204 NO CONTENT] Successfully updated a expense
 	def update
 		@expense = @user.purchases.find(params[:id])
-    params[:expense].delete(:contributions_attributes) if params[:expense][:contributions_attributes].nil?
-    params[:expense].delete(:obligations_attributes) if params[:expense][:obligations_attributes].nil?
-		@expense.update_attributes(params[:expense])
+    expense_params.delete(:contributions_attributes) if expense_params[:contributions_attributes].nil?
+    expense_params.delete(:obligations_attributes) if expense_params[:obligations_attributes].nil?
+		@expense.update_attributes(expense_params)
 		respond_with @expense
 	end
 
@@ -128,5 +127,11 @@ class ExpensesController < ApplicationController
 		@expense = @user.purchases.find(params[:id])
 		@expense.destroy
 		respond_with @expense
+	end
+
+	private
+
+	def expense_params
+		params.require(:expense).permit(:cost, :expense_type, :name, :tip, :tip_included, :is_loan, :loanee_id, obligations_attributes: [:amount, :user_id, :is_average], contributions_attributes: [:amount, :user_id, :is_paid])
 	end
 end

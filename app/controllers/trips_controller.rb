@@ -51,7 +51,7 @@ class TripsController < ApplicationController
   #    "name" => 'Mt bROhemia'
   #   }
 	def create
-		@trip = @user.trips.build(params[:trip])
+		@trip = @user.trips.build(trip_params)
     @trip.organizer_id = @user.id
     @trip.save
 		respond_with @trip
@@ -70,7 +70,7 @@ class TripsController < ApplicationController
   #  [204 NO CONTENT] Successfully updated a trip
 	def update
 		@trip = @user.organized_trips.find(params[:id])
-		@trip.update_attributes(params[:trip])
+		@trip.update_attributes(trip_params)
 		respond_with @trip
 	end
 
@@ -85,5 +85,11 @@ class TripsController < ApplicationController
 		@trip = @user.organized_trips.find(params[:id])
 		@trip.destroy
 		respond_with @trip
+	end
+
+	private
+
+	def trip_params
+		params.require(:trip).permit(:name, :location, :starts_on, :ends_on, :description, :needs_facebook_event)
 	end
 end

@@ -1,17 +1,17 @@
 require "spec_helper"
 require 'support/auth_helper'
 
-describe "/contributions" do
+describe "/contributions", type: :request do
   include AuthHelper
 
   before(:each) do
-    @organizer = Factory(:user)
-    @trip = Factory(:trip, :organizer => @organizer)
-    @user2 = Factory(:user)
+    @organizer = FactoryGirl.create(:user)
+    @trip = FactoryGirl.create(:trip, :organizer => @organizer)
+    @user2 = FactoryGirl.create(:user)
     @trip.add_member(@user2)
-    @user3 = Factory(:user)
+    @user3 = FactoryGirl.create(:user)
     @trip.add_member(@user3)
-    @expense = Factory(:expense, :trip => @trip, :purchaser => @organizer, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
+    @expense = FactoryGirl.create(:expense, :trip => @trip, :purchaser => @organizer, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
   end
 
   describe "GET /contributions" do
@@ -49,7 +49,7 @@ describe "/contributions" do
     end
 
     it "should return a contributions from another expense" do
-      other_expense = Factory(:expense)
+      other_expense = FactoryGirl.create(:expense)
       other_contribution = @user2.add_contribution(other_expense, 20)
 
       get "/expenses/#{@expense.id}/contributions", {:format => :json}, auth_parameters
@@ -81,7 +81,7 @@ describe "/contributions" do
     end
 
     it "should return a contribution from another user if organizer" do
-      expense2 = Factory(:expense, :trip => @trip, :purchaser => @user2, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
+      expense2 = FactoryGirl.create(:expense, :trip => @trip, :purchaser => @user2, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
       contribution2 = @user3.add_contribution(expense2, 20)
 
       get "/contributions/#{contribution2.id}", {:format => :json}, auth_parameters(@organizer)
@@ -93,7 +93,7 @@ describe "/contributions" do
     end
 
     it "should return a contribution from another user if purchaser" do
-      expense2 = Factory(:expense, :trip => @trip, :purchaser => @user2, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
+      expense2 = FactoryGirl.create(:expense, :trip => @trip, :purchaser => @user2, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
       contribution2 = @user3.add_contribution(expense2, 20)
 
       get "/contributions/#{contribution2.id}", {:format => :json}, auth_parameters(@user2)
@@ -116,7 +116,7 @@ describe "/contributions" do
     end
 
     it "should let the organizer of the trip create contributions for another member" do
-      @expense2 = Factory(:expense, :trip => @trip, :purchaser => @user2, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
+      @expense2 = FactoryGirl.create(:expense, :trip => @trip, :purchaser => @user2, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
       post "/expenses/#{@expense2.id}/contributions", {:format => :json, :expense_contribution => {:user_id => @user3.id, :amount => 20}}, auth_parameters(@organizer)
 
       response.status.should eq 201
@@ -125,7 +125,7 @@ describe "/contributions" do
     end
 
     it "should let the purchaser of the expense create contributions for another member" do
-      @expense2 = Factory(:expense, :trip => @trip, :purchaser => @user2, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
+      @expense2 = FactoryGirl.create(:expense, :trip => @trip, :purchaser => @user2, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
       post "/expenses/#{@expense2.id}/contributions", {:format => :json, :expense_contribution => {:user_id => @user3.id, :amount => 20}}, auth_parameters(@user2)
 
       response.status.should eq 201
@@ -166,7 +166,7 @@ describe "/contributions" do
     end
 
     it "should update a contribution from another user if organizer" do
-      expense2 = Factory(:expense, :trip => @trip, :purchaser => @user2, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
+      expense2 = FactoryGirl.create(:expense, :trip => @trip, :purchaser => @user2, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
       contribution2 = @user3.add_contribution(expense2, 20)
 
       put "/contributions/#{contribution2.id}", {:format => :json, :expense_contribution => {:amount => 50}}, auth_parameters(@organizer)
@@ -177,7 +177,7 @@ describe "/contributions" do
     end
 
     it "should update a contribution from another user if purchaser" do
-      expense2 = Factory(:expense, :trip => @trip, :purchaser => @user2, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
+      expense2 = FactoryGirl.create(:expense, :trip => @trip, :purchaser => @user2, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
       contribution2 = @user3.add_contribution(expense2, 20)
 
       put "/contributions/#{contribution2.id}", {:format => :json, :expense_contribution => {:amount => 50}}, auth_parameters(@user2)
@@ -196,7 +196,7 @@ describe "/contributions" do
     it "should delete a contribution with all the attributes" do
       delete "/contributions/#{@contribution.id}", {:format => :json, :expense_contribution => {:amount => 50}}, auth_parameters(@user2)
 
-      ExpenseContribution.exists?(@contributionid).should be_false
+      ExpenseContribution.exists?(@contributionid).should eq false
     end
 
     it "should not delete an contribution for another user" do
@@ -204,25 +204,25 @@ describe "/contributions" do
         delete "/contributions/#{@contribution.id}", {:format => :json}, auth_parameters(@user3)
       }.to raise_exception ActiveRecord::RecordNotFound
 
-      ExpenseContribution.exists?(@contribution.id).should be_true
+      ExpenseContribution.exists?(@contribution.id).should eq true
     end
 
     it "should delete a contribution from another user if organizer" do
-      expense2 = Factory(:expense, :trip => @trip, :purchaser => @user2, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
+      expense2 = FactoryGirl.create(:expense, :trip => @trip, :purchaser => @user2, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
       contribution2 = @user3.add_contribution(expense2, 20)
 
       delete "/contributions/#{contribution2.id}", {:format => :json}, auth_parameters(@organizer)
 
-      ExpenseContribution.exists?(contribution2.id).should be_false
+      ExpenseContribution.exists?(contribution2.id).should eq false
     end
 
     it "should delete a contribution from another user if purchaser" do
-      expense2 = Factory(:expense, :trip => @trip, :purchaser => @user2, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
+      expense2 = FactoryGirl.create(:expense, :trip => @trip, :purchaser => @user2, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
       contribution2 = @user3.add_contribution(expense2, 20)
 
       delete "/contributions/#{contribution2.id}", {:format => :json}, auth_parameters(@user2)
 
-      ExpenseContribution.exists?(contribution2.id).should be_false
+      ExpenseContribution.exists?(contribution2.id).should eq false
     end
   end
 

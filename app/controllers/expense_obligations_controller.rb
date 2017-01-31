@@ -60,7 +60,7 @@ class ExpenseObligationsController < ApplicationController
   #    "is_customized" => true
   #   }
 	def create
-		@obligation = @user.obligations.build(params[:expense_obligation])
+		@obligation = @user.obligations.build(expense_obligation_params)
 		@expense = @user.expenses.find(params[:expense_id])
 		@obligation.expense = @expense
 		@obligation.save
@@ -81,7 +81,7 @@ class ExpenseObligationsController < ApplicationController
   #  [204 NO CONTENT] Successfully updated an obligation
 	def update
 		@obligation = get_obligation
-		@obligation.update_attributes(params[:expense_obligation])
+		@obligation.update_attributes(expense_obligation_params)
 		respond_with @obligation
 	end
 
@@ -90,4 +90,8 @@ class ExpenseObligationsController < ApplicationController
   def get_obligation
     @user.obligations.find(params[:id]) rescue @user.purchases.find(params[:expense_id]).obligations.find(params[:id])
   end
+
+	def expense_obligation_params
+		params.require(:expense_obligation).permit(:amount, :name, :user_id, :is_average)
+	end
 end

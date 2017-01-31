@@ -1,12 +1,12 @@
 require "spec_helper"
 require 'support/auth_helper'
 
-describe "/trips" do
+describe "/trips", type: :request  do
   include AuthHelper
 
   before(:each) do
-    @user = Factory(:user)
-    @trip = Factory(:trip, :organizer => @user)
+    @user = FactoryGirl.create(:user)
+    @trip = FactoryGirl.create(:trip, :organizer => @user)
   end
 
   describe "GET /trips" do
@@ -20,7 +20,7 @@ describe "/trips" do
     end
 
     it "should not return trips that the user is not a member of" do
-    	not_member_of_trip = Factory(:trip)
+    	not_member_of_trip = FactoryGirl.create(:trip)
 
     	get "/trips", {:format => :json}, auth_parameters
 
@@ -43,7 +43,7 @@ describe "/trips" do
     end
 
     it "should not return a trip that the user organized" do
-    	not_organized_trip = Factory(:trip)
+    	not_organized_trip = FactoryGirl.create(:trip)
       not_organized_trip.add_member(@user)
 
     	get "/organized_trips", {:format => :json}, auth_parameters
@@ -68,7 +68,7 @@ describe "/trips" do
 
   describe "POST /trips" do
     it "should create a trip with all the attributes" do
-      trip_attrs = Factory.attributes_for(:trip, :name => "Mt BROhemia")
+      trip_attrs = FactoryGirl.attributes_for(:trip, :name => "Mt BROhemia")
       post "/trips", {:format => :json, :trip => trip_attrs}, auth_parameters
 
       response.status.should eq 201
@@ -78,7 +78,7 @@ describe "/trips" do
     end
 
     it "should create a trip with the user who created it as the organizer" do
-      trip_attrs = Factory.attributes_for(:trip, :name => "Mt BROhemia")
+      trip_attrs = FactoryGirl.attributes_for(:trip, :name => "Mt BROhemia")
       post "/trips", {:format => :json, :trip => trip_attrs}, auth_parameters
 
       response.status.should eq 201
@@ -90,7 +90,7 @@ describe "/trips" do
 
   describe "PUT /trips/:id" do
     it "should update a trip matching the id" do
-      trip_attrs = Factory.attributes_for(:trip, :name => "Mt BROhemia")
+      trip_attrs = FactoryGirl.attributes_for(:trip, :name => "Mt BROhemia")
       put "/trips/#{@trip.id}", {:format => :json, :trip => trip_attrs}, auth_parameters
 
       response.status.should eq 204

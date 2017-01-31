@@ -11,8 +11,8 @@ class ApplicationController < ActionController::Base
 
   def twitter_client
     @twitter_client ||= Twitter::Client.new(
-    :consumer_key => JUNKETEER_TWITTER_CONSUMER_KEY,
-    :consumer_secret => JUNKETEER_TWITTER_CONSUMER_SECRET,
+    :consumer_key => ENV['JUNKETEER_TWITTER_CONSUMER_KEY'],
+    :consumer_secret => ENV['JUNKETEER_TWITTER_CONSUMER_SECRET'],
     :oauth_token => session[:access_token] || @user.twitter_access_token,
     :oauth_token_secret => session[:access_secret] || @user.twitter_access_secret
     )

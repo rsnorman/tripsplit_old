@@ -19,7 +19,7 @@ class MembershipsController < ApplicationController
   #    "user_id" => 1
   #   }
 	def create
-		@membership = @user.trips.find(params[:trip_id]).memberships.create(params[:membership])
+		@membership = @user.trips.find(params[:trip_id]).memberships.create(membership_params)
 		respond_with @membership
 	end
 
@@ -34,5 +34,11 @@ class MembershipsController < ApplicationController
 		@membership = @user.trips.find(params[:trip_id]).memberships.where(:user_id => params[:id]).first
 		@membership.destroy
 		respond_with @membership
+	end
+
+	private
+
+	def membership_params
+		params.require(:membership).permit(:trip, :user, :trip_id, :user_id)
 	end
 end

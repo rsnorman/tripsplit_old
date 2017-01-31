@@ -9,16 +9,15 @@ end
 class ExpenseObligation < ActiveRecord::Base
   belongs_to :user
   belongs_to :expense
-  attr_accessible :amount, :name, :user_id, :is_average
 
   validates_with ObligationsMeetCost, :if => lambda { !self.id.nil? && self.amount != self.amount_was && self.is_average }
   validates_presence_of :amount, :user_id
   validates_uniqueness_of :user_id, :scope => [:expense_id, :is_tip]
 
-  scope :averaged, where(:is_average => true)
-  scope :custom, where(:is_average => false)
-  scope :editable, where(:is_tip => false)
-  scope :tips, where(:is_tip => true)
+  scope :averaged, -> { where(:is_average => true) }
+  scope :custom, -> { where(:is_average => false) }
+  scope :editable, -> { where(:is_tip => false) }
+  scope :tips, -> { where(:is_tip => true) }
 
   before_update :set_as_not_average
   after_update :adjust_other_expense_obligations, :if => lambda{ self.amount_was != self.amount }

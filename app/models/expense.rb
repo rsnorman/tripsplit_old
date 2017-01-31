@@ -1,5 +1,4 @@
 class Expense < ActiveRecord::Base
-  attr_accessible :cost, :expense_type, :name, :tip, :tip_included, :is_loan, :loanee_id, :obligations_attributes, :contributions_attributes
   attr_accessor :full_detail, :with_purchaser, :loanee_id
 
   belongs_to :purchaser, :class_name => User
@@ -36,7 +35,7 @@ class Expense < ActiveRecord::Base
 
   # Reaverages the obligations to make sure the full cost is covered of the expense
   def reaverage_obligations
-    total_custom_amount = obligations.custom.editable.sum(&:amount)
+    total_custom_amount = obligations.custom.editable.sum(:amount)
     averaged_obligations = obligations.averaged.editable
     averaged_amount = (read_attribute(:cost) - total_custom_amount) / averaged_obligations.size
     averaged_obligations.each do |obligation|
@@ -69,13 +68,13 @@ class Expense < ActiveRecord::Base
   # @param [User] member that cost is being calculated for
   # @return [BigDecimal] cost for the member
   def cost_for(member)
-    obligations.select{|x| x.user_id == member.id}.sum(&:amount)
+    obligations.select{|x| x.user_id == member.id}.map(&:amount).inject(0, :+)
   end
 
   # Returns the cost for the purchaser, factoring in contributions
   # @return [BigDecimal] cost for purchaser of expense
   def cost_for_purchaser
-    cost - contributions.sum(&:amount)
+    cost - contributions.sum(:amount)
   end
 
   # Gets the contribution from a member, factoring in contributions

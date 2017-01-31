@@ -2,11 +2,11 @@ require 'spec_helper'
 
 describe Expense do
   before(:each) do
-    @purchaser = Factory(:user)
-    @member = Factory(:user)
-    @trip = Factory(:trip, :organizer => @purchaser)
+    @purchaser = FactoryGirl.create(:user)
+    @member = FactoryGirl.create(:user)
+    @trip = FactoryGirl.create(:trip, :organizer => @purchaser)
     @trip.add_member(@member)
-    @expense = Factory(:expense, :purchaser => @purchaser, :trip => @trip, :cost => 100)
+    @expense = FactoryGirl.create(:expense, :purchaser => @purchaser, :trip => @trip, :cost => 100)
   end
 
   describe "#create_obligations_for_trip_members" do
@@ -17,7 +17,7 @@ describe Expense do
     end
 
     it "should create obligations for the tip for both members" do
-      expense = Factory(:expense, :purchaser => @purchaser, :trip => @trip, :cost => 100, :tip => 20)
+      expense = FactoryGirl.create(:expense, :purchaser => @purchaser, :trip => @trip, :cost => 100, :tip => 20)
       expense.obligations.size.should eq 4
       expense.obligations.tips.size.should eq 2
 
@@ -75,7 +75,7 @@ describe Expense do
     end
 
     it "should return the average of the cost and tip" do
-      expense = Factory(:expense, :purchaser => @purchaser, :trip => @trip, :cost => 80, :tip => 20)
+      expense = FactoryGirl.create(:expense, :purchaser => @purchaser, :trip => @trip, :cost => 80, :tip => 20)
       expense.cost_for(@member).should eq 50
     end
   end
@@ -107,7 +107,7 @@ describe Expense do
     end
 
     it "should update the averaged obligations when expense amount is increased and update contributions marked as paid" do
-      @contribution = Factory(:contribution, :user => @member, :expense => @expense, :is_paid => true)
+      @contribution = FactoryGirl.create(:contribution, :user => @member, :expense => @expense, :is_paid => true)
       @contribution.amount.should eq 50
       @expense.update_attributes(:cost => 200)
       @expense.obligations.collect(&:amount).should eq [100, 100]
@@ -117,7 +117,7 @@ describe Expense do
 
   describe "#contribution_from" do
     it "should remove money from the average cost of an expense for user that has contributed" do
-      @contribution = Factory(:contribution, :user => @member, :expense => @expense, :amount => 20)
+      @contribution = FactoryGirl.create(:contribution, :user => @member, :expense => @expense, :amount => 20)
       @expense.contribution_from(@member).should eq 20
     end
 
@@ -126,18 +126,18 @@ describe Expense do
     end
 
     it "should return the entire cost of the expense minus contributions made for the purchaser" do
-      @contribution = Factory(:contribution, :user => @member, :expense => @expense, :amount => 20)
+      @contribution = FactoryGirl.create(:contribution, :user => @member, :expense => @expense, :amount => 20)
       @expense.contribution_from(@purchaser).should eq 80
     end
   end
 
   describe "#average_cost" do
     it "should return the average cost of an expense with two members" do
-      @user1 = Factory(:user)
-      @user2 = Factory(:user)
-      @trip = Factory(:trip, :organizer => @user1)
+      @user1 = FactoryGirl.create(:user)
+      @user2 = FactoryGirl.create(:user)
+      @trip = FactoryGirl.create(:trip, :organizer => @user1)
       @trip.add_member(@user2)
-      @expense = Factory(:expense, :purchaser => @user1, :trip => @trip, :cost => 100)
+      @expense = FactoryGirl.create(:expense, :purchaser => @user1, :trip => @trip, :cost => 100)
 
       @expense.average_cost.should eq 50
     end
@@ -149,19 +149,19 @@ describe Expense do
     end
 
     it "should return the total cost of the expense minus contributions for the purchaser" do
-      Factory(:contribution, :user => @member, :expense => @expense, :amount => 10)
+      FactoryGirl.create(:contribution, :user => @member, :expense => @expense, :amount => 10)
       @expense.cost_for_purchaser.should eq 90
     end
   end
 
   describe "#is_loan" do
     it "should only create an obligation for the user that matches the loanee_id" do
-      loaner = Factory(:user)
-      loanee = Factory(:user)
-      trip = Factory(:trip, :organizer => loaner)
+      loaner = FactoryGirl.create(:user)
+      loanee = FactoryGirl.create(:user)
+      trip = FactoryGirl.create(:trip, :organizer => loaner)
       trip.add_member(loanee)
 
-      expense = Factory(:expense, :trip => trip, :cost => 100, :loanee_id => loanee.id)
+      expense = FactoryGirl.create(:expense, :trip => trip, :cost => 100, :loanee_id => loanee.id)
 
       expense.is_loan.should eq true
       expense.reload
