@@ -2,15 +2,15 @@ require 'spec_helper'
 
 describe User do
   before(:each) do
-    @user = Factory(:user)
+    @user = FactoryGirl.create(:user)
   end
 
   describe "total_trip_purchases_cost" do
     before(:each) do
-      @trip = Factory(:trip)
+      @trip = FactoryGirl.create(:trip)
       @trip.add_member(@user)
-      @user.purchases << Factory(:expense, :cost => 10, :trip => @trip)
-      @user.purchases << Factory(:expense, :cost => 30, :trip => @trip)
+      @user.purchases << FactoryGirl.create(:expense, :cost => 10, :trip => @trip)
+      @user.purchases << FactoryGirl.create(:expense, :cost => 30, :trip => @trip)
     end
 
     it "should total all costs of trip at $40" do
@@ -18,18 +18,18 @@ describe User do
     end
 
     it "should not add expense from differnet trip" do
-      @user.purchases << Factory(:expense, :cost => 100)
+      @user.purchases << FactoryGirl.create(:expense, :cost => 100)
       @user.total_trip_purchases_cost(@trip).should eq 40
     end
   end
 
   describe "#total_purchases_cost" do
     before(:each) do
-      @trip = Factory(:trip)
+      @trip = FactoryGirl.create(:trip)
       @trip.add_member(@user)
-      @user.purchases << Factory(:expense, :cost => 10, :trip => @trip)
-      @user.purchases << Factory(:expense, :cost => 30, :trip => @trip)
-      @user.purchases << Factory(:expense, :cost => 100)
+      @user.purchases << FactoryGirl.create(:expense, :cost => 10, :trip => @trip)
+      @user.purchases << FactoryGirl.create(:expense, :cost => 30, :trip => @trip)
+      @user.purchases << FactoryGirl.create(:expense, :cost => 100)
     end
 
     it "should total all purchases from different trips to $140" do
@@ -39,10 +39,10 @@ describe User do
 
   describe "#amount_owed_from" do
     before(:each) do
-      @member = Factory(:user)
-      @trip = Factory(:trip, :organizer => @user)
+      @member = FactoryGirl.create(:user)
+      @trip = FactoryGirl.create(:trip, :organizer => @user)
       @trip.add_member(@member)
-      @expense = Factory(:expense, :purchaser => @user, :cost => 100, :trip => @trip)
+      @expense = FactoryGirl.create(:expense, :purchaser => @user, :cost => 100, :trip => @trip)
       @trip.reload
     end
 
@@ -51,18 +51,18 @@ describe User do
     end
 
     it "should return $25 since user paid $100 for expense and member paid $50 for another" do
-      Factory(:expense, :purchaser => @member, :cost => 50, :trip => @trip)
+      FactoryGirl.create(:expense, :purchaser => @member, :cost => 50, :trip => @trip)
       @user.amount_owed_from(@member).should eq 25
     end
 
     it "should return $25 since user paid $100 for expense and member contributed $25" do
-      Factory(:contribution, :amount => 25, :user => @member, :expense => @expense)
+      FactoryGirl.create(:contribution, :amount => 25, :user => @member, :expense => @expense)
       @user.amount_owed_from(@member).should eq 25
     end
 
     it "should return $50 since user paid $100 for expense and user contributed $25 to member's expense" do
-      member_expense = Factory(:expense, :purchaser => @member, :cost => 50, :trip => @trip)
-      Factory(:contribution, :amount => 25, :user => @user, :expense => member_expense)
+      member_expense = FactoryGirl.create(:expense, :purchaser => @member, :cost => 50, :trip => @trip)
+      FactoryGirl.create(:contribution, :amount => 25, :user => @user, :expense => member_expense)
       @user.amount_owed_from(@member).should eq 50
     end
 
@@ -72,7 +72,7 @@ describe User do
     end
 
     it "should return 0 if the user owes the member money" do
-      Factory(:expense, :purchaser => @member, :cost => 150, :trip => @trip)
+      FactoryGirl.create(:expense, :purchaser => @member, :cost => 150, :trip => @trip)
       @user.amount_owed_from(@member).should eq 0
     end
 
@@ -83,10 +83,10 @@ describe User do
 
   describe "#amount_due_to" do
     before(:each) do
-      @member = Factory(:user)
-      @trip = Factory(:trip, :organizer => @user)
+      @member = FactoryGirl.create(:user)
+      @trip = FactoryGirl.create(:trip, :organizer => @user)
       @trip.add_member(@member)
-      @expense = Factory(:expense, :purchaser => @user, :cost => 100, :trip => @trip)
+      @expense = FactoryGirl.create(:expense, :purchaser => @user, :cost => 100, :trip => @trip)
       @trip.reload
     end
 
@@ -95,18 +95,18 @@ describe User do
     end
 
     it "should return $25 since user paid $100 for expense and member paid $50 for another" do
-      Factory(:expense, :purchaser => @member, :cost => 50, :trip => @trip)
+      FactoryGirl.create(:expense, :purchaser => @member, :cost => 50, :trip => @trip)
       @member.amount_due_to(@user).should eq 25
     end
 
     it "should return $25 since user paid $100 for expense and member contributed $25" do
-      Factory(:contribution, :amount => 25, :user => @member, :expense => @expense)
+      FactoryGirl.create(:contribution, :amount => 25, :user => @member, :expense => @expense)
       @member.amount_due_to(@user).should eq 25
     end
 
     it "should return $50 since user paid $100 for expense and user contributed $25 to member's expense" do
-      member_expense = Factory(:expense, :purchaser => @member, :cost => 50, :trip => @trip)
-      Factory(:contribution, :amount => 25, :user => @user, :expense => member_expense)
+      member_expense = FactoryGirl.create(:expense, :purchaser => @member, :cost => 50, :trip => @trip)
+      FactoryGirl.create(:contribution, :amount => 25, :user => @user, :expense => member_expense)
       @member.amount_due_to(@user).should eq 50
     end
 
@@ -116,7 +116,7 @@ describe User do
     end
 
     it "should return 0 if the user owes the member money" do
-      Factory(:expense, :purchaser => @member, :cost => 150, :trip => @trip)
+      FactoryGirl.create(:expense, :purchaser => @member, :cost => 150, :trip => @trip)
       @member.amount_due_to(@user).should eq 0
     end
 
@@ -127,16 +127,16 @@ describe User do
 
   describe "#connect_accounts" do
     before(:each) do
-      @user2 = Factory(:user)
+      @user2 = FactoryGirl.create(:user)
     end
 
     it "should delete the second account" do
       @user.connect(@user2)
-      User.exists?(@user2.id).should be_false
+      User.exists?(@user2.id).should eq false
     end
 
     it "should transfer all organized trips from second account to first account" do
-      trip = Factory(:trip, :organizer => @user2)
+      trip = FactoryGirl.create(:trip, :organizer => @user2)
       @user.connect(@user2)
 
       trip.reload
@@ -144,8 +144,8 @@ describe User do
     end
 
     it "should transfer all expenses from second account to first account" do
-      trip = Factory(:trip, :organizer => @user2)
-      expense = Factory(:expense, :purchaser => @user2, :trip => trip)
+      trip = FactoryGirl.create(:trip, :organizer => @user2)
+      expense = FactoryGirl.create(:expense, :purchaser => @user2, :trip => trip)
       @user.connect(@user2)
 
       expense.reload
@@ -153,7 +153,7 @@ describe User do
     end
 
     it "should transfer all memberships from second account to first account" do
-      trip = Factory(:trip, :organizer => Factory(:user))
+      trip = FactoryGirl.create(:trip, :organizer => FactoryGirl.create(:user))
       membership = trip.add_member(@user2)
       @user.connect(@user2)
 
@@ -162,7 +162,7 @@ describe User do
     end
 
     it "should transfer all contributions from second account to first account" do
-      contribution = Factory(:contribution, :user => @user2)
+      contribution = FactoryGirl.create(:contribution, :user => @user2)
 
       @user.connect(@user2)
 
@@ -171,7 +171,7 @@ describe User do
     end
 
     it "should transfer all contributions from second account to first account" do
-      obligation = Factory(:obligation, :user => @user2)
+      obligation = FactoryGirl.create(:obligation, :user => @user2)
 
       @user.connect(@user2)
 
@@ -180,7 +180,7 @@ describe User do
     end
 
     it "should transfer all friendships from second account to first account" do
-      friendship = Factory(:friendship, :user => @user2)
+      friendship = FactoryGirl.create(:friendship, :user => @user2)
       @user.connect(@user2)
 
       friendship.reload
@@ -188,7 +188,7 @@ describe User do
     end
 
     it "should transfer all friendships tied to second account from other users to first account" do
-      friendship = Factory(:friendship, :friend => @user2)
+      friendship = FactoryGirl.create(:friendship, :friend => @user2)
       @user.connect(@user2)
 
       friendship.reload
@@ -197,7 +197,7 @@ describe User do
 
     it "should transfer over all facebook fields" do
       now = Time.now
-      user3 = Factory(:user, :facebook_id => "1", :facebook_access_token_expires_at => now, :facebook_access_token => "12345")
+      user3 = FactoryGirl.create(:user, :facebook_id => "1", :facebook_access_token_expires_at => now, :facebook_access_token => "12345")
       @user.connect(user3)
       @user.facebook_id.should eq "1"
       @user.facebook_access_token_expires_at.should eq now
@@ -206,7 +206,7 @@ describe User do
 
     it "should transfer over all twitter fields" do
       now = Time.now
-      user3 = Factory(:user, :twitter_id => "1", :twitter_access_token => "9876", :twitter_access_secret => "12345")
+      user3 = FactoryGirl.create(:user, :twitter_id => "1", :twitter_access_token => "9876", :twitter_access_secret => "12345")
       @user.connect(user3)
       @user.twitter_id.should eq "1"
       @user.twitter_access_token.should eq "9876"

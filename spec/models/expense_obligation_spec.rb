@@ -4,10 +4,10 @@ describe ExpenseObligation do
 
   describe "#percentage" do
   	before(:each) do
-  		@purchaser = Factory(:user)
-  		@trip = Factory(:trip, :organizer => @user)
-  		@expense = Factory(:expense, :purchaser => @purchaser, :trip => @trip, :cost => 100)
-      @obligation = Factory(:obligation, :amount => 20, :expense => @expense)
+  		@purchaser = FactoryGirl.create(:user)
+  		@trip = FactoryGirl.create(:trip, :organizer => @user)
+  		@expense = FactoryGirl.create(:expense, :purchaser => @purchaser, :trip => @trip, :cost => 100)
+      @obligation = FactoryGirl.create(:obligation, :amount => 20, :expense => @expense)
   	end
 
   	it "should return a percentage of the obligation the user made to the expense" do
@@ -17,28 +17,28 @@ describe ExpenseObligation do
 
   describe "#set_as_not_average" do
     before(:each) do
-      @obligation = Factory(:obligation, :amount => 10)
+      @obligation = FactoryGirl.create(:obligation, :amount => 10)
     end
 
     it "should set has_been_customized to true after amount is updated" do
       @obligation.update_attributes(:amount => 20)
-      @obligation.is_average.should be_false
+      @obligation.is_average.should eq false
     end
 
     it "should not set has_been_customized to true if amount was not changed" do
       @obligation.user_id = 5
       @obligation.save
-      @obligation.is_average.should be_true
+      @obligation.is_average.should eq true
     end
   end
 
   describe "#destroy_tip" do
     before(:each) do
-      @purchaser = Factory(:user)
-      @member = Factory(:user)
-      @trip = Factory(:trip, :organizer => @purchaser)
+      @purchaser = FactoryGirl.create(:user)
+      @member = FactoryGirl.create(:user)
+      @trip = FactoryGirl.create(:trip, :organizer => @purchaser)
       @trip.add_member(@member)
-      Factory(:expense, :purchaser => @purchaser, :trip => @trip, :cost => 80, :tip => 20)
+      FactoryGirl.create(:expense, :purchaser => @purchaser, :trip => @trip, :cost => 80, :tip => 20)
     end
 
     it "should remove the tip obligation if the member deletes the portion obligation" do
@@ -50,12 +50,12 @@ describe ExpenseObligation do
 
   describe "#adjust_other_expense_obligations" do
     before(:each) do
-      @trip = Factory(:trip)
+      @trip = FactoryGirl.create(:trip)
       3.times do
-        @trip.add_member(Factory(:user))
+        @trip.add_member(FactoryGirl.create(:user))
       end
 
-      @expense = Factory(:expense, :purchaser => @purchaser, :trip => @trip, :cost => 100)
+      @expense = FactoryGirl.create(:expense, :purchaser => @purchaser, :trip => @trip, :cost => 100)
     end
 
     it "should update the obligations that are not customized to spread out the cost when obligation is set higher" do
@@ -91,24 +91,24 @@ describe ExpenseObligation do
     end
 
     it "should update the obligations that are not customized after a new obligation is added" do
-      Factory(:user).add_obligation(@expense, "Fries", 20, true, false)
+      FactoryGirl.create(:user).add_obligation(@expense, "Fries", 20, true, false)
       @expense.obligations.collect(&:amount).should eq [20, 20, 20, 20, 20]
     end
 
     it "should update the obligations that are not customized after a new obligation is added" do
-      Factory(:user).add_obligation(@expense, "Fries", 20, true, false)
+      FactoryGirl.create(:user).add_obligation(@expense, "Fries", 20, true, false)
       @expense.obligations.collect(&:amount).should eq [20, 20, 20, 20, 20]
     end
   end
 
     describe "#reaverage" do
     before(:each) do
-      @trip = Factory(:trip)
+      @trip = FactoryGirl.create(:trip)
       3.times do
-        @trip.add_member(Factory(:user))
+        @trip.add_member(FactoryGirl.create(:user))
       end
 
-      @expense = Factory(:expense, :purchaser => @purchaser, :trip => @trip, :cost => 100)
+      @expense = FactoryGirl.create(:expense, :purchaser => @purchaser, :trip => @trip, :cost => 100)
     end
 
     it "should reaverage the updated obligation after is_average is set back to true" do

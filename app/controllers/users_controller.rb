@@ -12,7 +12,7 @@ class UsersController < ApplicationController
   #  [200 OK] Successfully retrieved Array of users
   #   # Example response
   #   [{
-  #    "name" => "Ryan Norman", 
+  #    "name" => "Ryan Norman",
   #    "email" => "ryann@hesonline.com"
   #   }]
 	def index
@@ -21,7 +21,7 @@ class UsersController < ApplicationController
 	end
 
   def login
-    @user = User.find_by_email_and_password(params[:user][:email], params[:user][:password])
+    @user = User.find_by_email_and_password(user_params[:email], user_params[:password])
 
     if @user
       respond_with @user
@@ -39,12 +39,12 @@ class UsersController < ApplicationController
   #  [200 OK] Successfully retrieved a user
   #   # Example response
   #   {
-  #    "name" => "Ryan Norman", 
+  #    "name" => "Ryan Norman",
   #    "email" => "ryann@hesonline.com"
   #   }
 	def show
 		@user = User.find(params[:id])
-    
+
     @user.current_trip = @user.trips.find(params[:trip_id]) if params[:member]
 
 		respond_with @user
@@ -55,7 +55,7 @@ class UsersController < ApplicationController
   # @example
   #  #POST /users, {
   #    user: {
-  #      name: 'Ryan Norman', 
+  #      name: 'Ryan Norman',
   #      email: 'ryann@hesonline.com'
   #    }
   #  }
@@ -64,11 +64,11 @@ class UsersController < ApplicationController
   #  [201 CREATED] Successfully created a user
   #   # Example response
   #   {
-  #    "name" => "Ryan Norman", 
+  #    "name" => "Ryan Norman",
   #    "email" => "ryann@hesonline.com"
   #   }
 	def create
-		@user = User.create(params[:user])
+		@user = User.create(user_params)
 		respond_with @user
 	end
 
@@ -77,7 +77,7 @@ class UsersController < ApplicationController
 	# @example
 	#  #PUT /users, {
   #    user: {
-  #      name: 'Ryan Norman', 
+  #      name: 'Ryan Norman',
   #      email: 'ryann@hesonline.com'
   #    }
   #  }
@@ -86,7 +86,7 @@ class UsersController < ApplicationController
   #  [204 NO CONTENT] Successfully updated a user
 	def update
 		@user ||= User.find(params[:id])
-		@user.update_attributes(params[:user])
+		@user.update_attributes(user_params)
 		respond_with @user
 	end
 
@@ -101,5 +101,11 @@ class UsersController < ApplicationController
 		@user ||= User.find(params[:id])
 		@user.destroy
 		respond_with @user
+	end
+
+	private
+
+	def user_params
+		params.require(:user).permit(:email, :name, :password)
 	end
 end

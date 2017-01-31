@@ -1,14 +1,14 @@
 require "spec_helper"
 require 'support/auth_helper'
 
-describe "/expenses" do
+describe "/expenses", type: :request  do
   include AuthHelper
 
   before(:each) do
-    @user = Factory(:user)
-    @friend = Factory(:user)
+    @user = FactoryGirl.create(:user)
+    @friend = FactoryGirl.create(:user)
     @user.reload
-    friendship = Factory(:friendship, :user => @user, :friend => @friend)
+    friendship = FactoryGirl.create(:friendship, :user => @user, :friend => @friend)
   end
 
   describe "GET /friendships" do
@@ -22,7 +22,7 @@ describe "/expenses" do
     end
 
     it "should return a list of friends for a user" do
-    	friendship = Factory(:friendship)
+    	friendship = FactoryGirl.create(:friendship)
       get "/friendships", {:format => :json}, auth_parameters
 
       response.should be_ok
@@ -36,7 +36,7 @@ describe "/expenses" do
 
   describe "POST /friendships" do
     it "should create a friendship with all the attributes" do
-      friend = Factory(:user)
+      friend = FactoryGirl.create(:user)
       post "/friendships", {:format => :json, :friendship => {:friend_id => friend.id}}, auth_parameters
 
       response.status.should eq 201
@@ -59,7 +59,7 @@ describe "/expenses" do
     end
 
     it "should not delete other friendships" do
-    	friendship = Factory(:friendship)
+    	friendship = FactoryGirl.create(:friendship)
       expect { delete "/friendships/#{friendship.friend.id}", {:format => :json}, auth_parameters }.to raise_exception
     end
   end

@@ -62,12 +62,12 @@ class ExpenseContributionsController < ApplicationController
 		@expense = @user.expenses.find(params[:expense_id])
 		@contribution.expense = @expense
 
-    if params[:expense_contribution][:user_id]
+    if expense_contribution_params[:user_id]
       if @expense.trip.organizer_id == @user.id || @expense.purchaser_id == @user.id
-        user_id = params[:expense_contribution].delete(:user_id)
+        user_id = expense_contribution_params.delete(:user_id)
         Rails.logger.info [user_id, @expense.purchaser_id].inspect
         if user_id.to_i != @expense.purchaser_id
-          @contribution.attributes = params[:expense_contribution]
+          @contribution.attributes = expense_contribution_params
           @contribution.user_id = user_id
 		      @contribution.save
         else
@@ -77,7 +77,7 @@ class ExpenseContributionsController < ApplicationController
         @contribution.errors[:user_id] = ["Only purchaser or organizer can add contributions for other members"]
       end
     else
-      @contribution.attributes = params[:expense_contribution]
+      @contribution.attributes = expense_contribution_params
       @contribution.user = @user
       @contribution.save
     end
@@ -98,7 +98,7 @@ class ExpenseContributionsController < ApplicationController
   #  [204 NO CONTENT] Successfully updated an contribution
 	def update
 		@contribution = get_contribution
-		@contribution.update_attributes(params[:expense_contribution])
+		@contribution.update_attributes(expense_contribution_params)
 		respond_with @contribution
 	end
 
@@ -126,4 +126,8 @@ class ExpenseContributionsController < ApplicationController
 
     @contribution
   end
+
+	def expense_contribution_params
+		params.require(:expense_contribution).permit(:amount, :user_id, :is_paid)
+	end
 end

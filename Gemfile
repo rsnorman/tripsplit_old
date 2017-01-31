@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.12'
+gem 'rails', '~> 4.0'
+gem 'responders', '~> 2.0'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -15,6 +16,8 @@ group :production do
   gem 'newrelic_rpm'
 end
 
+gem 'ruby_dep', '~> 1.3.1'
+
 gem 'json'
 
 gem 'rack-cors', :require => 'rack/cors'
@@ -28,31 +31,17 @@ gem 'twitter-text'
 gem 'omniauth-facebook'
 gem "koala", "~> 1.7.0rc1"
 
-
 gem 'rest-client'
 
 group :development, :test do
-  gem 'rb-fsevent', '0.9.2'
-  gem "rspec", "2.11.0"
-  gem "rspec-rails", "2.11.0"
-  gem "capybara", "2.0.1"
-  gem "guard", "1.4.0"
-  gem "guard-rspec", "2.1.0"
-  gem 'terminal-notifier-guard', "1.5.3"
-  gem "factory_girl_rails", '1.1.0'
-  gem "database_cleaner", "0.9.1"
+  gem 'rb-fsevent'
+  gem "rspec"
+  gem "rspec-rails"
+  gem "capybara"
+  gem "guard"
+  gem "guard-rspec"
+  gem 'terminal-notifier-guard'
+  gem "factory_girl_rails"
+  gem "database_cleaner"
+	gem "byebug"
 end
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger
-# gem 'ruby-debug'

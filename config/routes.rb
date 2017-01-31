@@ -44,5 +44,5 @@ GroupExpenser::Application.routes.draw do
   get '/profile', :to =>'sessions#show', :as =>'show'
   delete '/signout', :to =>'sessions#destroy', :as =>'signout'
 
-  match '*path' => 'application#redirect_to_hash_path'
+  match '*path', to: redirect('/redirect_to_hash_path'), via: :all
 end

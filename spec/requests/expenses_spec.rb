@@ -1,13 +1,13 @@
 require "spec_helper"
 require 'support/auth_helper'
 
-describe "/expenses" do
+RSpec.describe "/expenses", type: :request do
   include AuthHelper
 
   before(:each) do
-    @user = Factory(:user)
-    @trip = Factory(:trip, :organizer => @user)
-    @expense = Factory(:expense, :trip => @trip, :purchaser => @user, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
+    @user = FactoryGirl.create(:user)
+    @trip = FactoryGirl.create(:trip, :organizer => @user)
+    @expense = FactoryGirl.create(:expense, :trip => @trip, :purchaser => @user, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
   end
 
   describe "GET /expenses" do
@@ -21,8 +21,8 @@ describe "/expenses" do
     end
 
     it "should not return an expense from another trip" do
-      other_trip = Factory(:trip, :organizer => @user)
-      other_expense = Factory(:expense, :trip => other_trip, :purchaser => @user)
+      other_trip = FactoryGirl.create(:trip, :organizer => @user)
+      other_expense = FactoryGirl.create(:expense, :trip => other_trip, :purchaser => @user)
 
       get "/trips/#{@trip.id}/expenses", {:format => :json}, auth_parameters
 
@@ -54,7 +54,7 @@ describe "/expenses" do
     end
 
     it "should not return an expense not purchased on one of the user's trips" do
-      other_expense = Factory(:expense)
+      other_expense = FactoryGirl.create(:expense)
 
       expect { get "/expenses/#{other_expense.id}", {:format => :json}, auth_parameters }.to raise_exception ActiveRecord::RecordNotFound
     end
@@ -62,7 +62,7 @@ describe "/expenses" do
 
   describe "POST /expenses" do
     it "should create a expense with all the attributes" do
-      expense_attrs = Factory.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 2, :expense_type => "Food")
+      expense_attrs = FactoryGirl.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 2, :expense_type => "Food")
       expense_attrs.delete(:user_id)
       expense_attrs.delete(:trip_id)
       post "/trips/#{@trip.id}/expenses", {:format => :json, :expense => expense_attrs}, auth_parameters
@@ -75,35 +75,28 @@ describe "/expenses" do
       expense['expense_type'].should eq "Food"
     end
 
-    it "should return an error if non-nested resource url is used to purchase expense" do
-      expense_attrs = Factory.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 2, :expense_type => "Food")
-      expense_attrs.delete(:user_id)
-      expense_attrs.delete(:trip_id)
-      expect { post "/expenses", {:format => :json, :expense => expense_attrs}, auth_parameters }.to raise_exception
-    end
-
     it "should return an error if trip does not exist that expense is being added to" do
-      expense_attrs = Factory.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 2, :expense_type => "Food")
+      expense_attrs = FactoryGirl.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 2, :expense_type => "Food")
       expense_attrs.delete(:user_id)
       expense_attrs.delete(:trip_id)
       expect { post "/trips/1000/expenses", {:format => :json, :expense => expense_attrs}, auth_parameters }.to raise_exception ActiveRecord::RecordNotFound
     end
 
     it "should return an error if user is not part of trip that expense is being added to" do
-      expense_attrs = Factory.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 2, :expense_type => "Food")
+      expense_attrs = FactoryGirl.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 2, :expense_type => "Food")
       expense_attrs.delete(:user_id)
       expense_attrs.delete(:trip_id)
-      expect { post "/trips/#{Factory(:trip).id}/expenses", {:format => :json, :expense => expense_attrs}, auth_parameters }.to raise_exception ActiveRecord::RecordNotFound
+      expect { post "/trips/#{FactoryGirl.create(:trip).id}/expenses", {:format => :json, :expense => expense_attrs}, auth_parameters }.to raise_exception ActiveRecord::RecordNotFound
     end
 
     it "should set create an obligation for a user through nested attributes" do
-      user2 = Factory(:user)
+      user2 = FactoryGirl.create(:user)
       @trip.add_member(user2)
 
-      expense_attrs = Factory.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 20, :expense_type => "Food")
+      expense_attrs = FactoryGirl.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 20, :expense_type => "Food")
       expense_attrs.delete(:user_id)
       expense_attrs.delete(:trip_id)
-      obligation_attrs = Factory.attributes_for(:obligation, :expense => nil, :user_id => user2.id, :amount => 5, :is_average => false)
+      obligation_attrs = FactoryGirl.attributes_for(:obligation, :expense => nil, :user_id => user2.id, :amount => 5, :is_average => false)
       obligation_attrs.delete(:expense)
       obligation_attrs.delete(:is_tip)
       post "/trips/#{@trip.id}/expenses", {:format => :json, :expense => expense_attrs.merge(:obligations_attributes => [obligation_attrs])}, auth_parameters
@@ -115,13 +108,13 @@ describe "/expenses" do
     end
 
     it "should remove an obligation for a user through nested attributes" do
-      user2 = Factory(:user)
+      user2 = FactoryGirl.create(:user)
       @trip.add_member(user2)
 
-      expense_attrs = Factory.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 20, :expense_type => "Food")
+      expense_attrs = FactoryGirl.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 20, :expense_type => "Food")
       expense_attrs.delete(:user_id)
       expense_attrs.delete(:trip_id)
-      obligation_attrs = Factory.attributes_for(:obligation, :expense => nil, :user_id => user2.id, :amount => 0, :is_average => false)
+      obligation_attrs = FactoryGirl.attributes_for(:obligation, :expense => nil, :user_id => user2.id, :amount => 0, :is_average => false)
       obligation_attrs.delete(:expense)
       obligation_attrs.delete(:is_tip)
       post "/trips/#{@trip.id}/expenses", {:format => :json, :expense => expense_attrs.merge(:obligations_attributes => [obligation_attrs])}, auth_parameters
@@ -133,13 +126,13 @@ describe "/expenses" do
     end
 
     it "should set create a contribution for a user through nested attributes" do
-      user2 = Factory(:user)
+      user2 = FactoryGirl.create(:user)
       @trip.add_member(user2)
 
-      expense_attrs = Factory.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 20, :expense_type => "Food")
+      expense_attrs = FactoryGirl.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 20, :expense_type => "Food")
       expense_attrs.delete(:user_id)
       expense_attrs.delete(:trip_id)
-      contribution_attrs = Factory.attributes_for(:contribution, :expense => nil, :user_id => user2.id, :amount => 5)
+      contribution_attrs = FactoryGirl.attributes_for(:contribution, :expense => nil, :user_id => user2.id, :amount => 5)
       contribution_attrs.delete(:expense)
       contribution_attrs.delete(:is_tip)
       post "/trips/#{@trip.id}/expenses", {:format => :json, :expense => expense_attrs.merge(:contributions_attributes => [contribution_attrs])}, auth_parameters
@@ -151,13 +144,13 @@ describe "/expenses" do
     end
 
     it "should set create a contribution for a user through nested attributes that is completely paid" do
-      user2 = Factory(:user)
+      user2 = FactoryGirl.create(:user)
       @trip.add_member(user2)
 
-      expense_attrs = Factory.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 20, :expense_type => "Food")
+      expense_attrs = FactoryGirl.attributes_for(:expense, :name => "Nacho Cheese Doritos", :cost => 20, :expense_type => "Food")
       expense_attrs.delete(:user_id)
       expense_attrs.delete(:trip_id)
-      contribution_attrs = Factory.attributes_for(:contribution, :expense => nil, :user_id => user2.id, :is_paid => true)
+      contribution_attrs = FactoryGirl.attributes_for(:contribution, :expense => nil, :user_id => user2.id, :is_paid => true)
       contribution_attrs.delete(:expense)
       contribution_attrs.delete(:is_tip)
       post "/trips/#{@trip.id}/expenses", {:format => :json, :expense => expense_attrs.merge(:contributions_attributes => [contribution_attrs])}, auth_parameters

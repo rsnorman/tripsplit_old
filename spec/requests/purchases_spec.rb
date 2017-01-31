@@ -1,13 +1,13 @@
 require "spec_helper"
 require 'support/auth_helper'
 
-describe "/purchases" do
+describe "/purchases", type: :request  do
   include AuthHelper
 
   before(:each) do
-    @user = Factory(:user)
-    @trip = Factory(:trip, :organizer => @user)
-    @purchase = Factory(:expense, :trip => @trip, :purchaser => @user, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
+    @user = FactoryGirl.create(:user)
+    @trip = FactoryGirl.create(:trip, :organizer => @user)
+    @purchase = FactoryGirl.create(:expense, :trip => @trip, :purchaser => @user, :cost => 50, :expense_type => 'Gas', :name => 'Sunoco Gas Fillup')
   end
 
   describe "GET /purchases" do
@@ -31,8 +31,8 @@ describe "/purchases" do
     end
 
     it "should not return any purchases not purchased by a user on a trip" do
-      other_user = Factory(:user)
-      other_purchase = Factory(:expense, :trip_id => @trip.id, :purchaser => other_user)
+      other_user = FactoryGirl.create(:user)
+      other_purchase = FactoryGirl.create(:expense, :trip_id => @trip.id, :purchaser => other_user)
 
       get "/trips/#{@trip.id}/purchases", {:format => :json}, auth_parameters
 
@@ -55,7 +55,7 @@ describe "/purchases" do
     end
 
     it "should not return an purchase not purchased on one of the user's trips" do
-      other_purchase = Factory(:expense)
+      other_purchase = FactoryGirl.create(:expense)
 
       expect { get "/purchases/#{other_purchase.id}", {:format => :json}, auth_parameters }.to raise_exception ActiveRecord::RecordNotFound
     end
@@ -63,7 +63,7 @@ describe "/purchases" do
 
   describe "PUT /purchases/:id" do
     it "should update a purchase matching the id" do
-      purchase_attrs = Factory.attributes_for(:expense, :cost => 45)
+      purchase_attrs = FactoryGirl.attributes_for(:expense, :cost => 45)
       put "/purchases/#{@purchase.id}", {:format => :json, :expense => purchase_attrs}, auth_parameters
 
       response.status.should eq 204
@@ -74,8 +74,8 @@ describe "/purchases" do
     end
 
     it "should not update an purchase that is not purchased by user" do
-    	other_purchase = Factory(:expense, :trip => @trip)
-      purchase_attrs = Factory.attributes_for(:expense, :cost => 45)
+    	other_purchase = FactoryGirl.create(:expense, :trip => @trip)
+      purchase_attrs = FactoryGirl.attributes_for(:expense, :cost => 45)
       expect { put "/purchases/#{other_purchase.id}", {:format => :json, :expense => purchase_attrs}, auth_parameters }.to raise_exception ActiveRecord::RecordNotFound
     end
   end
@@ -89,7 +89,7 @@ describe "/purchases" do
     end
 
     it "should raise an error if user tries to delete an purchase not purchased by them" do
-    	other_purchase = Factory(:expense, :trip => @trip)
+    	other_purchase = FactoryGirl.create(:expense, :trip => @trip)
     	expect { delete "/purchases/#{other_purchase.id}", {:format => :json}, auth_parameters }.to raise_exception ActiveRecord::RecordNotFound
     end
   end

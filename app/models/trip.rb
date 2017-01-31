@@ -1,7 +1,6 @@
 class Trip < ActiveRecord::Base
   include ActionView::Helpers::NumberHelper
 
-  attr_accessible :name, :location, :starts_on, :ends_on, :description, :needs_facebook_event
   attr_accessor :needs_facebook_event
 
   belongs_to :organizer, :class_name => User
@@ -86,9 +85,9 @@ class Trip < ActiveRecord::Base
   # @param [User] member that has contributed
   # @return [BigDecimal] total amount of contributions
   def total_contributed_from(member)
-    contributed_total = member.purchases.where(:trip_id => self.id).sum(&:cost)
-    contributed_total += member.contributions.where(["expense_id IN (:expense_ids)", {:expense_ids => expenses.collect(&:id)}]).sum(&:amount)
-    contributed_total -= contributions.where(["expense_id IN (:expense_ids)", {:expense_ids => member.purchases.collect(&:id)}]).sum(&:amount)
+    contributed_total = member.purchases.where(:trip_id => self.id).sum(:cost)
+    contributed_total += member.contributions.where(["expense_id IN (:expense_ids)", {:expense_ids => expenses.collect(&:id)}]).sum(:amount)
+    contributed_total -= contributions.where(["expense_id IN (:expense_ids)", {:expense_ids => member.purchases.collect(&:id)}]).sum(:amount)
     contributed_total
   end
 
@@ -96,7 +95,7 @@ class Trip < ActiveRecord::Base
   # @param [User] member that has obligations
   # @return [BigDecimal] total amount of obligations
   def total_obligated_from(member)
-    member.obligations.where(["expense_id IN (:expense_ids)", {:expense_ids => expenses.collect(&:id)}]).sum(&:amount)
+    member.obligations.where(expense: expenses).sum(:amount)
   end
 
   # Gets a list of members that are due money and how much credit they have

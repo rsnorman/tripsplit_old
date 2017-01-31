@@ -1,5 +1,4 @@
 class TripMembership < ActiveRecord::Base
-  attr_accessible :trip, :user, :trip_id, :user_id
   belongs_to :trip
   belongs_to :user
 
