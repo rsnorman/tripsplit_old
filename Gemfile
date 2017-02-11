@@ -20,6 +20,8 @@ gem 'ruby_dep', '~> 1.3.1'
 
 gem 'json'
 
+gem 'devise'
+
 gem 'rack-cors', :require => 'rack/cors'
 
 gem 'omniauth'
