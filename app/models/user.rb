@@ -1,4 +1,10 @@
 class User < ActiveRecord::Base
+  # Include default devise modules.
+  devise :database_authenticatable, :registerable
+          # :recoverable, :rememberable, :trackable, :validatable,
+          # :confirmable, :omniauthable
+  include DeviseTokenAuth::Concerns::User
+
   attr_accessor :current_trip
 
   has_many :organized_trips, :class_name => Trip, :foreign_key => :organizer_id, :dependent => :destroy

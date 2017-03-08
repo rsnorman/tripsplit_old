@@ -1,15 +1,14 @@
 GroupExpenser::Application.routes.draw do
+  mount_devise_token_auth_for 'User', at: 'auth', skip: [:omniauth_callbacks]
+
   resources :users do
     resources :purchases, :controller => :expenses, :only => :index
     resources :obligations, :as => :expense_obligations, :controller => :expense_obligations, :only => [:index]
     resources :contributions, :as => :expense_contributions, :controller => :expense_contributions
-    collection do
-      post :login
-    end
   end
 
   resources :trips do
-    resources :members, :controller => :users, :only => [:index, :show], :member => true
+    resources :members, :controller => :members, :only => [:index, :show]
     resources :memberships, :as => :trip_memberships, :only => [:create, :destroy]
     resources :expenses, :only => [:create, :index, :show, :update, :destroy]
   end
@@ -44,5 +43,5 @@ GroupExpenser::Application.routes.draw do
   get '/profile', :to =>'sessions#show', :as =>'show'
   delete '/signout', :to =>'sessions#destroy', :as =>'signout'
 
-  match '*path', to: redirect('/redirect_to_hash_path'), via: :all
+  # match '*path', to: redirect('/redirect_to_hash_path'), via: :all
 end

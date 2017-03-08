@@ -21,7 +21,7 @@ class ExpenseContributionsController < ApplicationController
     if params[:expense_id]
       @contributions = Expense.find(params[:expense_id]).contributions
     else
-		  @contributions = @user.contributions
+		  @contributions = current_user.contributions
     end
 		respond_with @contributions
 	end
@@ -59,11 +59,12 @@ class ExpenseContributionsController < ApplicationController
   #   }
 	def create
     @contribution = ExpenseContribution.new
-		@expense = @user.expenses.find(params[:expense_id])
+		@expense = current_user.expenses.find(params[:expense_id])
 		@contribution.expense = @expense
+		@obligation = ExpenseObligation.find_by(expense: @expense, user: current_user)
 
     if expense_contribution_params[:user_id]
-      if @expense.trip.organizer_id == @user.id || @expense.purchaser_id == @user.id
+      if @expense.trip.organizer_id == current_user.id || @expense.purchaser_id == current_user.id
         user_id = expense_contribution_params.delete(:user_id)
         Rails.logger.info [user_id, @expense.purchaser_id].inspect
         if user_id.to_i != @expense.purchaser_id
@@ -78,11 +79,9 @@ class ExpenseContributionsController < ApplicationController
       end
     else
       @contribution.attributes = expense_contribution_params
-      @contribution.user = @user
+      @contribution.user = current_user
       @contribution.save
     end
-
-		respond_with @contribution
 	end
 
 	# Updates an contribution with the passed parameters
@@ -120,7 +119,7 @@ class ExpenseContributionsController < ApplicationController
   def get_contribution
     @contribution = ExpenseContribution.find(params[:id])
 
-    unless @contribution.user_id == @user.id || @contribution.expense.purchaser_id == @user.id || @contribution.expense.trip.organizer_id == @user.id
+    unless @contribution.user_id == current_user.id || @contribution.expense.purchaser_id == current_user.id || @contribution.expense.trip.organizer_id == current_user.id
       raise ActiveRecord::RecordNotFound
     end
 

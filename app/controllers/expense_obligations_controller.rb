@@ -17,8 +17,12 @@ class ExpenseObligationsController < ApplicationController
   #    "is_customized" => false
   #   }]
 	def index
-		@obligations = @user.expenses.find(params[:expense_id]).obligations
-		respond_with @obligations
+		@expense = current_user.expenses.find(params[:expense_id])
+		@obligations = @expense.obligations.includes(:user)
+		@user_contributions = @expense.contributions.includes(:user).inject({}) do |user_contributions, contribution|
+			user_contributions[contribution.user_id] = contribution
+			user_contributions
+		end
 	end
 
   # Gets a list of all the obligations for an expense for a user.
@@ -60,8 +64,8 @@ class ExpenseObligationsController < ApplicationController
   #    "is_customized" => true
   #   }
 	def create
-		@obligation = @user.obligations.build(expense_obligation_params)
-		@expense = @user.expenses.find(params[:expense_id])
+		@obligation = current_user.obligations.build(expense_obligation_params)
+		@expense = current_user.expenses.find(params[:expense_id])
 		@obligation.expense = @expense
 		@obligation.save
 		respond_with @obligation
@@ -88,7 +92,7 @@ class ExpenseObligationsController < ApplicationController
   private
 
   def get_obligation
-    @user.obligations.find(params[:id]) rescue @user.purchases.find(params[:expense_id]).obligations.find(params[:id])
+    current_user.obligations.find(params[:id]) rescue current_user.purchases.find(params[:expense_id]).obligations.find(params[:id])
   end
 
 	def expense_obligation_params

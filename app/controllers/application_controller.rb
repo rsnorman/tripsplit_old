@@ -1,7 +1,10 @@
 class ApplicationController < ActionController::Base
+  include DeviseTokenAuth::Concerns::SetUserByToken
 
-  before_filter :redirect_to_hash_path
-  before_filter :set_user_from_header
+  # before_action :authenticate_user!
+
+  # before_filter :redirect_to_hash_path
+  # before_filter :set_user_from_header
   private
 
 

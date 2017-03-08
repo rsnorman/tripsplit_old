@@ -1,4 +1,7 @@
 class Expense < ActiveRecord::Base
+
+  mount_uploader :picture, ExpensePictureUploader
+
   attr_accessor :full_detail, :with_purchaser, :loanee_id
 
   belongs_to :purchaser, :class_name => User

@@ -15,7 +15,7 @@ class TripsController < ApplicationController
   #    "name" => 'Mt bROhemia'
   #   }]
 	def index
-		@trips = params[:organized] ? @user.organized_trips : @user.trips
+		@trips = params[:organized] ? current_user.organized_trips : current_user.trips
 		respond_with @trips
 	end
 
@@ -31,7 +31,7 @@ class TripsController < ApplicationController
   #    "name" => 'Mt bROhemia'
   #   }
 	def show
-		@trip = @user.trips.find(params[:id])
+		@trip = current_user.trips.find(params[:id])
 		respond_with @trip
 	end
 
@@ -51,8 +51,8 @@ class TripsController < ApplicationController
   #    "name" => 'Mt bROhemia'
   #   }
 	def create
-		@trip = @user.trips.build(trip_params)
-    @trip.organizer_id = @user.id
+		@trip = current_user.trips.build(trip_params)
+    @trip.organizer_id = current_user.id
     @trip.save
 		respond_with @trip
 	end
@@ -69,9 +69,10 @@ class TripsController < ApplicationController
   # [URL] /trips [PUT]
   #  [204 NO CONTENT] Successfully updated a trip
 	def update
-		@trip = @user.organized_trips.find(params[:id])
+		process_picture
+		@trip = current_user.organized_trips.find(params[:id])
 		@trip.update_attributes(trip_params)
-		respond_with @trip
+		render json: @trip, status: 202
 	end
 
 	# Deletes a trip matching the id
@@ -82,14 +83,24 @@ class TripsController < ApplicationController
   # [URL] /trips [DELETE]
   #  [204 NO CONTENT] Successfully deleted a trip
 	def destroy
-		@trip = @user.organized_trips.find(params[:id])
+		@trip = current_user.organized_trips.find(params[:id])
 		@trip.destroy
 		respond_with @trip
 	end
 
 	private
 
+	def process_picture
+		tempfile = Tempfile.new(["trip-picture-#{SecureRandom.uuid}", params[:trip][:picture_file_name]])
+		tempfile << params[:trip][:picture]
+		params[:trip][:picture]
+	ensure
+		tempfile.close
+	end
+
 	def trip_params
-		params.require(:trip).permit(:name, :location, :starts_on, :ends_on, :description, :needs_facebook_event)
+		params.require(:trip).permit(:name, :location, :starts_on, :ends_on, :description, :picture, :needs_facebook_event).tap do |p|
+			p.delete(:picture) if p[:picture].blank?
+		end
 	end
 end

@@ -1,6 +1,8 @@
 class Trip < ActiveRecord::Base
   include ActionView::Helpers::NumberHelper
 
+  mount_uploader :picture, TripPictureUploader
+
   attr_accessor :needs_facebook_event
 
   belongs_to :organizer, :class_name => User

@@ -6,7 +6,7 @@ class ExpensesController < ApplicationController
 
 	# Sets the trip if trip id has been passed
 	def get_trip
-		@trip = @user.trips.find(params[:trip_id]) if params[:trip_id]
+		@trip = current_user.trips.find(params[:trip_id]) if params[:trip_id]
 	end
 
 	# Gets a list of all the expenses for the application or a user.
@@ -30,8 +30,8 @@ class ExpensesController < ApplicationController
   #    }
   #   }]
 	def index
-		@expenses = @trip.nil? ? @user.purchases : params[:purchased] ? @user.purchases.where(:trip_id => @trip.id) : @trip.expenses
-    @expenses.each{|x| x.with_purchaser = true}
+		@expenses = @trip.nil? ? current_user.purchases : params[:purchased] ? current_user.purchases.where(:trip_id => @trip.id) : @trip.expenses.order(created_at: :desc)
+    @expenses.each{|x| x.full_detail = true}
 		respond_with @expenses
 	end
 
@@ -89,8 +89,9 @@ class ExpensesController < ApplicationController
     expense_params.delete(:contributions_attributes) if expense_params[:contributions_attributes].nil?
     expense_params.delete(:obligations_attributes) if expense_params[:obligations_attributes].nil?
 		@expense = @trip.expenses.build(expense_params)
-		@expense.purchaser = @user
+		@expense.purchaser = current_user
 		@expense.save
+		@expense.full_detail = true
 
 		respond_with @expense
 	end
@@ -109,11 +110,12 @@ class ExpensesController < ApplicationController
   # [URL] /expenses [PUT]
   #  [204 NO CONTENT] Successfully updated a expense
 	def update
-		@expense = @user.purchases.find(params[:id])
+		@expense = current_user.purchases.find(params[:id])
     expense_params.delete(:contributions_attributes) if expense_params[:contributions_attributes].nil?
     expense_params.delete(:obligations_attributes) if expense_params[:obligations_attributes].nil?
 		@expense.update_attributes(expense_params)
-		respond_with @expense
+		@expense.full_detail = true
+		render json: @expense, status: 202
 	end
 
 	# Deletes a expense matching the id
@@ -124,7 +126,7 @@ class ExpensesController < ApplicationController
   # [URL] /expenses [DELETE]
   #  [204 NO CONTENT] Successfully deleted a expense
 	def destroy
-		@expense = @user.purchases.find(params[:id])
+		@expense = current_user.purchases.find(params[:id])
 		@expense.destroy
 		respond_with @expense
 	end
@@ -132,6 +134,8 @@ class ExpensesController < ApplicationController
 	private
 
 	def expense_params
-		params.require(:expense).permit(:cost, :expense_type, :name, :tip, :tip_included, :is_loan, :loanee_id, obligations_attributes: [:amount, :user_id, :is_average], contributions_attributes: [:amount, :user_id, :is_paid])
+		params.require(:expense).permit(:cost, :expense_type, :name, :tip, :tip_included, :is_loan, :loanee_id, :description, :picture, obligations_attributes: [:amount, :user_id, :is_average], contributions_attributes: [:amount, :user_id, :is_paid]).tap do |p|
+			p.delete(:picture) if p[:picture].blank?
+		end
 	end
 end

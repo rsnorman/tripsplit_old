@@ -17,10 +17,11 @@ group :production do
 end
 
 gem 'ruby_dep', '~> 1.3.1'
-
+gem 'jbuilder'
 gem 'json'
 
 gem 'devise'
+gem 'devise_token_auth'
 
 gem 'rack-cors', :require => 'rack/cors'
 
@@ -34,6 +35,9 @@ gem 'omniauth-facebook'
 gem "koala", "~> 1.7.0rc1"
 
 gem 'rest-client'
+
+gem 'mini_magick'
+gem 'carrierwave'
 
 group :development, :test do
   gem 'rb-fsevent'
