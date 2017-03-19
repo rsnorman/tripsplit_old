@@ -9,6 +9,7 @@ json.array! @obligations do |obligation|
 
   json.user do
     json.name obligation.user.name || obligation.user.email
+    json.picture obligation.user.picture
   end
 
   json.expense do
@@ -16,6 +17,7 @@ json.array! @obligations do |obligation|
 
     json.purchaser do
       json.name @expense.purchaser.name || @expense.purchaser.email
+      json.picture @expense.purchaser.picture
     end
   end
 end

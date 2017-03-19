@@ -205,12 +205,104 @@ describe User do
     end
 
     it "should transfer over all twitter fields" do
-      now = Time.now
       user3 = FactoryGirl.create(:user, :twitter_id => "1", :twitter_access_token => "9876", :twitter_access_secret => "12345")
       @user.connect(user3)
       @user.twitter_id.should eq "1"
       @user.twitter_access_token.should eq "9876"
       @user.twitter_access_secret.should eq "12345"
+    end
+  end
+
+  describe '#owes_user' do
+    let(:trip_member) { FactoryGirl.create(:user) }
+    let(:trip) { FactoryGirl.create(:trip, organizer: @user) }
+
+    before do
+      trip.add_member(FactoryGirl.create(:user))
+      trip.add_member(trip_member)
+    end
+
+    subject { @user }
+
+    context 'with no purchases' do
+      it 'returns 0' do
+        expect(subject.owes_user(trip_member, trip)).to be_zero
+      end
+    end
+
+    context 'with member with single purchase' do
+      let!(:expense) do
+        FactoryGirl.create(:expense, purchaser: trip_member,
+                                     cost: 90,
+                                     trip: trip)
+      end
+
+      it 'returns third of purchase amount' do
+        expect(subject.owes_user(trip_member, trip)).to eq 30
+      end
+    end
+
+    context 'with user with single purchase' do
+      let!(:expense) do
+        FactoryGirl.create(:expense, purchaser: subject,
+                                     cost: 90,
+                                     trip: trip)
+      end
+
+      it 'returns negative third of purchase amount' do
+        expect(subject.owes_user(trip_member, trip)).to eq(-30)
+      end
+    end
+
+    context 'with purchases from user and member' do
+      let!(:expense) do
+        FactoryGirl.create(:expense, purchaser: subject,
+                                     cost: 30,
+                                     trip: trip)
+        FactoryGirl.create(:expense, purchaser: trip_member,
+                                     cost: 90,
+                                     trip: trip)
+      end
+
+      it 'returns amount owed minus amount due to user' do
+        expect(subject.owes_user(trip_member, trip)).to eq(20)
+      end
+    end
+
+    context 'with member with single purchase but user already paid back' do
+      let(:expense) do
+        FactoryGirl.create(:expense, purchaser: trip_member,
+                                     cost: 90,
+                                     trip: trip)
+      end
+
+      before do
+        FactoryGirl.create(:contribution, amount: 30,
+                                          user: subject,
+                                          expense: expense)
+      end
+
+      it 'returns zero' do
+        expect(subject.owes_user(trip_member, trip)).to be_zero
+      end
+    end
+
+    context 'with user with single purchase but member already paid back' do
+      let(:expense) do
+        FactoryGirl.create(:expense, purchaser: subject,
+                                     cost: 90,
+                                     trip: trip)
+      end
+
+      before do
+        FactoryGirl.create(:contribution, amount: 30,
+                                          user: trip_member,
+                                          expense: expense)
+      end
+
+      it 'returns zero' do
+        expect(subject.owes_user(trip_member, trip)).to be_zero
+      end
     end
   end
 end

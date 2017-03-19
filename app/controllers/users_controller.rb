@@ -87,7 +87,6 @@ class UsersController < ApplicationController
 	def update
 		@user ||= User.find(params[:id])
 		@user.update_attributes(user_params)
-		respond_with @user
 	end
 
 	# Deletes a user matching the id
@@ -106,6 +105,6 @@ class UsersController < ApplicationController
 	private
 
 	def user_params
-		params.require(:user).permit(:email, :name, :password)
+		params.require(:user).permit(:email, :name, :password, :picture)
 	end
 end

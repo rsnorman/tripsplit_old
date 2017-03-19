@@ -92,8 +92,6 @@ class ExpensesController < ApplicationController
 		@expense.purchaser = current_user
 		@expense.save
 		@expense.full_detail = true
-
-		respond_with @expense
 	end
 
 	# Updates a expense with the passed parameters
@@ -115,7 +113,6 @@ class ExpensesController < ApplicationController
     expense_params.delete(:obligations_attributes) if expense_params[:obligations_attributes].nil?
 		@expense.update_attributes(expense_params)
 		@expense.full_detail = true
-		render json: @expense, status: 202
 	end
 
 	# Deletes a expense matching the id
@@ -128,7 +125,6 @@ class ExpensesController < ApplicationController
 	def destroy
 		@expense = current_user.purchases.find(params[:id])
 		@expense.destroy
-		respond_with @expense
 	end
 
 	private

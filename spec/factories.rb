@@ -2,7 +2,7 @@
 FactoryGirl.define do
   factory :user do
     name "Ryan Norman"
-    email  "rsnorman15@gmail.com"
+    sequence(:email) { |n| "rsnorman#{n}@gmail.com" }
     # facebook_access_token "CAAFKoEw0PJABAHkXnS2ug68rYpg8l2VjdZAt9IIhKvPhZCnkR9"
     # facebook_access_token_expires_at Time.now
     # facebook_id "234234"

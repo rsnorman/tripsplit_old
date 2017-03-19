@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
           # :confirmable, :omniauthable
   include DeviseTokenAuth::Concerns::User
 
+  mount_uploader :picture, UserPictureUploader
+
   attr_accessor :current_trip
 
   has_many :organized_trips, :class_name => Trip, :foreign_key => :organizer_id, :dependent => :destroy
@@ -72,6 +74,12 @@ class User < ActiveRecord::Base
   # return [BigDecimal] total cost of expenses
   def total_purchases_cost
     purchases.to_a.sum(&:cost)
+  end
+
+  # Calculates the total cost of the expenses paid for by user of all the trips taken
+  # return [BigDecimal] total cost of expenses
+  def total_contributions_cost
+    contributions.to_a.sum(&:amount)
   end
 
   # Calculates the total cost of the expenses paid for by the user for a single trip
@@ -142,10 +150,28 @@ class User < ActiveRecord::Base
     [(self.obligations.where(:expense_id => member_purchases_ids).sum(:amount) - self.contributions.where(:expense_id => member_purchases_ids).sum(:amount)) - (member.obligations.where(:expense_id => purchases_ids).sum(:amount) - member.contributions.where(:expense_id => purchases_ids).sum(:amount)), 0].max
   end
 
+  def owes_user(user, trip = nil)
+    user_purchase_ids = user.purchases.pluck(:id)
+    owe_amount = trip.obligations.where(user: self, expense_id: user_purchase_ids).sum(:amount)
+
+    purchase_ids = purchases.pluck(:id)
+    due_amount = trip.obligations.where(user: user, expense_id: purchase_ids).sum(:amount)
+
+    paid_out_amount = trip.contributions.where(user: self, expense_id: user_purchase_ids).sum(:amount)
+
+    paid_in_amount = trip.contributions.where(user: user, expense_id: purchase_ids).sum(:amount)
+
+    owe_amount + paid_in_amount - due_amount - paid_out_amount
+  end
+
   # Override so that password is not sent in JSON, XML, etc
   def serializable_hash(*args)
     args[0] = (args[0] || {}).merge(:except => [:password, :twitter_access_token, :twitter_access_secret, :facebook_access_token] )
     user_hash = super
+
+    user_hash[:total_trips] = trips.count
+    user_hash[:total_purchased] = total_purchases_cost
+    user_hash[:total_paid] = total_contributions_cost
 
     if self.current_trip
       user_hash[:due] = self.current_trip.total_due_to(self)
