@@ -8,16 +8,10 @@ json.array! @obligations do |obligation|
   end
 
   json.user do
-    json.name obligation.user.name || obligation.user.email
-    json.picture obligation.user.picture
+    json.partial! 'users/user', user: obligation.user
   end
 
   json.expense do
-    json.(@expense, :name, :cost, :average_cost)
-
-    json.purchaser do
-      json.name @expense.purchaser.name || @expense.purchaser.email
-      json.picture @expense.purchaser.picture
-    end
+    json.partial! 'expenses/expense', expense: @expense
   end
 end

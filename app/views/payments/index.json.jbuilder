@@ -10,12 +10,10 @@ json.array! @payments do |payment|
   json.amount amount
 
   json.recipient do
-    json.name payment.recipient.name || payment.recipient.email
-    json.picture payment.recipient.picture
+    json.partial! 'users/user', user: payment.recipient
   end
 
   json.payer do
-    json.name payment.payer.name || payment.payer.email
-    json.picture payment.payer.picture
+    json.partial! 'users/user', user: payment.payer
   end
 end

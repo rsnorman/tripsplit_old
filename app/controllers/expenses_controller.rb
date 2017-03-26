@@ -31,8 +31,6 @@ class ExpensesController < ApplicationController
   #   }]
 	def index
 		@expenses = @trip.nil? ? current_user.purchases : params[:purchased] ? current_user.purchases.where(:trip_id => @trip.id) : @trip.expenses.order(created_at: :desc)
-    @expenses.each{|x| x.full_detail = true}
-		respond_with @expenses
 	end
 
 	# Gets a expense matching the id
