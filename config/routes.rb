@@ -5,6 +5,7 @@ GroupExpenser::Application.routes.draw do
     resources :purchases, :controller => :expenses, :only => :index
     resources :obligations, :as => :expense_obligations, :controller => :expense_obligations, :only => [:index]
     resources :contributions, :as => :expense_contributions, :controller => :expense_contributions
+    resources :payments, only: :index
   end
 
   resources :trips do
