@@ -16,7 +16,6 @@ class TripsController < ApplicationController
   #   }]
 	def index
 		@trips = params[:organized] ? current_user.organized_trips : current_user.trips
-		respond_with @trips
 	end
 
 	# Gets a trip matching the id
@@ -32,7 +31,6 @@ class TripsController < ApplicationController
   #   }
 	def show
 		@trip = current_user.trips.find(params[:id])
-		respond_with @trip
 	end
 
 	# Creates a trip with the passed parameters
@@ -54,7 +52,6 @@ class TripsController < ApplicationController
 		@trip = current_user.trips.build(trip_params)
     @trip.organizer_id = current_user.id
     @trip.save
-		respond_with @trip
 	end
 
 	# Updates a trip with the passed parameters
@@ -72,7 +69,6 @@ class TripsController < ApplicationController
 		process_picture
 		@trip = current_user.organized_trips.find(params[:id])
 		@trip.update_attributes(trip_params)
-		render json: @trip, status: 202
 	end
 
 	# Deletes a trip matching the id

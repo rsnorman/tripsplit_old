@@ -23,6 +23,8 @@ gem 'json'
 gem 'devise'
 gem 'devise_token_auth'
 
+gem 'cancancan'
+
 gem 'rack-cors', :require => 'rack/cors'
 
 gem 'omniauth'
