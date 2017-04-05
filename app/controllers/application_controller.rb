@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
 
   # before_filter :redirect_to_hash_path
   # before_filter :set_user_from_header
+  before_filter :configure_permitted_parameters, if: :devise_controller?
+
   private
 
 
@@ -30,5 +32,11 @@ class ApplicationController < ActionController::Base
       Rails.logger.info request.original_fullpath
       redirect_to "#{":9000" if Rails.env.development?}/##{request.original_fullpath}" and return false
     end
+  end
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :email, :password])
   end
 end

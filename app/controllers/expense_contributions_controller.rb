@@ -61,10 +61,10 @@ class ExpenseContributionsController < ApplicationController
     @contribution = ExpenseContribution.new
 		@expense = current_user.expenses.find(params[:expense_id])
 		@contribution.expense = @expense
-		@obligation = ExpenseObligation.find_by(expense: @expense, user: current_user)
 
     if expense_contribution_params[:user_id]
       if @expense.trip.organizer_id == current_user.id || @expense.purchaser_id == current_user.id
+        @obligation = ExpenseObligation.find_by(expense: @expense, user_id: expense_contribution_params[:user_id])
         user_id = expense_contribution_params.delete(:user_id)
         Rails.logger.info [user_id, @expense.purchaser_id].inspect
         if user_id.to_i != @expense.purchaser_id
@@ -78,6 +78,7 @@ class ExpenseContributionsController < ApplicationController
         @contribution.errors[:user_id] = ["Only purchaser or organizer can add contributions for other members"]
       end
     else
+      @obligation = ExpenseObligation.find_by(expense: @expense, user: current_user)
       @contribution.attributes = expense_contribution_params
       @contribution.user = current_user
       @contribution.save

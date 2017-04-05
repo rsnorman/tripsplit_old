@@ -2,12 +2,9 @@
 class ExpensesController < ApplicationController
 	respond_to :json
 
-	before_action :get_trip, :only => [:index, :create]
-
-	# Sets the trip if trip id has been passed
-	def get_trip
-		@trip = current_user.trips.find(params[:trip_id]) if params[:trip_id]
-	end
+  load_and_authorize_resource :trip, through: :current_user, only: [:index, :create]
+  load_and_authorize_resource through: :trip, only: :create
+  load_and_authorize_resource except: [:index, :create]
 
 	# Gets a list of all the expenses for the application or a user.
   #
@@ -30,7 +27,7 @@ class ExpensesController < ApplicationController
   #    }
   #   }]
 	def index
-		@expenses = @trip.nil? ? current_user.purchases : params[:purchased] ? current_user.purchases.where(:trip_id => @trip.id) : @trip.expenses.order(created_at: :desc)
+		@expenses = @trip.expenses.order(created_at: :desc)
 	end
 
 	# Gets a expense matching the id
@@ -53,9 +50,6 @@ class ExpensesController < ApplicationController
   #    }
   #   }
 	def show
-		@expense = Expense.where(trip: @user.trips).find(params[:id])
-    @expense.full_detail = true
-		respond_with @expense
 	end
 
 	# Creates a expense with the passed parameters
@@ -84,12 +78,8 @@ class ExpensesController < ApplicationController
   #    }
   #   }
 	def create
-    expense_params.delete(:contributions_attributes) if expense_params[:contributions_attributes].nil?
-    expense_params.delete(:obligations_attributes) if expense_params[:obligations_attributes].nil?
 		@expense = @trip.expenses.build(expense_params)
-		@expense.purchaser = current_user
 		@expense.save
-		@expense.full_detail = true
 	end
 
 	# Updates a expense with the passed parameters
@@ -106,11 +96,7 @@ class ExpensesController < ApplicationController
   # [URL] /expenses [PUT]
   #  [204 NO CONTENT] Successfully updated a expense
 	def update
-		@expense = current_user.purchases.find(params[:id])
-    expense_params.delete(:contributions_attributes) if expense_params[:contributions_attributes].nil?
-    expense_params.delete(:obligations_attributes) if expense_params[:obligations_attributes].nil?
 		@expense.update_attributes(expense_params)
-		@expense.full_detail = true
 	end
 
 	# Deletes a expense matching the id
@@ -121,15 +107,17 @@ class ExpensesController < ApplicationController
   # [URL] /expenses [DELETE]
   #  [204 NO CONTENT] Successfully deleted a expense
 	def destroy
-		@expense = current_user.purchases.find(params[:id])
 		@expense.destroy
 	end
 
 	private
 
 	def expense_params
-		params.require(:expense).permit(:cost, :expense_type, :name, :tip, :tip_included, :is_loan, :loanee_id, :description, :picture, obligations_attributes: [:amount, :user_id, :is_average], contributions_attributes: [:amount, :user_id, :is_paid]).tap do |p|
+		params.require(:expense).permit(:purchaser_id, :cost, :expense_type, :name, :description, :picture).tap do |p|
 			p.delete(:picture) if p[:picture].blank?
+      if cannot?(:create_member_expense, @expense) || p[:purchaser_id].nil?
+        p[:purchaser_id] = current_user.id
+      end
 		end
 	end
 end

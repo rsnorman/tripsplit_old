@@ -30,6 +30,7 @@ class TripsController < ApplicationController
   #    "name" => 'Mt bROhemia'
   #   }
 	def show
+    raise 'here'
 		@trip = current_user.trips.find(params[:id])
 	end
 
@@ -66,7 +67,6 @@ class TripsController < ApplicationController
   # [URL] /trips [PUT]
   #  [204 NO CONTENT] Successfully updated a trip
 	def update
-		process_picture
 		@trip = current_user.organized_trips.find(params[:id])
 		@trip.update_attributes(trip_params)
 	end
@@ -81,18 +81,17 @@ class TripsController < ApplicationController
 	def destroy
 		@trip = current_user.organized_trips.find(params[:id])
 		@trip.destroy
-		respond_with @trip
 	end
 
 	private
 
-	def process_picture
-		tempfile = Tempfile.new(["trip-picture-#{SecureRandom.uuid}", params[:trip][:picture_file_name]])
-		tempfile << params[:trip][:picture]
-		params[:trip][:picture]
-	ensure
-		tempfile.close
-	end
+	# def process_picture
+	# 	tempfile = Tempfile.new(["trip-picture-#{SecureRandom.uuid}", params[:trip][:picture_file_name]])
+	# 	tempfile << params[:trip][:picture]
+	# 	params[:trip][:picture]
+	# ensure
+	# 	tempfile.close
+	# end
 
 	def trip_params
 		params.require(:trip).permit(:name, :location, :starts_on, :ends_on, :description, :picture, :needs_facebook_event).tap do |p|

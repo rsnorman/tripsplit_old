@@ -64,6 +64,7 @@ class Trip < ActiveRecord::Base
   # Adds up all the expenses and averages them per member
   # @return [BigDecimal] average cost per member of trip
   def average_cost_per_member
+    return 0 if memberships.empty?
     total_cost / memberships.size
   end
 

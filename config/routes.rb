@@ -24,7 +24,11 @@ GroupExpenser::Application.routes.draw do
     resources :contributions, :as => :expense_contributions, :controller => :expense_contributions
   end
 
-  resources :obligations, :as => :expense_obligations, :controller => :expense_obligations, :only => [:show, :update, :destroy]
+  resources :obligations, :as => :expense_obligations, :controller => :expense_obligations, :only => [:show, :update, :destroy] do
+    member do
+      post :pay
+    end
+  end
   resources :contributions, :as => :expense_contributions, :controller => :expense_contributions
 
   resources :friendships, :only => [:index, :create, :destroy]

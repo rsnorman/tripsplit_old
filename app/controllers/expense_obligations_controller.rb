@@ -1,7 +1,5 @@
 # Controller for registering, updating, and deleting obligations
 class ExpenseObligationsController < ApplicationController
-	respond_to :json
-
 	# Gets a list of all the obligations for an expense for a user.
   #
   # @example
@@ -89,6 +87,12 @@ class ExpenseObligationsController < ApplicationController
 		respond_with @obligation
 	end
 
+  def pay
+    @obligation = ExpenseObligation.find(params[:id])
+    authorize! :pay, @obligation
+    @contribution = PayObligation.pay(@obligation)
+  end
+
   private
 
   def get_obligation
@@ -98,4 +102,8 @@ class ExpenseObligationsController < ApplicationController
 	def expense_obligation_params
 		params.require(:expense_obligation).permit(:amount, :name, :user_id, :is_average)
 	end
+
+  def expense_obligation_pay_params
+    params.require(:expense_obligation).permit(:user_id)
+  end
 end
