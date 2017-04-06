@@ -30,7 +30,6 @@ class TripsController < ApplicationController
   #    "name" => 'Mt bROhemia'
   #   }
 	def show
-    raise 'here'
 		@trip = current_user.trips.find(params[:id])
 	end
 
