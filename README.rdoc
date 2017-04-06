@@ -1,0 +1,5 @@
+== TripSplit
+
+TripSplit is an AngularJS mobile app for splitting costs amongst friends while traveling.
+
+http://tripsplit.herokuapp.com

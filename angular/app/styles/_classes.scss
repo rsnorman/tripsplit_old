@@ -1,0 +1,26 @@
+a{
+  color: #ffffff;
+
+  .ui-currency-pos{
+  	color: #ffffff;
+	}
+
+  &:hover{
+    text-decoration: none;
+    color: $gray;
+    border-color: $gray;
+
+    .ui-currency-pos{
+  		color: $gray;
+  	}
+  }
+
+  &:active, &:focus{
+    border: 0;
+    outline: none;
+  }
+}
+
+.secondary-color{
+  color: $orange;
+}

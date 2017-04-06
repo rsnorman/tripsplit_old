@@ -1,0 +1,78 @@
+= Group Expenser API
+
+== Users
+=== To list all the users in a trip
+ GET /trips/:trip_id/users
+=== To get an account
+ GET /users/:id
+=== To create a new account
+ POST /users
+==== Parameters
+- email
+- name
+=== To update an account
+ PUT /users/:id
+==== Parameters
+- email
+- name
+=== To delete an account
+ DELETE /users/:id
+
+=== Managing User Purchases
+Purchases are expenses the user paid money for themself. 
+NOTE: Expenses are created through the expense resource url but can only be updated or destroyed through the purchases resource url.
+==== To list all purchases
+ GET /purchases
+==== To list all purchases for a trip
+ GET /trips/:trip_id/purchases
+==== To get a purchase (alias for /expenses/:id)
+ GET /purchases/:id
+==== To update a purchase
+ PUT /purchases/:id
+===== Parameters
+- name
+- cost
+- expense_type
+==== To delete a purchase
+ DELETE /purchases/:id
+
+== Trips
+=== To list all the trips for a user
+ GET /trips
+=== To list all the trips a user has organized
+ GET /organized_trips
+=== To get a trip's details
+ GET /trips/:id
+=== To organize a trip
+ POST /trips
+==== Parameters
+- name
+=== To update a trip
+ PUT /trips/:id
+==== Parameters
+- name
+=== To delete a trip
+ DELETE /trips/:id
+
+=== Managing Trip Members
+Only trip organizer can manage memberships
+==== Adding a new member
+ POST /trips/:trip_id/memberships
+===== Parameters
+- user_id
+==== Removing a member
+ DELETE /trips/:trip_id/membeships/:id
+
+=== Managing Trip Expenses
+Any member of the trip can create expenses.
+NOTE: Expenses are created through the expense resource url but can only be updated or destroyed through the purchases resource url.
+==== To list all expenses for a trip
+ GET /trips/:trip_id/expenses
+==== To get an expense
+ GET /expenses/:id
+==== To create a new expense for a trip
+ POST /trips/:trip_id/expenses
+===== Parameters
+- name
+- cost
+- expense_type
