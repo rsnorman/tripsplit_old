@@ -40,6 +40,7 @@ gem 'rest-client'
 
 gem 'mini_magick'
 gem 'carrierwave'
+gem 'fog-aws'
 
 group :development, :test do
   gem 'rb-fsevent'
